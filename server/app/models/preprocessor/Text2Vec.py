@@ -9,7 +9,7 @@ from collections import Counter
 import itertools
 
 #articles_df = pd.read_csv('./data/data.csv')
-#clean_df = pd.DataFrame(data={"titel": articles_df.iloc[:,0], "description": articles_df.iloc[:,1],"site_link":articles_df.iloc[:,2],"pdf_link": articles_df.iloc[:,3]})
+#clean_df = pd.DataFrame(data={"title": articles_df.iloc[:,0], "description": articles_df.iloc[:,1],"site_link":articles_df.iloc[:,2],"pdf_link": articles_df.iloc[:,3]})
 #clean_df.to_csv('./data/clean_data.csv', index=True)
 
 class MyText2VecModel:

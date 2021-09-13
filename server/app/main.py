@@ -8,7 +8,7 @@ def hello_world():
     return 'Hello World!'
 @app.route('/predict_keywords', methods=["POST"])
 def predict():
-    titel = request.form.get("titel")
+    title = request.form.get("title")
     article = request.form.get("body")
     print(request.form)
     keywords = model.predict_tags(article)

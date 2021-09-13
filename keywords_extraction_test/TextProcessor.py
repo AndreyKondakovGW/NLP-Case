@@ -5,6 +5,7 @@ import re
 import numpy as np
 import random
 import os
+import os.path
 from operator import itemgetter
 import nltk
 from nltk.corpus import stopwords
@@ -22,7 +23,7 @@ class TextProcessor:
     ----------
     corpus : list
         main corpus of papers. 
-        each entry is in format ["title","abstract","sitelink","pdflink"]
+        each entry is in format ["num","title","abstract","sitelink","pdflink"]
     
     """
     def __init__(self, filename, num_papers):
@@ -46,9 +47,10 @@ class TextProcessor:
         """
         with open(filename, 'r', encoding = 'utf-8') as textfile:
             csvreader = csv.reader(textfile, delimiter=',', quotechar='"')
-            
+            next(csvreader, None)  # skip the headers
             num_rows = sum(1 for row in csvreader)
             textfile.seek(0)
+            next(csvreader, None)  # skip the headers once again
             if (num_rows < num_papers):
                 raise ValueError("num_papers > number of rows in the csv file!")
             
@@ -59,8 +61,8 @@ class TextProcessor:
             j = 0
             for i, row in enumerate(csvreader):
                 if (i == samples[j]):
-                    self.corpus.append([row[0].replace(r'\n', '\n'), 
-                        row[1].replace(r'\n', '\n'), row[2], row[3]])
+                    self.corpus.append([int(row[0]), row[1].replace(r'\n', '\n'), 
+                        row[2].replace(r'\n', '\n'), row[3], row[4]])
                     j += 1
                     if (j >= maxind):
                         break
@@ -103,9 +105,15 @@ class TextProcessor:
                         
         namespace = '{http://www.w3.org/2005/Atom}' #namespace in an XML document
         
+        file_existed = os.path.isfile(filename)
+        
         with open(filename, filemode, newline='', encoding="utf8") as csvfile:
-            csvwriter = csv.writer(csvfile, quotechar='"', quoting=csv.QUOTE_ALL)
+            csvwriter = csv.writer(csvfile, quotechar='"', quoting=csv.QUOTE_NONNUMERIC)
             received = 0
+            
+            if 'w' in filemode or not file_existed:
+                csvwriter.writerow(['num', "title", "description", "site_link", "pdf_link"])
+            
             for start in range(start_ind, num_papers+start_ind, step):
                 query = 'search_query=%s&start=%i&max_results=%i' % (search_query,
                                                                  start,
@@ -129,7 +137,7 @@ class TextProcessor:
                         elif not 'title' in link.attrib:
                             sitelink = link.attrib.get('href')
 
-                    csvwriter.writerow([i.replace("\n",r"\n").replace("\t",r"\t").replace('"','') for i in [title, abstract, sitelink, pdflink]])
+                    csvwriter.writerow([received - start_ind] + [i.replace("\n",r"\n").replace("\t",r"\t").replace('"','') for i in [title, abstract, sitelink, pdflink]])
                     received += 1
 
                 if verbose:
