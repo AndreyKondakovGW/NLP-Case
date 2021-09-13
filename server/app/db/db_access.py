@@ -17,7 +17,7 @@ class DBAccess:
         for r in result:
             ids[r['_id']] = sum(el in keywords for el in r['keywords'])
             
-        largest = heapq.nlargest(100, ids, key=ids.get)
+        largest = heapq.nlargest(num_results, ids, key=ids.get)
             
         papers = self.db_data.find({"_id": {"$in": largest}})
         papers_list = [] 
