@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from preprocessor import preprocess_text
+from nlp_case.server.app.models.preprocessor.StandartPreprogressor import preprocess_text
 import nltk
 import gensim
 from gensim.models import KeyedVectors

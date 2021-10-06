@@ -1,5 +1,5 @@
 import pymongo
-from keywords_extraction_test.TextRank_model import TextRank_model
+from nlp_case.server.app.models import TextRank_model
 
 class DBPusher:
     """
@@ -11,7 +11,7 @@ class DBPusher:
         self.client = pymongo.MongoClient("mongodb+srv://nlp_admin:"+pwd+"@cluster0.oelvn.mongodb.net/Cluster0?retryWrites=true&w=majority")
         self.db = self.client.nlp
         
-    def _get_collection(self, collection)
+    def _get_collection(self, collection):
         collections = self.db.list_collection_names()
         if collection in collections:
             raise ValueError("Collection " + collection + " exists! This may cause data duplication")
