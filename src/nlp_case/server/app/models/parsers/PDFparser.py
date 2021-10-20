@@ -5,7 +5,7 @@ from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
 from pdfminer.pdfpage import PDFPage
-
+import os
 import io
 
 
@@ -15,8 +15,8 @@ class Parser(object):
         rsrcmgr = PDFResourceManager()
         retstr = io.StringIO()
         laparams = LAParams()
-        device = TextConverter(rsrcmgr, retstr, laparams=laparams)
-        fp = open(filename, 'rb')
+        device = TextConverter(rsrcmgr, retstr, laparams=laparams) 
+        fp = filename
         interpreter = PDFPageInterpreter(rsrcmgr, device)
         password = ""
         maxpages = 0
@@ -34,7 +34,7 @@ class Parser(object):
         text = retstr.getvalue()
         retstr.close()
         
-        with open('./server/app/tmp/out.txt', mode='w', encoding='utf-8') as f :
+        with open(os.path.dirname(os.path.abspath(__file__)) + '\..\..\\tmp\out.txt', mode='w', encoding='utf-8') as f :
             f.write(text)
         return text
 

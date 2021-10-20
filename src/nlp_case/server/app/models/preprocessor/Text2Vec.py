@@ -7,6 +7,7 @@ from gensim.models import KeyedVectors
 
 from collections import Counter
 import itertools
+import os
 
 #articles_df = pd.read_csv('./data/data.csv')
 #clean_df = pd.DataFrame(data={"title": articles_df.iloc[:,0], "description": articles_df.iloc[:,1],"site_link":articles_df.iloc[:,2],"pdf_link": articles_df.iloc[:,3]})
@@ -17,7 +18,7 @@ class MyText2VecModel:
     def save_embadding_model(filename):
         stopwords = nltk.corpus.stopwords.words("english")
 
-        articles_df = pd.read_csv('./data/clean_data.csv')
+        articles_df = pd.read_csv(os.path.dirname(os.path.abspath(__file__)) + '\..\..\..\..\data\clean_data.csv')
         articles_df["clean_description"] = articles_df["description"].apply(lambda text: preprocess_text(text,stopwords=stopwords))
 
         corpus = articles_df["clean_description"]
@@ -43,7 +44,8 @@ class MyText2VecModel:
         word_data.wv.save(filename)
 
     @staticmethod
-    def generate_embadding(model_name, data_df):
+    def generate_embadding(model_name, filename):
+        data_df = pd.read_csv(os.path.dirname(os.path.abspath(__file__)) + '\..\..\..\..\data\clean_data.csv')
         stopwords = nltk.corpus.stopwords.words("english")
         word_emb_model = KeyedVectors.load(model_name)
         data_df["clean_description"] = data_df["description"].apply(lambda text: preprocess_text(text,stopwords=stopwords))
@@ -54,7 +56,7 @@ class MyText2VecModel:
         embadding_df = pd.DataFrame(np.array(data),columns=range(100))
         embadding_df['description'] = data_df["description"]
         print(embadding_df.head())
-        embadding_df.to_csv('./data/embadding_data.csv', index=True)
+        embadding_df.to_csv(filename, index=True)
 
           
 

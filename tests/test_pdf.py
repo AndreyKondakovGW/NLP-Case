@@ -1,10 +1,8 @@
 import requests
 
-data = {}
 url = "http://127.0.0.1:5000/find_similar_article"
 files = {
-    'data' : data,
-    'document': open('./tests/test.pdf', 'rb')
+    'file': open('.\\test.pdf', 'rb')
 }
 
 headers = {
@@ -13,4 +11,6 @@ headers = {
 'Cache-Control': "no-cache",
 }
 
-r = requests.post(url, files=files, headers=headers)
+print(url)
+r = requests.post(url, json={"data": "article"}, files=files)
+print(r.text)
