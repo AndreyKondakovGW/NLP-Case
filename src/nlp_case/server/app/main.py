@@ -12,13 +12,15 @@ app = Flask(__name__)
 @app.route('/')
 def hello_world():
     return 'Hello World!'
+
 @app.route('/predict_keywords', methods=["POST"])
 def predict():
     title = request.form.get("title")
     article = request.form.get("body")
-    print(request.form)
     keywords = model.predict_tags(article)
     return jsonify({'result': keywords})
+
+
 @app.route('/search_articles_with_keywords', methods=["POST"])
 def find_by_keywords():
     keywords = request.get_json().get("keywords")
@@ -30,6 +32,8 @@ def find_by_keywords():
         print()
     return jsonify({'result': 
     [{'titel': p[0], 'abstract': p[1]} for p in papers]})
+
+    
 @app.route('/find_similar_article', methods=["POST"])
 def find_most_similar():
     json_data = request.files["file"]

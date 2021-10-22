@@ -1,6 +1,21 @@
 import re
 import nltk
 
+SIMPLE_RE_DIGIT = re.compile(r'[\w\d]+', re.I)
+SIMPLE_RE = re.compile(r'[\w]+', re.I)
+
+def tokenizer_regex(txt,to_lower=True, min_token_size=4):
+    if (to_lower):
+        txt = txt.lower()
+    all_tokens = SIMPLE_RE.findall(txt)
+    return [token for token in all_tokens if len(token) >= min_token_size]
+
+def tokenize_corpus(texts, tokenizer, **tokenizer_kwargs):
+    return [tokenizer(txt, **tokenizer_kwargs) for txt in texts]
+
+def preprogress_corpus(texts, stemm=False, lemm=True, stopwords=None):
+    return [preprocess_text(text, stemm=stemm, lemm=lemm, stopwords=stopwords) for text in texts]
+
 def preprocess_text(text, stemm=False, lemm=True, stopwords=None):
     ## clean (convert to lowercase and remove punctuations and   
     ##characters and then strip)

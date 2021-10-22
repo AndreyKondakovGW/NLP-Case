@@ -31,7 +31,7 @@ class DBPusher:
                 "abstract": paper[1],
                 "sitelink": paper[2],
                 "pdflink": paper[3]}
-            db.data.insert_one(p)
+            self.db.data.insert_one(p)
             
     def push_keywords(self, papers, collection = "keywords"):
         _db = self._get_collection(collection)
@@ -39,6 +39,6 @@ class DBPusher:
         tr = TextRank_model(lemmatize = True)
         for paper in papers:
             keywords = tr.predict_tags(paper[1])
-            _id = list(db.data.find({'sitelink': paper[2]}))[0]['_id']
+            _id = list(self.db.data.find({'sitelink': paper[2]}))[0]['_id']
             p = {'_id':_id, 'keywords': keywords}
-            db.keywords.insert_one(p)
+            self.db.keywords.insert_one(p)
