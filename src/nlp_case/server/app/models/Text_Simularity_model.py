@@ -45,6 +45,7 @@ class Text_Simularity_model:
         self.data['distant'] = pd.Series(data = distants)
         print('Most Similar article: ')
         res = self.data[self.data['distant'] == self.data['distant'].min()]
-        print(res['description'])
+        print(res['description'].array[0])
+        return res['description']
 
 

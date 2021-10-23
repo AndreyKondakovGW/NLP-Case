@@ -4,7 +4,7 @@ import pandas as pd
 import nltk
 import os
 
-DATA_PATH = os.path.dirname(os.path.abspath(__file__)) + "\..\..\..\data\clean_data.csv"
+DATA_PATH = os.path.dirname(os.path.abspath(__file__)) + "\..\..\..\..\data\clean_data.csv"
 
 class Tfidf_model:
     def __init__(self, use_stopword = True):

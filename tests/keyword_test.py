@@ -1,5 +1,5 @@
-from nlp_case.server.app.models.TextRank_model import TextRank_model
-from nlp_case.server.app.models.Tfidf_model import Tfidf_model
+from nlp_case.server.app.models.text_keywords_models.TextRank_model import TextRank_model
+from nlp_case.server.app.models.text_keywords_models.Tfidf_model import Tfidf_model
 
 text = '''We consider the potential density of rational points on an algebraic variety
 

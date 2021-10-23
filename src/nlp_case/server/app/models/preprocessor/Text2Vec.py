@@ -55,7 +55,8 @@ class MyText2VecModel:
             data.append(embadding_vector)
         embadding_df = pd.DataFrame(np.array(data),columns=range(100))
         embadding_df['description'] = data_df["description"]
-        print(embadding_df.head())
+        embadding_df['site_link'] = data_df["description"]
+        embadding_df['pdf_link'] = data_df["description"]
         embadding_df.to_csv(filename, index=True)
 
           

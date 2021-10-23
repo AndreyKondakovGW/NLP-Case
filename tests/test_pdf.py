@@ -2,7 +2,7 @@ import requests
 
 url = "http://127.0.0.1:5000/find_similar_article"
 files = {
-    'file': open('.\\test.pdf', 'rb')
+    'file': open('.\\test2.pdf', 'rb')
 }
 
 headers = {

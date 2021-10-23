@@ -129,3 +129,5 @@ dmypy.json
 .pyre/
 
 #big model files
+src/nlp_case/data/word2vec.wordvectors.vectors.npy
+src/nlp_case/data/word2vec.wordvectors

@@ -4,11 +4,10 @@
 2
 
  
-
-g
-u
-A
-6
+t
+c
+O
+1
 2
 
  
@@ -17,31 +16,27 @@ A
  
 ]
 
+V
+C
 .
-
-G
-A
-h
-t
-a
-m
-
+s
+c
 [
  
  
 
 1
 v
-5
-9
-5
+0
+2
+3
 1
 1
 
 .
 
-8
 0
+1
 1
 2
 :
@@ -51,788 +46,343 @@ X
 r
 a
 
-POTENTIAL DENSITY OF PROJECTIVE VARIETIES HAVING AN
+Deep Curriculum Learning in Task Space for Multi-Class
 
-INT-AMPLIFIED ENDOMORPHISM
+Based Mammography Diagnosis
 
-JIA JIA, TAKAHIRO SHIBATA, AND DE-QI ZHANG
+Jun Luoa, Dooman Arefanb, Margarita Zuleyb,c, Jules Sumkinb,c, and Shandong Wua,b,d,e
 
-Abstract. We consider the potential density of rational points on an algebraic variety
+aIntelligent Systems Program, School of Computing and Information, University of Pittsburgh,
 
-deﬁned over a number ﬁeld K, i.e., the property that the set of rational points of X becomes
+Pittsburgh, PA, USA
+
+bDepartment of Radiology, University of Pittsburgh, Pittsburgh, PA, USA
 
-Zariski dense after a ﬁnite ﬁeld extension of K. For a non-uniruled projective variety with
+cMagee-Womens Hospital, University of Pittsburgh Medical Center, Pittsburgh, PA, USA
+dDepartment of Biomedical Informatics, University of Pittsburgh, Pittsburgh, PA, USA
+
+eDepartment of Bioengineering, University of Pittsburgh, Pittsburgh, PA, USA
 
-an int-ampliﬁed endomorphism, we show that it always satisﬁes potential density. When
+ABSTRACT
 
-a rationally connected variety admits an int-ampliﬁed endomorphism, we prove that there
+Mammography is used as a standard screening procedure for the potential patients of breast cancer. Over the
+past decade, it has been shown that deep learning techniques have succeeded in reaching near-human performance
+in a number of tasks, and its application in mammography is one of the topics that medical researchers most
+concentrate on. In this work, we propose an end-to-end Curriculum Learning (CL) strategy in task space for
+classifying the three categories of Full-Field Digital Mammography (FFDM), namely Malignant, Negative, and
+False recall. Speciﬁcally, our method treats this three-class classiﬁcation as a “harder” task in terms of CL, and
+create an “easier” sub-task of classifying False recall against the combined group of Negative and Malignant. We
+introduce a loss scheduler to dynamically weight the contribution of the losses from the two tasks throughout
+the entire training process. We conduct experiments on an FFDM datasets of 1,709 images using 5-fold cross
+validation. The results show that our curriculum learning strategy can boost the performance for classifying the
+three categories of FFDM compared to the baseline strategies for model training.
 
-exists some rational curve with a Zariski dense forward orbit, assuming the Zariski dense
+Keywords: Curriculum learning, Full-Field Digital Mammography, Deep learning
 
-orbit conjecture in lower dimensions. As an application, we prove the potential density
+1. INTRODUCTION
 
-for projective varieties with int-ampliﬁed endomorphisms in dimension ≤ 3. We also study
+Breast cancer is the second leading cause of cancer death in women. As of 2021, breast cancer takes up 12%
+of new annual cancer cases globally.1 Full-Field Digital Mammography (FFDM), also known as the digital
+mammography, is a mammography screening techniques that enables the manipulation of images in such a way
+that it is more convenient for the radiologists to evaluate the areas of concerns with computer-aided detection
+(CAD) systems. Meanwhile, over the past decade, it has been shown that deep learning techniques have succeeded
+in reaching near-human performance in a number of tasks,2–4 and its application in mammography is one of the
+topics that medical researchers most concentrate on.5
 
-the existence of densely many rational points with the maximal arithmetic degree over a
+Curriculum learning6 (CL), as a major machine learning regime, is a learning strategy where an “easy-to-
+hard” curriculum is designed to train the model. CL is particularly intriguing in medical ﬁelds, since medical
+knowledge can serve as an important contributing factor to the deﬁnition of “easy” and “hard” in terms of CL.3, 4
+Such a curriculum can be designed with respect to both the input space and the output (task) space. CL in
+the input space sort the sorts the training samples from the “easier” ones to “harder” ones.3, 4 And CL in the
+output (task) space7 treats the original task as a “harder” task, and learns “easier” sub-tasks prior to learning
+the original “harder” task. In classiﬁcation tasks with multiple (≥ 3 classes) classes, CL in task space creates
+“easier” classiﬁcation sub-tasks out of the original “harder” task, usually by grouping classes with similarities,7
+and thus reducing the number of total classes and the diﬃculty of the task.
 
-suﬃciently large number ﬁeld.
+Further author information: (Send correspondence to Shandong Wu)
+Shandong Wu: E-mail: wus3@upmc.edu, Telephone: 1 412 641 2567
+Jun Luo: E-mail: jul117@pitt.edu
 
-Contents
+(a) Malignant
 
-1.
+(b) False recall
 
-Introduction
+(c) Negative
 
-2. Preliminaries
+Figure 1: Example Full-Field Digital Mammography images from the three categories of our dataset.
 
-3. Rationally connected varieties: Proof of Proposition 1.5
+In this work, we propose an end-to-end curriculum learning in task space strategy on classifying three cate-
+gories of the Full-Field Digital Mammography (FFDM), namely Malignant, Negative, and False recall (shown in
+Figure 1). Our method treats the original three-class classiﬁcation task as a “harder” task in terms of CL, and
+create an “easier” sub-task of classifying the false recall cases against the combined group of the negative and
+the malignant cases. We introduce a loss scheduler to dynamically weight the contribution of the two tasks to
+the loss that the machine learning model learns from throughout the training process. We conduct experiments
+using an FFDM dataset of 1,709 images using 5-fold cross validation. The results show that our curriculum
+learning strategy can boost the model’s performance compared to the baseline training strategies.
 
-4.
+2.1 Study Cohort and Dataset
 
-Int-ampliﬁed endomorphisms: Proofs of Proposition 1.6 and Theorem 1.7
+2. METHOD
 
-5. The maximal arithmetic degree: Proofs of Theorems 1.10 and 1.11
+In this IRB-approved study, we used a cohort of 1,709 FFDM images (349 Malignant cases, 653 Negative cases
+and 707 False recall cases). The FFDM images were retrospectively collected at our institution and reviewed by
+expert radiologists. Sample images from the three classes are shown in Figure 1. We conducted our experiments
+with 5-fold cross validation. Within each iteration of cross validation, one fold of the data was used as a hold-out
+test set. 80% and 20% of the remaining four folds were used as training and validation set respectively. The
+data partitioning scheme is described with more details in Table 1. Note that the numbers in Table 1 are within
+±1 range, since the ﬁve folds do not evenly split the data samples.
 
-References
+Table 1: The number of images in each class for each partition of the 5-fold cross validation. Note that the
+numbers are within ±1 range, since the ﬁve folds do not evenly split the data samples.
+Malignant Negative False recall Total
 
-1
+Training set
+Validation set
+Test set
+Total
 
-4
+226
+53
+45
+349
 
-6
+425
+98
+130
+653
 
-7
+460
+106
+141
+707
 
-8
+1,111
+280
+341
+1,709
 
-11
+2.2 Curriculum in Task Space
 
-1. Introduction
+Curriculum learning seeks a certain “easy-to-hard” order of the learning procedure. The order can be in terms of
+the input samples or the learning tasks. Here in this study, while we focus on the original three-class classiﬁcation
+of the FFDM images, we treat it as a “harder” task and create an “easier” sub-task of binary classiﬁcation. In
+this sub-task, the goal is to classify False recall against the combined group of Malignant and Negative cases.
 
-Let K be a number ﬁeld with a ﬁxed algebraic closure K. Given a variety X over K, we
+Consider an image-label pair (xi, yi), where xi represents the image and yi ∈ {0, 1, 2} (with 0, 1, and 2
+representing False recall, Negative, and Malignant respectively) is the ground truth label of the image. Let
+f (xi)(c) be the probability that the predicted label is c with f (·) being the machine learning model and c ∈
 
-are interested in the set of K-rational points X(K) of X. More speciﬁcally, we study the
+{0, 1, 2}. We compute the cross entropy loss for the original “harder” task of the three-class classiﬁcation as in
+Equation (1), where yi,c is the cth element in the one-hot representation of the label yi.
 
-potential density of varieties over K.
+Lhard(xi, yi) = −(cid:88)
 
-2020 Mathematics Subject Classiﬁcation. 37P55, 14G05, 14E30, 08A35.
-Key words and phrases. Potential density, Int-ampliﬁed endomorphism, Arithmetic degree, Dynamical de-
-gree.
+(cid:16)
 
-1
+yi,c · log(f (xi)(c))
 
-2
+c
 
-JIA JIA, TAKAHIRO SHIBATA, AND DE-QI ZHANG
+(cid:17)
 
-Deﬁnition 1.1. A variety X deﬁned over a number ﬁeld K is said to satisfy potential
-density if there is a ﬁnite ﬁeld extension K ⊆ L such that XL(L) is Zariski dense in XL,
-where XL := X ×Spec K Spec L.
+(1)
 
-The potential density of varieties over number ﬁelds has been investigated in several papers.
+(2)
+
+For the created “easier” task, to group the Negative and Malignant classes together against the False recall
+class, we assign xi a new label zi = 1yi(cid:54)=0 where 1 is the indicator function, which means that zi will only be
+0 if yi = 0, or else zi = 1. In terms of the prediction, we treat the probability of zi = 0 still as f (xi)(0) and
+the probability of zi = 1 as f (xi)(1) + f (xi)(2), or 1 − f (xi)(0). Consequently, we can compute the binary cross
+entropy loss for the created “easier” task of the binary classiﬁcation, as shown in Equation (2).
 
-The potential density problem is attractive because the potential density of a variety is
+Leasy(xi, zi) = −(cid:16)
 
-pretty much governed by its geometry. See [Cam04] for a conjecture characterising varieties
+zi · log(f (xi)(0)) + (1 − zi) · log(1 − f (xi)(0))
 
-satisfying potential density. However, algebraic varieties for which the potential density is
+(cid:17)
 
-veriﬁed are very few. See [Has03] for a survey of studies on the potential density problem.
+L(xi, yi, zi) = λ · Leasy(xi, zi) + (1 − λ) · Lhard(xi, yi)
 
-In this paper, we ﬁrst study the potential density of varieties admitting int-ampliﬁed en-
+(3)
+We compute the ﬁnal loss as a weighted sum of L1(xi, yi) and L2(xi, zi) as shown in Equation (3). We
+introduce a loss scheduler to dynamically weight the contribution of the losses from the two tasks throughout the
+entire training process, which is done by designing a speciﬁc function for the λ in Equation (3) with respect to
+the current training epoch number. In this work, we investigate the loss schedulers listed in Table 2 and Figure
+2. In practice, λ can be any function. Note that in Figure 2 and Table 2 all loss schedulers have λ = 1 at the
+beginning of training, and λ = 0 after when the current epoch number, e, is larger than a preset hyperparameter
+L. This is to make the training focus on the “easier” task in the beginning of training, while transitioning to
+focusing on the “harder” task (original three-class classiﬁcation) as training progresses.
 
-domorphisms. For the deﬁnition of int-ampliﬁed endomorphisms, see 2.1(11). Recently, the
+Table 2: Functions of diﬀerent types of loss scheduler with
+current epoch number, e, less than the preset hyperparameter
+L, (λ = 0 when L ≤ e ≤ E)
 
-equivariant minimal model program for varieties with int-ampliﬁed endomorphisms was es-
+Loss scheduler type Function (with 0 ≤ e < L)
+λ(e) = (cos(eπ/L) + 1) /2
+Cosine
+λ(e) = 1 − e/L
+Linear
+λ(e) = −(e/L)2 + 1
+Concave quadratic
+λ(e) = L−2 · (e − L)2
+Convex quadratic
+λ(e) = e/L,  = 10−3
+Exponential
+λ(e) = log(1 + L − e)/ log(1 + L)
+Logarithm
+λ(e) = 1
+Step
 
-tablished (cf. [MZ20]). It has been used to study arithmetic-dynamical problems (cf. [MY19],
+Figure 2: Seven diﬀerent types of loss scheduler.
+L is a preset hyperparameter and E is the total
+number of the training epochs
 
-[MMSZ20]). It turns out that the equivariant minimal model program is also useful for the
+Table 3: Comparison of the diﬀerent methods’ performance. “LS: X” stands for a certain type of loss scheduler.
+The bold numbers correspond to the highest value for each metric.
 
-potential density problem.
+Accuracy
 
-Our main conjecture is the following.
+Balanced
+accuracy
+
+Average
 
-Conjecture 1.2 (Potential density under int-ampliﬁed endomorphisms). Let X be a pro-
+AUC
 
-jective variety deﬁned over a number ﬁeld K. Suppose that X admits an int-ampliﬁed endo-
+Aboutalib et al.5 (baseline)
 
-morphism. Then X satisﬁes potential density.
+LS: exponential
+LS: convex quadratic
+LS: linear
+LS: cosine
+LS: concave quadratic
+LS: logarithm
+LS: step
 
-The endomorphism being int-ampliﬁed is a crucial assumption in Conjecture 1.2 above.
-Indeed, consider X = X1 × C where X1 is any smooth projective variety and C is any
-smooth projective curve of genus at least 2. Such X does not satisfy potential density
+0.489
 
-(cf. Remark 1.4(2)). It does not have any int-ampliﬁed endomorphisms either; this is because
-every surjective endomorphism f of X, after iteration, has the form (x1, x2) 7→ (g(x1, x2), x2)
-for some morphism g : X1 × C → X1 by [San20, Lemma 4.5], and hence descends to the
-identity map idC on C via the natural projection X → C; thus, the iteration and hence f
-itself are not int-ampliﬁed (cf. [Men20, Lemma 3.7 and Theorem 1.1]).
+0.491
+0.510
+0.480
+0.501
+0.508
+0.511
+0.515
 
-One might think that Conjecture 1.2 is too strong. In fact, the following even stronger
+0.458
 
-conjecture has already been long outstanding (cf. Medvedev–Scanlon [MS09, Conjecture
+0.468
+0.474
+0.476
+0.464
+0.492
+0.494
+0.483
 
-5.10], and Amerik–Bogomolov–Rovinsky [ABR11]).
+0.658
 
-Conjecture 1.3 (Zariski dense orbit conjecture). Let X be a variety deﬁned over an alge-
+0.658
+0.672
+0.655
+0.653
+0.671
+0.668
+0.669
 
-braically closed ﬁeld k of characteristic zero and f : X 99K X a dominant rational map. If
-the f ∗-invariant function ﬁeld k(X)f is trivial, that is, k(X)f = k, then there exists some
+Binary
 
-POTENTIAL DENSITY
+task
 
-3
+accuracy
 
-x ∈ X(k) whose (forward) f -orbit Of (x) := {f n(x) | n ≥ 0} is well-deﬁned (i.e., f is deﬁned
-at f n(x) for any n ≥ 0) and Zariski dense in X.
+0.598
 
-Note that Conjecture 1.3 with f being int-ampliﬁed implies Conjecture 1.2 (cf. Lemmas 2.2
+0.623
+0.607
+0.614
+0.611
+0.633
+0.617
+0.622
 
-and 2.3).
+Binary
 
-Remark 1.4. We recall some known cases of the potential density problem and Conjec-
+task
+AUC
 
-ture 1.3.
+0.633
 
-(1) Unirational varieties and abelian varieties over number ﬁelds satisfy potential density
+0.641
+0.648
+0.635
+0.645
+0.647
+0.644
+0.655
 
-(cf. [Has03, Corollary 3.3 and Proposition 4.2]).
+3. RESULTS
 
-(2) Let X be a variety with a dominant rational map X 99K C to a curve of genus ≥ 2
+We evaluate our method on 1,709 FFDM images using 5-fold cross validation. The results shown in Table 3
+are means over the ﬁve partitions. We use the VGG162 as the backbone of the convolutional neural network
+(CNN) model. We present the results for diﬀerent loss schedulers and compare our methods with Aboutalib et
+al.’s method5 (baseline) which is a deep learning method on the same three-class classiﬁcation task as ours. Our
+model evaluation metrics include the accuracy and the AUC for the three-class classiﬁcation, and the balanced
+accuracy by averaging the accuracies of the three classes, which reduces the eﬀect induced by data imbalance. In
+addition, to further evaluate the methods’ overall ability to distinguish False recall, we also show the accuracy
+and AUC of the binary “easier” task mentioned in Section 2.2. All experiments are implemented in PyTorch
+framework and run on an Nvidia TESLA V100 GPU from Pittsburgh Supercomputing Center.
 
-over a number ﬁeld. Then X does not satisfy potential density (cf. [Fal83] and [Has03,
+4. DISCUSSION
 
-Proposition 3.1]).
+In this work, we proposed a curriculum learning strategy in task space for FFDM image classiﬁcation of the
+three classes of Malignant, Negative, and False recall. We designed a loss scheduler to weight the contribution
+of the original “harder” three-class classiﬁcation task and the created “easier” binary classiﬁcation task.
 
-(3) Conjecture 1.3 holds for any pair (X, f ) with X being a curve (cf. [Ame11, Corollary
+According to the results, CL in task space with most forms of the loss scheduler outperform the baseline,
+which attributes to the fact that the loss schedulers focus more on the “easier” task during the ﬁrst stage of the
+training process (0 ≤ e < L), while Aboutalib et al.’s method5 (baseline) only uses the basic learning strategy. In
+addition, the three concave loss schedulers, namely the concave quadratic, logarithm and step function, perform
+better than the other ones. This is partially because these three concave loss scheduler put reasonably more
+weight than others on the “easier” task, which provides more help on understanding the “harder” task (see
+Figure 2).
 
-9]).
+5. NEW OR BREAKTHROUGH WORK TO BE PRESENTED
 
-(4) Conjecture 1.3 holds for any pair (X, f ) with X being a projective surface and f a
+As far as we know, this work is one of the newest studies that develop a learning strategy with regard to
+curriculum learning in task space on FFDM image classiﬁcation. Our method demonstrates that by scheduling
+the learning from an “easier” sub-task to the original “harder” task, the model’s performance to classify the
+three classes of the FFDM images will be further improved from the baseline learning strategies. We believe
+that such curriculum learning methods will expand the possibilities of artiﬁcial intelligence (AI) studies and its
+applications in future medical imaging research.
 
-surjective endomorphism of X (cf. [Xie19], [JXZ20]).
+REFERENCES
 
-We ﬁrst prove Conjecture 1.2 for rationally connected varieties in dimension ≤ 3.
+[1] “U.S. Breast Cancer Statistics.” American Cancer Society, 4 February 2021, https://www.breastcancer.
 
-Proposition 1.5. Let X be a rationally connected projective variety over K. Suppose that
-dim X ≤ 3 and X admits an int-ampliﬁed endomorphism. Then X satisﬁes potential density.
+org/symptoms/understand_bc/statistics (2021).
 
-Conjecture 1.2 also has a positive answer for non-uniruled varieties in any dimension:
+[2] Simonyan, K. and Zisserman, A., “Very deep convolutional networks for large-scale image recognition,” arXiv
 
-Proposition 1.6. Let X be a non-uniruled projective variety over K. Suppose that X admits
+preprint arXiv:1409.1556 (2014).
 
-an int-ampliﬁed endomorphism. Then X satisﬁes potential density.
+[3] Luo, J., Kitamura, G., Doganay, E., Arefan, D., and Wu, S., “Medical knowledge-guided deep curricu-
+lum learning for elbow fracture diagnosis from x-ray images,” in [Medical Imaging 2021: Computer-Aided
+Diagnosis], 11597, 1159712, International Society for Optics and Photonics (2021).
 
-With the help of Propositions 1.5 and 1.6, we are able to show:
+[4] Jim´enez-S´anchez, A., Mateus, D., Kirchhoﬀ, S., Kirchhoﬀ, C., Biberthaler, P., Navab, N., Ballester, M. A. G.,
+and Piella, G., “Medical-based deep curriculum learning for improved fracture classiﬁcation,” in [International
+Conference on Medical Image Computing and Computer-Assisted Intervention ], 694–702, Springer (2019).
 
-Theorem 1.7. Let X be a normal projective variety over K with at worst Q-factorial klt
-singularities. Suppose that dim X ≤ 3 and X admits an int-ampliﬁed endomorphism. Then
+[5] Aboutalib, S. S., Mohamed, A. A., Berg, W. A., Zuley, M. L., Sumkin, J. H., and Wu, S., “Deep learn-
+ing to distinguish recalled but benign mammography images in breast cancer screening,” Clinical Cancer
+Research 24(23), 5902–5909 (2018).
 
-X satisﬁes potential density.
+[6] Bengio, Y., Louradour, J., Collobert, R., and Weston, J., “Curriculum learning,” in [Proceedings of the 26th
 
-In the last section, we study Question 1.9 below, which is also arithmetic in nature, initi-
+annual international conference on machine learning ], 41–48 (2009).
 
-ated in [KS14] and further studied in [SS20] and [SS21].
-
-Deﬁnition 1.8 (cf. [SS20, Deﬁnition 1.4]). Let X be a projective variety over a number
-ﬁeld K and f : X → X a surjective morphism. We recall the inequality
-
-αf (x) ≤ d1(f )
-
-4
-
-JIA JIA, TAKAHIRO SHIBATA, AND DE-QI ZHANG
-
-between the arithmetic degree αf (x) at a point x ∈ X(K) and the ﬁrst dynamical degree
-d1(f ) of f (cf. 2.1(12) and (13)). Let L be an intermediate ﬁeld: K ⊆ L ⊆ K. We say that
-(X, f ) has densely many L-rational points with the maximal arithmetic degree if there is a
-subset S ⊆ X(L) satisfying the following conditions:
-
-(1) S is Zariski dense in XL;
-(2) the equality αf (x) = d1(f ) holds for all x ∈ S; and
-(3) Of (x1) ∩ Of (x2) = ∅ for any pair of distinct points x1, x2 ∈ S.
-
-Following [SS21], we introduce the following notation. We say that (X, f ) satisﬁes (DR)L
-if (X, f ) has densely many L-rational points with the maximal arithmetic degree. We say
-that (X, f ) satisﬁes (DR) if there is a ﬁnite ﬁeld extension K ⊆ L (⊆ K) such that (X, f )
-satisﬁes (DR)L.
-
-Question 1.9. Let X be a projective variety over K and f : X → X a surjective endomor-
-
-phism. Assume that X satisﬁes potential density. Does (X, f ) satisfy (DR)?
-
-Question 1.9 has a positive answer for smooth projective surfaces when d1(f ) > 1 (cf. [SS21,
-
-Theorem 1.5]). We generalise it to (possibly singular) projective surfaces:
-
-Theorem 1.10. Let X be a normal projective surface over K satisfying potential density,
-and f : X → X a surjective morphism with d1(f ) > 1. Then (X, f ) satisﬁes (DR).
-
-The following is an aﬃrmative answer to Question 1.9 for int-ampliﬁed endomorphisms
-
-on rationally connected threefolds.
-
-Theorem 1.11. Let X be a rationally connected smooth projective threefold over K and
-f : X → X an int-ampliﬁed endomorphism. Then (X, f ) satisﬁes (DR).
-
-Acknowledgements. The ﬁrst, second and third authors are supported, from NUS, by the
-
-President’s scholarship, a Research Fellowship and an ARF, respectively.
-
-2.1. Notation and Terminology
-
-2. Preliminaries
-
-(1) Let K be a number ﬁeld. We work over K when considering the potential density. We
-
-ﬁx an algebraic closure K of K.
-
-(2) Let k be an algebraically closed ﬁeld of characteristic zero. We work over k when
-
-considering geometric properties.
-
-(3) A variety means a geometrically integral separated scheme of ﬁnite type over a ﬁeld.
-
-POTENTIAL DENSITY
-
-5
-
-(4) Let X be a variety over K and f : X → X a morphism (over K). We denote XK :=
-
-X ×Spec K Spec K and fK : XK → XK the induced morphism (over K).
-
-(5) The symbol ∼R denotes the R-linear equivalence on Cartier divisors.
-(6) We refer to [KM98] for deﬁnitions of Q-factoriality and klt singularities.
-(7) A variety X of dimension n is uniruled if there is a variety U of dimension n − 1 and a
-
-dominant rational map P1 × U 99K X.
-
-(8) Let X be a proper variety over a ﬁeld k. We say that X is rationally connected if there
-is a family of proper algebraic curves U → Y whose geometric ﬁbres are irreducible
-rational curves with cycle morphism U → X such that U ×Y U → X × X is dominant
-(cf. [Kol96, IV Deﬁnition 3.2]). When k is algebraically closed of characteristic zero, if X
-
-is rationally connected, then any two closed points of X are connected by an irreducible
-
-rational curve over k (by applying [Kol96, IV Theorem 3.9] to a resolution of X). The
-
-converse holds when k is also uncountable (cf. [Kol96, IV Proposition 3.6.2]).
-
-(9) A normal projective variety X is said to be Q-abelian if there is a ﬁnite surjective
-morphism π : A → X, which is étale in codimension 1, with A being an abelian variety.
-(10) For a morphism f : X → X and a point x ∈ X, the forward f -orbit of x is the set
-
-Of (x) := {x, f (x), f 2(x), . . .}. We denote the Zariski closure of Of (x) by Zf (x).
-
-More generally, for a closed subset Y ⊆ X, we denote Of (Y ) := S∞
-
-n=0 f n(Y ) and its
-
-Zariski-closure Zf (Y ) := Of (Y ). We say that Of (Y ) is Zariski dense if Zf (Y ) = X.
-
-(11) A surjective morphism f : X → X of a projective variety is called int-ampliﬁed if there
-exists an ample Cartier divisor H on X such that f ∗H − H is ample. In particular,
-polarised endomorphisms are int-ampliﬁed.
-
-(12) Let X be a projective variety and f : X → X a surjective morphism. The ﬁrst dynamical
-
-degree d1(f ) of f is the limit
-
-d1(f ) := lim
-n→∞
-
-((f n)∗H · H dim X−1)1/n,
-
-where H is an ample Cartier divisor on X. This limit always converges and is indepen-
-
-dent of the choice of H.
-
-(13) Let X be a projective variety over K and f : X → X a surjective morphism. Fix a
-(logarithmic) height function hH ≥ 1 associated to an ample Cartier divisor H on X.
-For x ∈ X(K), the arithmetic degree αf (x) of f at x is the limit
-
-αf (x) := lim
-n→∞
-
-hH(f n(x))1/n.
-
-This limit always converges and is independent of the choices of H and hH (cf. [KS16]).
-
-6
-
-JIA JIA, TAKAHIRO SHIBATA, AND DE-QI ZHANG
-
-Lemma 2.2. Let X be a projective variety over k and f : X → X an int-ampliﬁed endomor-
-phism. Then k(X)f = k. In particular, if Conjecture 1.3 holds for (X, f ), then there exists
-some x ∈ X(k) such that Of (x) is Zariski dense in X.
-
-Proof. Assume to the contrary that there is a nonconstant rational function φ : X 99K P1 such
-that φ◦f = φ. Let Γ be the graph of the rational map φ : X 99K P1 with projections π1 : Γ →
-X being birational and π2 : Γ → P1 being surjective. Then f lifts to an endomorphism f |Γ
-on Γ such that π1 ◦ f |Γ = f ◦ π1 and π2 ◦ f |Γ = π2. It follows from [Men20, Lemmas 3.4 and
-3.5] that id : P1 → P1 is int-ampliﬁed, which is absurd.
-
-(cid:3)
-
-Lemma 2.3. Let X be a projective variety over K, f : X → X a surjective morphism,
-and Z ⊆ X a subvariety which satisﬁes potential density (e.g., Z is an abelian variety or
-unirational; see Remark 1.4(1)). If Of (Z) is Zariski dense, then X satisﬁes potential density.
-
-Proof. Replacing K with a ﬁnite extension, we may assume that Z(K) is Zariski dense in Z.
-Then the union S∞
-
-n=0 f n(Z(K)) is a Zariski dense set of K-rational points of X.
-
-(cid:3)
-
-3. Rationally connected varieties: Proof of Proposition 1.5
-
-Lemma 3.1. Let X be a rationally connected projective variety over k and of dimension
-d ≥ 1, and f : X → X an int-ampliﬁed endomorphism. Assume Conjecture 1.3 in dimension
-≤ d − 1. Then there is a rational curve C ⊆ X such that Of (C) is Zariski dense.
-
-Proof. If we have a Zariski dense f -orbit Of (x), take any rational curve C passing through
-x. Clearly, Of (C) is Zariski dense. So we may assume that f has no Zariski dense orbit.
-
-Let x ∈ X(k) be a point such that Zf (x) is irreducible with dimension r < d. By
-[Fak03, Theorem 5.1], the subset of X(k) consisting of f -periodic points is Zariski dense in
-X. Pick an f -periodic point y ∈ X(k) \ Zf (x). After iterating f , we may assume that y is
-an f -ﬁxed point. Take a rational curve C ⊆ X containing x and y. Set W := Zf (C). If
-W = X, we are done. So we may assume that W ( X. If dim W = r, then W has its
-irreducible decomposition as W = Zf (x) ∪ W1 ∪ · · · ∪ Wm. There is some n ≥ 0 such that
-f n(x) ∈ Zf (x)\ Sm
-i=1 Wi. Hence f n(C) ⊆ Zf (x). In
-particular, y = f n(y) ∈ f n(C) ⊆ Zf (x), a contradiction. Thus r < dim W (< dim X = d).
-
-i=1 Wi. Then f n(C) ⊆ W but f n(C) 6⊆ Sm
-
-Now there exists an f -periodic irreducible component W ′ ⊆ W with r < dim W ′ < d.
-Replacing f by a positive power, we may assume that W ′ is f -invariant. Then f |W ′ is an int-
-ampliﬁed endomorphism on W ′ (cf. [Men20, Lemma 2.2]). By assumption, Conjecture 1.3
-holds for (W ′, f |W ′). So there exists some w ∈ W ′(k) such that Zf (w) = Zf |W ′ (w) = W ′
-
-POTENTIAL DENSITY
-
-7
-
-(cf. Lemma 2.2). In particular, Zf (w) is irreducible with dim Zf (w) > r. Continuing this
-process, the lemma follows.
-(cid:3)
-
-Corollary 3.2. Let X be a rationally connected projective variety over k and of dimension
-≤ 3, and f : X → X an int-ampliﬁed endomorphism. Then there is a rational curve C ⊆ X
-such that Of (C) is Zariski dense.
-
-Proof. This follows from Remark 1.4(3), (4), and Lemma 3.1.
-
-(cid:3)
-
-Proof of Proposition 1.5. By applying Corollary 3.2 to (XK, fK), we know that there is a
-rational curve C ⊆ XK such that OfK (C) is Zariski dense. Replacing K with a ﬁnite
-extension, we may assume that C is deﬁned over K. Then Of (C) is Zariski dense in X. The
-theorem follows from Lemma 2.3.
-(cid:3)
-
-4. Int-amplified endomorphisms: Proofs of Proposition 1.6 and Theorem 1.7
-
-Lemma 4.1. (cf. [Men20, Theorem 1.9]) Let X be a normal projective variety over k and
-f : X → X an int-ampliﬁed endomorphism. Assume one of the following conditions.
-
-(1) X is non-uniruled.
-(2) X has at worst Q-factorial klt singularities, and KX is pseudo-eﬀective.
-
-Then X is a Q-abelian variety. In particular, f has a Zariski dense orbit.
-
-Proof. The ﬁrst claim is [Men20, Theorem 1.9]. Now there is a ﬁnite cover π : A → X (étale
-
-in codimension 1) from an abelian variety A with f lifted to an int-ampliﬁed endomorphism
-
-g on A (cf. [NZ10, Lemma 2.12] and [Men20, Lemma 3.5]). Since Conjecture 1.3 holds for
-endomorphisms on abelian varieties (cf. [GS17]), g has a Zariski dense orbit Og(a) for some
-a ∈ A(k) (cf. Lemma 2.2). Then Of (π(a)) is a Zariski dense orbit of f .
-(cid:3)
-
-Lemma 4.2. Let X be a normal projective variety over k and of dimension ≤ 3 with at
-worst Q-factorial klt singularities. Let f : X → X be an int-ampliﬁed endomorphism. Then
-there exists a rational subvariety Z ⊆ X of dimension ≥ 0, such that Of (Z) is Zariski dense.
-
-Proof. By Remark 1.4(3), (4), and Lemma 2.2, the assertion holds when dim X ≤ 2. Then
-
-by Corollary 3.2 and Lemma 4.1, we may assume that X is a threefold, which is uniruled
-but not rationally connected, and KX is not pseudo-eﬀective.
-
-By [MZ20], replacing f with an iteration, we can run an f -equivariant minimal model
-
-program:
-
-X = X0
-
-µ0
-
-/❴❴❴
-
-µ1
-
-/❴❴❴
-
-· · ·
-
-µm−1
-
-/❴❴❴
-
-X1
-
-Xm = X ′
-
-π
-
-/ Y,
-
-/
-/
-/
-/
-8
-
-JIA JIA, TAKAHIRO SHIBATA, AND DE-QI ZHANG
-
-where each µi is a birational map and π is a Mori ﬁbre space with dim Y < dim X ′ = 3.
-If dim Y = 0, then X ′ is klt Fano. Hence X ′ and X are rationally connected (cf. [Zha06,
-Theorem 1]), contradicting our extra assumption. Thus dim Y = 1, 2. Since dim Y ≤ 2,
-the int-ampliﬁed endomorphism g := f |Y has a Zariski dense orbit Og(y) by Remark 1.4
-(3), (4) and Lemma 2.2 (cf. [Men20, Lemmas 3.4 and 3.5]). Replacing y by gN (y) for a
-suitable N ≥ 0, we may assume that F := π−1(y) is a klt Fano variety of dimension equal
-to dim X − dim Y ∈ {1, 2}, and hence a rational variety. Clearly, Of (F ) is Zariski dense in
-X by construction.
-(cid:3)
-
-Proof of Proposition 1.6. Since being uniruled and the potential density are birational prop-
-
-erties (cf. 2.1(7) and [Has03, Proposition 3.1]), they are invariant under the normalisation
-
-map. Also, since an int-ampliﬁed endomorphism on the variety X lifts to an int-ampliﬁed
-
-endomorphism on its normalisation (cf. [Men20, Lemma 3.5]), we may assume that X is
-
-normal. Then the proposition follows from Lemmas 4.1 and 2.3.
-
-Proof of Theorem 1.7. This follows from Lemmas 4.2 and 2.3.
-
-(cid:3)
-
-(cid:3)
-
-5. The maximal arithmetic degree: Proofs of Theorems 1.10 and 1.11
-
-In this section, we study Question 1.9. First, we prove Theorem 1.10.
-
-Lemma 5.1. Let X, Y be normal projective varieties over K, and f : X → X and g : Y → Y
-surjective endomorphisms. Assume that there is a surjective morphism π : X → Y such that
-π ◦ f = g ◦ π. Then:
-
-(1) If π is generically ﬁnite and (X, f ) satisﬁes (DR), then (Y, g) also satisﬁes (DR).
-
-(2) If π is birational, then (X, f ) satisﬁes (DR) if and only if so does (Y, g).
-
-π′
-
-−→ X ′ ϕ
-
-−→ Y be the Stein factorisation
-Proof. Assume ﬁrst that π is generically ﬁnite. Let X
-of π, where π′ is a projective morphism with connected ﬁbres (indeed, π′
-OX ≃ OX ′) to a
-∗
-normal variety X ′, and ϕ is a ﬁnite morphism (cf. [Har77, Corollary 11.5]). Since π ◦ f =
-g ◦ π and ϕ is ﬁnite, we see that π′ ◦ f contracts every ﬁbre of π′. By the rigidity lemma
-(cf. [Deb01, Lemma 1.15]), there is a morphism f ′ : X ′ → X ′ such that π′ ◦ f = f ′ ◦ π′ and
-ϕ ◦ f ′ = g ◦ π. By [SS21, Lemma 3.2], for (1), we only need to show that (X ′, f ′) satisﬁes
-(DR), which can be deduced from (2); for (2), we only need to show that if (X, f ) satisﬁes
-
-(DR), then so does (Y, g).
-
-Let Σ ⊆ Y be the subset consisting of points y such that dim π−1(y) > 0, and E :=
-π−1(Σ) ⊆ X, which is a closed proper subset. Since π has connected ﬁbres by Zariski’s Main
-
-POTENTIAL DENSITY
-
-9
-
-Theorem (cf. [Har77, Corollary 11.4]), π|X\E : X \ E → Y \ Σ is an isomorphism. Since
-g is ﬁnite, both Σ and Y \ Σ are g−1-invariant. There is an induced surjective morphism
-f |X\E : X \ E → X \ E such that π|X\E ◦ f |X\E = g|Y \Σ ◦ π|X\E. Let L be a ﬁnite ﬁeld
-extension of K such that (X, f ) satisﬁes (DR)L. Then there exists a sequence of L-rational
-points SX = {xi}∞
-
-i=1 ⊆ X(L) \ E such that
-
-• SX is Zariski dense in XL;
-• αf (xi) = d1(f ) for all i; and
-• Of (xi) ∩ Of (xj) = ∅ for i 6= j.
-
-Thus yi := π(xi) is well-deﬁned and SY := {yi}∞
-i=1 satisﬁes the conditions of (DR)L for (Y, g);
-note that d1(f ) = d1(g) and αf (xi) = αg(yi) (cf. [Sil17, Lemma 3.2] in the smooth case, or
-[MMSZ20, Lemma 2.8] in general).
-(cid:3)
-
-We need the following from [SS20].
-
-Lemma 5.2 (cf. [SS20, Theorem 4.1]). Let X be a projective variety over K and f : X → X
-a surjective morphism with d1(f ) > 1. Assume the following condition:
-
-(†)
-
-There is a numerically non-zero nef R-Cartier divisor D on X such that
-f ∗D ∼R d1(f )D, and for any proper closed subset Y ⊆ XK, there exists
-a morphism g : P1
-
-K) 6⊆ Y and g∗D is ample.
-
-K → X such that g(P1
-
-Then (X, f ) satisﬁes (DR)K.
-
-We also need the following structure theorem of endomorphisms.
-
-Proposition 5.3 (cf. [JXZ20, Theorem 1.1]). Let f : X → X be a non-isomorphic surjective
-
-endomorphism of a normal projective surface over k. Then, replacing f with a positive power,
-
-one of the following holds.
-
-(i) ρ(X) = 2; there is a P1-ﬁbration X → C to a smooth projective curve of genus ≥ 1,
-
-and f descends to an automorphism of ﬁnite order on the curve C.
-
-(ii) f lifts to an endomorphism f |V on a smooth projective surface V via a generically
-
-ﬁnite surjective morphism V → X.
-
-(iii) X is a rational surface.
-
-Proof. We use [JXZ20, Theorem 1.1]. Cases (1), (3) and (8) imply our (ii). Cases (4) ∼ (7)
-
-and (9) lead to our (iii). Case (2) implies our (i), noting that f cannot be polarised since it
-
-descends to an automorphism and hence ρ(X) = 2 by [MZ19, Theorem 5.4].
-
-(cid:3)
-
-10
-
-JIA JIA, TAKAHIRO SHIBATA, AND DE-QI ZHANG
-
-Proof of Theorem 1.10. When f is an automorphism, we may take an equivariant resolution
-
-of (X, f ) and assume that X is smooth (cf. Lemma 5.1). In this case, the theorem follows
-
-from [SS21, Theorem 1.5].
-
-Now we assume that deg(f ) ≥ 2. We apply Proposition 5.3 to (XK, fK) (cf. [SS21, Lemma
-3.3]). In either case, we may replace K with a ﬁnite ﬁeld extension so that the varieties and
-
-morphisms are deﬁned over K.
-
-In Case 5.3 (ii), the theorem follows from Lemma 5.1 and [SS21, Theorem 1.5]. In Case 5.3
-
-(iii), the theorem is a consequence of [SS20, Theorem 1.11].
-
-In Case 5.3 (i), we may assume g(C) = 1; otherwise, X does not satisfy potential density
-(cf. Remark 1.4(2)). Let F ∼= P1 be a general ﬁbre of X → C. After replacing K with a
-ﬁnite ﬁeld extension, there is a numerically non-zero nef R-Cartier divisor D on X such that
-f ∗D ∼R d1(f )D (cf. [MMS+21, Theorem 6.4]). The numerical equivalence class of D is not
-a multiple of that of the ﬁbre F since f ∗F ∼R F and d1(f ) > 1. Then (D · F ) > 0, by
-the Hodge index theorem. Thus, (X, f ) satisﬁes the condition (†) in Lemma 5.2 and hence
-
-satisﬁes (DR).
-
-(cid:3)
-
-Before proving Theorem 1.11, we need a stronger version of Corollary 3.2 in dimension 3.
-
-Lemma 5.4. Let X be a rationally connected smooth projective threefold over k and f : X →
-
-X an int-ampliﬁed endomorphism. Let D be a numerically non-zero nef R-Cartier divisor on
-X. Then there is a rational curve C ⊆ X such that Of (C) is Zariski dense and (D · C) > 0.
-
-Proof. By [Yos20, Corollary 1.4], X is of Fano type. Then there is a surjective morphism
-φ : X → Y to a projective variety Y such that D ∼R φ∗H for some ample R-divisor on Y by
-[BCHM10, Theorem 3.9.1].
-
-If f has a Zariski dense orbit Of (x), then there is a rational curve passing through x (such
-a curve exists since X is rationally connected) and satisfying the claims. So we may assume
-
-that f has no Zariski dense orbit.
-
-Since Conjecture 1.3 is known for surfaces (cf. [JXZ20, Theorem 1.9]), we can take a point
-x0 ∈ X such that dim Zf (x0) = 2 (cf. Proof of Lemma 3.1). Replacing f by a power and
-x0 by f N (x0) for some integer N ≥ 0, we may assume that Zf (x0) is irreducible. Take an
-f -periodic point x1 ∈ X such that x1 6∈ Zf (x0) ∪ φ−1(φ(x0)). Take a rational curve C ⊆ X
-containing x0, x1. We see that Of (C) is Zariski dense as in the proof of Lemma 3.1. Now
-φ(C) is not a point by construction, so
-
-(D · C) = (φ∗H · C) = (H · φ∗C) > 0.
-
-POTENTIAL DENSITY
-
-Thus C satisﬁes the claims.
-
-11
-
-(cid:3)
-
-Proof of Theorem 1.11. By [MMS+21, Theorem 6.4], replacing K by a ﬁnite extension, there
-is a numerically non-zero nef R-Cartier divisor D on X such that f ∗D ∼R d1(f )D. Lemma 5.4
-implies that, replacing K with a ﬁnite extension so that the curve C there (and f ) are deﬁned
-over K, the pair (X, f ) satisﬁes (†) in Lemma 5.2. Hence (X, f ) satisﬁes (DR).
-
-(cid:3)
-
-References
-
-[ABR11] E. Amerik, F. Bogomolov, and M. Rovinsky, Remarks on endomorphisms and rational points,
-
-Compos. Math. 147 (2011), no. 6, 1819–1842. ↑2
-
-[Ame11] E. Amerik, Existence of non-preperiodic algebraic points for a rational self-map of inﬁnite order,
-
-Math. Res. Lett. 18 (2011), no. 02, 251–256. ↑3
-
-[BCHM10] C. Birkar, P. Cascini, C. D. Hacon, and J. McKernan, Existence of minimal models for varieties
-
-of log general type, J. Amer. Math. Soc. 23 (2010), no. 2, 405–468. ↑10
-
-[Cam04] F. Campana, Orbifolds, special varieties and classiﬁcation theory, Annales de l’institut fourier,
-
-2004, pp. 499–630. ↑2
-
-[Deb01] O. Debarre, Higher-dimensional algebraic geometry, Universitext, Springer-Verlag, New York,
-
-2001. ↑8
-
-[Fak03] N. Fakhruddin, Questions on self maps of algebraic varieties, J. Ramanujan Math. Soc. 18 (2003),
-
-no. 2, 109–122. ↑6
-
-[Fal83] G. Faltings, Endlichkeitssätze für abelsche varietäten über zahlkörpern, Invent. Math. 73 (1983),
-
-no. 3, 349–366. ↑3
-
-[GS17] D. Ghioca and T. Scanlon, Density of orbits of endomorphisms of abelian varieties, Trans. Amer.
-
-Math. Soc. 369 (2017), no. 1, 447–466. ↑7
-
-[Har77] R. Hartshorne, Algebraic geometry, Grad. Texts in Math., vol. 52, Springer-Verlag, New York,
-
-1977. ↑8, 9
-
-[Has03] B. Hassett, Potential density of rational points on algebraic varieties, Higher dimensional varieties
-
-and rational points, 2003, pp. 223–282. ↑2, 3, 8
-
-[JXZ20] J. Jia, J. Xie, and D.-Q. Zhang, Surjective endomorphisms of projective surfaces – the existence
-
-of inﬁnitely many dense orbits (2020), available at 2005.03628. ↑3, 9, 10
-
-[KM98] J. Kollár and S. Mori, Birational geometry of algebraic varieties, Cambridge Tracts in Math.,
-
-Cambridge Univ. Press, 1998. ↑5
-
-[Kol96] J. Kollár, Rational Curves on Algebraic Varieties, Erg. Math. 32 (3. Folge), Springer-Verlag,
-
-Berlin, 1996. ↑5
-
-[KS14] S. Kawaguchi and J. H. Silverman, Examples of dynamical degree equals arithmetic degree, Michi-
-
-gan Math. J. 63 (2014), no. 1, 41–63. ↑3
-
-[KS16]
-
-, Dynamical canonical heights for Jordan blocks, arithmetic degrees of orbits, and nef
-
-canonical heights on abelian varieties, Trans. Amer. Math. Soc. 368 (2016), no. 7, 5009–5035. ↑5
-
-12
-
-JIA JIA, TAKAHIRO SHIBATA, AND DE-QI ZHANG
-
-[Men20] S. Meng, Building blocks of ampliﬁed endomorphisms of normal projective varieties, Math. Z.
-
-294 (2020), no. 3, 1727–1747. ↑2, 6, 7, 8
-
-[MMS+21] Y. Matsuzawa, S. Meng, T. Shibata, D.-Q. Zhang, and G. Zhong, Invariant subvarieties with
-
-small dynamical degree, Int. Math. Res. Not. IMRN (2021). ↑10, 11
-
-[MMSZ20] Y. Matsuzawa, S. Meng, T. Shibata, and D.-Q. Zhang, Non-density of points of small arithmetic
-
-degrees (2020), available at 2002.10976. ↑2, 9
-
-[MS09] A. Medvedev and T. Scanlon, Polynomial dynamics (2009), available at 0901.2352v1. ↑2
-
-[MY19] Y. Matsuzawa and S. Yoshikawa, Kawaguchi-Silverman conjecture for endomorphisms on
-
-rationally connected varieties admitting an int-ampliﬁed endomorphism (2019), available at
-
-1908.11537. ↑2
-
-[MZ19] S. Meng and D.-Q. Zhang, Kawaguchi-Silverman conjecture for surjective endomorphisms (2019),
-
-available at 1908.01605. ↑9
-
-[MZ20]
-
-, Semi-group structure of all endomorphisms of a projective variety admitting a polarized
-
-endomorphism, Math. Res. Lett. 27 (2020), no. 2, 523–549. ↑2, 7
-
-[NZ10] N. Nakayama and D.-Q. Zhang, Polarized endomorphisms of complex normal varieties, Math.
-
-Ann. 346 (2010), no. 4, 991–1018. ↑7
-
-[San20] K. Sano, Dynamical degree and arithmetic degree of endomorphisms on product varieties, Tohoku
-
-Math. J. (2) 72 (2020), no. 1, 1–13. ↑2
-
-[Sil17] J. H Silverman, Arithmetic and dynamical degrees on abelian varieties, J. Théor. Nombres Bor-
-
-deaux 29 (2017), no. 1, 151–167. ↑9
-
-[SS20] K. Sano and T. Shibata, Zariski density of points with maximal arithmetic degree (2020), available
-
-at 2007.15180. ↑3, 9, 10
-
-[SS21]
-
-, Zariski density of points with maximal arithmetic degree for surfaces (2021), available
-
-at 2101.08417. ↑3, 4, 8, 10
-
-[Xie19] J. Xie, The existence of Zariski dense orbits for endomorphisms of projective surfaces (with an
-
-appendix in collaboration with Thomas Tucker) (2019), available at 1905.07021. ↑3
-
-[Yos20] S. Yoshikawa, Structure of Fano ﬁbrations of varieties admitting an int-ampliﬁed endomorphism
-
-(2020), available at 2002.01257. ↑10
-
-[Zha06] Q. Zhang, Rational connectedness of log Q-Fano varieties, J. Reine Angew. Math. 2006 (2006),
-
-no. 590, 131–142. ↑8
-
-National University of Singapore, Singapore 119076, Republic of Singapore
-
-Email address: jia_jia@u.nus.edu
-
-National University of Singapore, Singapore 119076, Republic of Singapore
-
-Email address: mattash@nus.edu.sg
-
-National University of Singapore, Singapore 119076, Republic of Singapore
-
-Email address: matzdq@nus.edu.sg
+[7] Stretcu, O., Platanios, E. A., Mitchell, T., and P´oczos, B., “Coarse-to-Fine Curriculum Learning for Classi-
+ﬁcation,” in [International Conference on Learning Representations (ICLR) Workshop on Bridging AI and
+Cognitive Science (BAICS) ], (2020).
 
 
