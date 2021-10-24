@@ -1,4 +1,5 @@
 import pymongo, heapq
+from bson.objectid import ObjectId
 
 class DBAccess:
     
@@ -26,6 +27,22 @@ class DBAccess:
             
         return papers_list
         
+    #[!!!] does not reset itself automatically.
+    #needs .rewind() to iterate over DB again
+    def get_papers_iterator(self):
+        return self.db_data.find()
+        
+    def get_all_keywords(self):
+        return self.db_kw.distinct("keywords")
+        
+    def get_paper_by_id(self, id):
+        cursor = self.db_data.find({"_id": ObjectId(id)})
+        if cursor.count() == 0:
+            raise ValueError("No paper with this ID found!")
+
+        return cursor[0]
+        
     def search_text(self, text, num_results = 10):
         pass
+
         

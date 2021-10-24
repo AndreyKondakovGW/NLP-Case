@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from nlp_case.server.app.models.text_keywords_models.TextRank_model import  TextRank_model
 from nlp_case.server.app.models.text_keywords_models.Tfidf_model import Tfidf_model
 from nlp_case.server.app.db.db_access import DBAccess
-from nlp_case.server.app.models.Text_Simularity_model import Text_Simularity_model
+from nlp_case.server.app.models.Text_Similarity_model import Text_Similarity_model
 from nlp_case.server.app.models.NER_Disease_recognizer import NERDiseaseRecognizer
 from nlp_case.server.app.models.NER_Disease_net import SentenceDiseaseRecognizer, StackedConv1d
 import os
@@ -50,8 +50,8 @@ def find_dis_names():
 
 if __name__ == '__main__':
     print(os.path.abspath(__file__))
-    sim_model = Text_Simularity_model()
-    acsess = DBAccess("7P7RRzvV516fhdQX")
+    access = DBAccess("7P7RRzvV516fhdQX")
+    sim_model = Text_Similarity_model(access)
     rake_model = TextRank_model()
     #tf_model = Tfidf_model()
     NER_model = NERDiseaseRecognizer()
