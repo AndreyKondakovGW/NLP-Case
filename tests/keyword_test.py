@@ -1,5 +1,6 @@
 from nlp_case.server.app.models.text_keywords_models.TextRank_model import TextRank_model
 from nlp_case.server.app.models.text_keywords_models.Tfidf_model import Tfidf_model
+from nlp_case.server.app.db.db_access import DBAccess
 
 text = '''We consider the potential density of rational points on an algebraic variety
 
@@ -21,7 +22,8 @@ the existence of densely many rational points with the maximal arithmetic degree
 
 sufficiently large number field.'''
 
-tfmodel = Tfidf_model()
+access = DBAccess("7P7RRzvV516fhdQX")
+tfmodel = Tfidf_model(access.get_papers_iterator())
 trmodel = TextRank_model()
 print(tfmodel.predict_keywords(text))
 print('='*10)

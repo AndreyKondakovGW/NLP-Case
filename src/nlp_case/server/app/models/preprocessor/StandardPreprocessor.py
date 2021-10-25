@@ -13,10 +13,15 @@ def tokenizer_regex(txt,to_lower=True, min_token_size=4):
 def tokenize_corpus(texts, tokenizer, **tokenizer_kwargs):
     return [tokenizer(txt, **tokenizer_kwargs) for txt in texts]
 
-def preprogress_corpus(texts, stemm=False, lemm=True, stopwords=None):
+def preprocess_corpus(texts, stemm=False, lemm=True, stopwords=None):
     return [preprocess_text(text, stemm=stemm, lemm=lemm, stopwords=stopwords) for text in texts]
 
 def preprocess_text(text, stemm=False, lemm=True, stopwords=None):
+    regex1 = r'\$.*?\$' # removes all LATEX-formulas
+    regex2 = r'(\b(\w*\d+\w*)\b)|(\b\w{1}\b)' #removes all 1-symbol words and words containing numbers
+    text = re.sub(regex1, ' ', text)
+    text = re.sub(regex2, ' ', text)
+
     ## clean (convert to lowercase and remove punctuations and   
     ##characters and then strip)
     text = re.sub(r'[^\w\s\n]', '', str(text).lower().strip())

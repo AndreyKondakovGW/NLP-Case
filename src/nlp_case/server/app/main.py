@@ -24,7 +24,7 @@ def predict():
 @app.route('/search_articles_with_keywords', methods=["POST"])
 def find_by_keywords():
     keywords = request.get_json().get("keywords")
-    papers = acsess.search_keywords(keywords, num_results=3)
+    papers = access.search_keywords(keywords, num_results=3)
     for p in papers:
         print(p[1])
         print()

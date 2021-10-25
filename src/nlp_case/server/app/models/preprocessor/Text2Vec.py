@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from nlp_case.server.app.models.preprocessor.StandartPreprogressor import preprocess_text
+from nlp_case.server.app.models.preprocessor.StandardPreprocessor import preprocess_text
 import nltk
 import gensim
 from gensim.models import KeyedVectors
@@ -60,7 +60,6 @@ class MyText2VecModel:
         embedding_df['_id'] = ids
         print(embedding_df.head())
         embedding_df.to_csv(filename, index=True)
-
           
 
 def map_word_frequency(document):

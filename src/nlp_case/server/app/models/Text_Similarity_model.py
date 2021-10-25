@@ -2,7 +2,7 @@ import pandas as pd
 from gensim.models import KeyedVectors
 from nlp_case.server.app.models.parsers.PDFparser import Parser
 from nlp_case.server.app.models.preprocessor.Text2Vec import MyText2VecModel
-from nlp_case.server.app.models.preprocessor.StandartPreprogressor import preprocess_text
+from nlp_case.server.app.models.preprocessor.StandardPreprocessor import preprocess_text
 from nlp_case.server.app.models.preprocessor.Text2Vec import get_sif_feature_vector
 import nltk
 from sklearn.metrics.pairwise import cosine_similarity
@@ -17,8 +17,7 @@ def get_cosine_similarity(feature_vec_1, feature_vec_2):
 
 class Text_Similarity_model:
     def __init__(self, db_access, datapath = DATA_PATH, modelpath = MODEL_PATH):
-        #[!!!] possible mistake here, but everything works 4 me
-        if not os.path.exists(modelpath + ".vectors.npy"): 
+        if not os.path.exists(modelpath): 
             print('Waiting for creating the model')
             self.model = MyText2VecModel.save_embedding_model(modelpath, db_access.get_papers_iterator())
             print('Model was created')
@@ -28,9 +27,10 @@ class Text_Similarity_model:
             MyText2VecModel.generate_embedding(self.model, datapath, db_access.get_papers_iterator())
             print('Embedding was created')
         self.data = pd.read_csv(datapath,index_col=False)
+        self.db_access = db_access
 
 
-    def find_similar_article(self,data):
+    def find_similar_article(self, data):
         stopwords = nltk.corpus.stopwords.words("english")
         Parser.parsePDF(data)
         description = Parser.getDescription(os.path.dirname(os.path.abspath(__file__)) + '\..\\tmp\out.txt')
@@ -41,12 +41,11 @@ class Text_Similarity_model:
 
         distants = []
         for index, row in self.data.iterrows():
-            vector = row.drop(['Unnamed: 0','description'])
+            vector = row.drop(['Unnamed: 0','_id'])
             distants.append(get_cosine_similarity(description_vector, vector.to_numpy()))
         self.data['distant'] = pd.Series(data = distants)
         print('Most Similar article: ')
         res = self.data[self.data['distant'] == self.data['distant'].min()]
-        print(res['description'].array[0])
-        return res['description']
-
-
+        _id = res['_id'].array[0]
+        paper = self.db_access.get_paper_by_id(_id)
+        return paper
