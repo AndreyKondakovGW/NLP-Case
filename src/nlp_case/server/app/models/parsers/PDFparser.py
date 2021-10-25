@@ -41,6 +41,5 @@ class Parser(object):
     @staticmethod
     def getDescription(filename):
         with open(filename, mode='r') as f :
-            description = re.split(r'Abstract\. |Contents|ABSTRACT|1\. INTRODUCTION|Keywords:|',f.read())[1].strip()
-            print(re.split(r'Abstract\. |Contents|ABSTRACT|1\. INTRODUCTION|Keywords:|',f.read()))
+            description = re.split(r'ABSTRACT|1. INTRODUCTION|Keywords:|Contents|Abstract. ',f.read())[1].strip()
         return description

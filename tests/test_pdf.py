@@ -1,5 +1,5 @@
 import requests
-
+import re
 url = "http://127.0.0.1:5000/find_similar_article"
 files = {
     'file': open('.\\test2.pdf', 'rb')

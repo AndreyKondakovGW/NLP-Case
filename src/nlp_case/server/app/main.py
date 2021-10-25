@@ -25,11 +25,6 @@ def predict():
 def find_by_keywords():
     keywords = request.get_json().get("keywords")
     papers = acsess.search_keywords(keywords, num_results=3)
-    for p in papers:
-        print(p[1])
-        print()
-        print('-' * 10)
-        print()
     return jsonify({'result': 
     [{'titel': p[0], 'pdf_link': p[3], 'site_link': p[2]} for p in papers]})
 
@@ -46,7 +41,15 @@ def find_most_similar():
 def find_dis_names():
     text = request.get_json().get("text")
     disease_entities = NER_model.find_all_Disease_entities(text)
-    return jsonify({'result': disease_entities})
+    return jsonify({'diseases': disease_entities})
+
+@app.route('/find_disease_names_in_file', methods=["POST"])
+def find_dis_names_infile():
+    file = request.files["file"]
+    print(file.read())
+    disease_entities = NER_model.find_all_Disease_entities([file.read().decode("utf-8")])
+    return jsonify({'diseases': disease_entities})
+
 
 if __name__ == '__main__':
     print(os.path.abspath(__file__))

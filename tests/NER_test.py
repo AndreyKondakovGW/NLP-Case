@@ -18,14 +18,16 @@ Zariski dense after a finite field extension of K. For a non-uniruled projective
 an int-amplified endomorphism, we show that it always satisfies potential density.''']
 test_sentences_tokenized = tokenize_corpus(test_sentences, min_token_size=1)
 sentences_word_recognizer = NERDiseaseRecognizer()
-#for sent_tokens, sent_tags in zip(test_sentences_tokenized, sentences_word_recognizer(test_sentences)):
-    #print()
-   # print(' '.join('{}-{}'.format(tok, tag) for tok, tag in zip(sent_tokens, sent_tags)))
-    #print()
 
 url = "http://127.0.0.1:5000/find_disease_names"
 data = {"text": test_sentences}
 headers = {'Content-Type': 'application/json', 'Accept':'application/json'}
 request= requests.post(url, json=data, headers=headers)
 
+
+url = "http://127.0.0.1:5000/find_disease_names_in_file"
+files = {
+    'file': open('.\\test_NER.txt', 'rb')
+}
+r = requests.post(url, json={"data": "text_file"}, files=files)
 print(request.text)
