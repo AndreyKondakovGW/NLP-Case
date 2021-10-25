@@ -15,13 +15,14 @@ import os
 
 class MyText2VecModel:
     @staticmethod
-    def save_embadding_model(filename):
+    def save_embedding_model(filename, data_iterator):
         stopwords = nltk.corpus.stopwords.words("english")
 
-        articles_df = pd.read_csv(os.path.dirname(os.path.abspath(__file__)) + '\..\..\..\..\data\clean_data.csv')
-        articles_df["clean_description"] = articles_df["description"].apply(lambda text: preprocess_text(text,stopwords=stopwords))
-
-        corpus = articles_df["clean_description"]
+        #TODO: this still loads whole DB in RAM. needs a fix
+        corpus = []
+        for paper in data_iterator:
+            clean_description = preprocess_text(paper['abstract'], stopwords=stopwords)
+            corpus.append(clean_description)
 
         ## create list of lists of unigrams
         lst_corpus = []
@@ -44,20 +45,21 @@ class MyText2VecModel:
         word_data.wv.save(filename)
 
     @staticmethod
-    def generate_embadding(model_name, filename):
-        data_df = pd.read_csv(os.path.dirname(os.path.abspath(__file__)) + '\..\..\..\..\data\clean_data.csv')
+    def generate_embedding(model, filename, data_iterator):
         stopwords = nltk.corpus.stopwords.words("english")
-        word_emb_model = KeyedVectors.load(model_name)
-        data_df["clean_description"] = data_df["description"].apply(lambda text: preprocess_text(text,stopwords=stopwords))
         data = []
-        for description in data_df["clean_description"]:
-            embadding_vector = get_sif_feature_vector(description, word_emb_model)
-            data.append(embadding_vector)
-        embadding_df = pd.DataFrame(np.array(data),columns=range(100))
-        embadding_df['description'] = data_df["description"]
-        embadding_df['site_link'] = data_df["description"]
-        embadding_df['pdf_link'] = data_df["description"]
-        embadding_df.to_csv(filename, index=True)
+        ids = []
+        
+        for paper in data_iterator:
+            clean_description = preprocess_text(paper['abstract'], stopwords=stopwords)
+            embedding_vector = get_sif_feature_vector(clean_description, model)
+            data.append(embedding_vector)
+            ids.append(paper['_id'])
+            
+        embedding_df = pd.DataFrame(np.array(data),columns=range(100))
+        embedding_df['_id'] = ids
+        print(embedding_df.head())
+        embedding_df.to_csv(filename, index=True)
 
           
 
