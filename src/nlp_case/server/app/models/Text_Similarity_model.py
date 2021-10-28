@@ -27,6 +27,8 @@ class Text_Similarity_model:
             print('Waiting for creating the embedding')
             MyText2VecModel.generate_embedding(self.model, datapath, db_access.get_papers_iterator())
             print('Embedding was created')
+
+        self.db_access = db_access
         self.data = pd.read_csv(datapath,index_col=False)
 
 
@@ -41,12 +43,14 @@ class Text_Similarity_model:
 
         distants = []
         for index, row in self.data.iterrows():
-            vector = row.drop(['Unnamed: 0','description'])
+            vector = row.drop(['Unnamed: 0','_id'])
             distants.append(get_cosine_similarity(description_vector, vector.to_numpy()))
         self.data['distant'] = pd.Series(data = distants)
         print('Most Similar article: ')
         res = self.data[self.data['distant'] == self.data['distant'].min()]
-        print(res['description'].array[0])
-        return res['description']
+        print(res['_id'].array[0])
+        paper = self.db_access.get_paper_by_id(res['_id'].array[0])
+        print(paper)
+        return paper
 
 

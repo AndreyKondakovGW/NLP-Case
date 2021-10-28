@@ -24,7 +24,7 @@ def predict():
 @app.route('/search_articles_with_keywords', methods=["POST"])
 def find_by_keywords():
     keywords = request.get_json().get("keywords")
-    papers = acsess.search_keywords(keywords, num_results=3)
+    papers = access.search_keywords(keywords, num_results=3)
     return jsonify({'result': 
     [{'titel': p[0], 'pdf_link': p[3], 'site_link': p[2]} for p in papers]})
 
@@ -35,8 +35,6 @@ def find_most_similar():
     res = sim_model.find_similar_article(json_data)
     return jsonify({'result': 0})
 
-
-#TODO добавить версию с текстовым файлом
 @app.route('/find_disease_names', methods=["POST"])
 def find_dis_names():
     text = request.get_json().get("text")
