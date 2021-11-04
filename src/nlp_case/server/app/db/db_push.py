@@ -1,5 +1,7 @@
 import pymongo
-from nlp_case.server.app.models import TextRank_model
+#from nlp_case.server.app.models import TextRank_model
+from nlp_case.server.app.models.text_keywords_models.Tfidf_model import Tfidf_model
+
 
 class DBPusher:
     """
@@ -33,12 +35,16 @@ class DBPusher:
                 "pdflink": paper[3]}
             self.db.data.insert_one(p)
             
-    def push_keywords(self, papers, collection = "keywords"):
+    def push_keywords(self, data_iterator, collection = "keywords"):
         _db = self._get_collection(collection)
         
-        tr = TextRank_model(lemmatize = True)
-        for paper in papers:
-            keywords = tr.predict_tags(paper[1])
-            _id = list(self.db.data.find({'sitelink': paper[2]}))[0]['_id']
+        tr = Tfidf_model(data_iterator)
+        if isinstance(data_iterator, pymongo.cursor.CursorType):
+            data_iterator.rewind()
+        
+        for paper in data_iterator:
+            keywords = tr.predict_keywords(paper['abstract'])
+            #_id = list(self.db.data.find({'sitelink': paper[2]}))[0]['_id']
+            _id = paper['_id']
             p = {'_id':_id, 'keywords': keywords}
             self.db.keywords.insert_one(p)
