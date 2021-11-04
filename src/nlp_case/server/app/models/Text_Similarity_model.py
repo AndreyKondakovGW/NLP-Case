@@ -35,22 +35,15 @@ class Text_Similarity_model:
     def find_similar_article(self, data):
         stopwords = nltk.corpus.stopwords.words("english")
         description = Parser.get_description_from_pdf(data)
-        print('Article description:')
-        print(description)
         description_clean = preprocess_text(description, stopwords=stopwords)
         description_vector = get_sif_feature_vector(description_clean, self.model)
 
         distants = []
-        for index, row in self.data.iterrows():
-            vector = row.drop(['Unnamed: 0','_id'])
-            distants.append(get_cosine_similarity(description_vector, vector.to_numpy()))
-        self.data['distant'] = pd.Series(data = distants)
-        print('Most Similar article: ')
-        res = self.data[self.data['distant'] == self.data['distant'].min()]
-        _id = res['_id'].array[0]
+        data_values = self.data.drop(['Unnamed: 0','_id'], axis = 1)
+        for index, row in data_values.iterrows():
+            distants.append(get_cosine_similarity(description_vector, row.to_numpy()))
+        distants_df = pd.DataFrame({'id': self.data['_id'], 'distant': pd.Series(data = distants)})
+        res = distants_df[distants_df['distant'] == distants_df['distant'].min()]
+        _id = res['id'].array[0]
         paper = self.db_access.get_paper_by_id(_id)
-<<<<<<< HEAD
         return paper
-=======
-        return paper
->>>>>>> c61f1e55eb7c626906c45f17c4f9eb677661eb5b

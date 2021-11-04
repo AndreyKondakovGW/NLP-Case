@@ -40,14 +40,14 @@ class Parser(object):
 
     @staticmethod
     def getDescription(filename):
-        with open(filename, mode='r') as f :
-            description = re.split(r'ABSTRACT|1. INTRODUCTION|Keywords:|Contents|Abstract. ',f.read())[1].strip()
+        with open(filename, mode='r', encoding='utf-8', errors="replace") as f :
+            description = re.split(r'ABSTRACT|1. INTRODUCTION|Keywords:|Contents|Abstract. |1. Introduction',f.read())[1].strip()
         return description
 
     def get_text_from_pdf(filename):
         Parser.parsePDF(filename)
         filename = os.path.dirname(os.path.abspath(__file__)) + '\..\..\\tmp\out.txt'
-        with open(filename, mode='r') as f :
+        with open(filename, mode='r', encoding='utf-8', errors="replace") as f :
             text = f.read()
         return text
 

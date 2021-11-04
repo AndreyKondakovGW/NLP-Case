@@ -4,10 +4,11 @@
 2
 
  
-t
-c
-O
-1
+
+g
+u
+A
+4
 2
 
  
@@ -15,28 +16,30 @@ O
  
  
 ]
+h
+p
+-
+h
+t
+a
+m
 
-V
-C
-.
-s
-c
 [
  
  
 
-1
-v
-0
 2
+v
+6
 3
-1
-1
+8
+0
+0
 
 .
 
+4
 0
-1
 1
 2
 :
@@ -46,343 +49,3116 @@ X
 r
 a
 
-Deep Curriculum Learning in Task Space for Multi-Class
+ASYMPTOTIC PROPERTIES OF GENERALIZED
 
-Based Mammography Diagnosis
+EIGENFUNCTIONS FOR MULTI-DIMENSIONAL QUANTUM
 
-Jun Luoa, Dooman Arefanb, Margarita Zuleyb,c, Jules Sumkinb,c, and Shandong Wua,b,d,e
+WALKS
 
-aIntelligent Systems Program, School of Computing and Information, University of Pittsburgh,
+TAKASHI KOMATSU, NORIO KONNO, HISASHI MORIOKA, AND ETSUO SEGAWA
 
-Pittsburgh, PA, USA
+Abstract. We construct a distorted Fourier transformation associated with
+the multi-dimensional quantum walk. In order to avoid the complication of no-
+tations, almost all of our arguments are restricted to two dimensional quantum
+walks (2DQWs) without loss of generality. The distorted Fourier transforma-
+tion characterizes generalized eigenfunctions of the time evolution operator of
+the QW. The 2DQW which will be considered in this paper has an anisotropy
+due to the deﬁnition of the shift operator for the free QW. Then we deﬁne
+an anisotropic Banach space as a modiﬁed Agmon-H¨ormander’s B∗ space and
+we derive the asymptotic behavior at inﬁnity of generalized eigenfunctions in
+these spaces. The scattering matrix appears in the asymptotic expansion of
+generalized eigenfunctions.
 
-bDepartment of Radiology, University of Pittsburgh, Pittsburgh, PA, USA
+1. Introduction
 
-cMagee-Womens Hospital, University of Pittsburgh Medical Center, Pittsburgh, PA, USA
-dDepartment of Biomedical Informatics, University of Pittsburgh, Pittsburgh, PA, USA
+1.1. Scattering theory for multi-dimensional quantum walk. In this paper,
+we consider the time-independent scattering theory for the position-dependent d-
+dimensional quantum walk (dDQW or simply QW for short) as a ﬁnite rank pertur-
+bation of the dD free QW which is deﬁned as follows. The states of quantum walker
+on Zd = {x = (x1, . . . , xd) ; x1, . . . , xd ∈ Z} are represented by ψ = {ψ(x)}x∈Zd
+which are C2d-valued sequences. Letting ∗T be the transpose operator for matrices
+or vectors, we denote by the column vector
+1 (x), . . . , ψ+
 
-eDepartment of Bioengineering, University of Pittsburgh, Pittsburgh, PA, USA
+ψ(x) = [ψ+
+for C-valued sequences ψ±
+j (x) corre-
+sponds the “probability amplitude” at x ∈ Zd of the chirality (j,±). The dD free
+QW is deﬁned by the operator U0 = S where S is the shift operator :
 
-ABSTRACT
+for j = 1, . . . , d on Zd. Each component ψ±
 
-Mammography is used as a standard screening procedure for the potential patients of breast cancer. Over the
-past decade, it has been shown that deep learning techniques have succeeded in reaching near-human performance
-in a number of tasks, and its application in mammography is one of the topics that medical researchers most
-concentrate on. In this work, we propose an end-to-end Curriculum Learning (CL) strategy in task space for
-classifying the three categories of Full-Field Digital Mammography (FFDM), namely Malignant, Negative, and
-False recall. Speciﬁcally, our method treats this three-class classiﬁcation as a “harder” task in terms of CL, and
-create an “easier” sub-task of classifying False recall against the combined group of Negative and Malignant. We
-introduce a loss scheduler to dynamically weight the contribution of the losses from the two tasks throughout
-the entire training process. We conduct experiments on an FFDM datasets of 1,709 images using 5-fold cross
-validation. The results show that our curriculum learning strategy can boost the performance for classifying the
-three categories of FFDM compared to the baseline strategies for model training.
+d (x), ψ−
 
-Keywords: Curriculum learning, Full-Field Digital Mammography, Deep learning
+1 (x), ψ−
 
-1. INTRODUCTION
+j
 
-Breast cancer is the second leading cause of cancer death in women. As of 2021, breast cancer takes up 12%
-of new annual cancer cases globally.1 Full-Field Digital Mammography (FFDM), also known as the digital
-mammography, is a mammography screening techniques that enables the manipulation of images in such a way
-that it is more convenient for the radiologists to evaluate the areas of concerns with computer-aided detection
-(CAD) systems. Meanwhile, over the past decade, it has been shown that deep learning techniques have succeeded
-in reaching near-human performance in a number of tasks,2–4 and its application in mammography is one of the
-topics that medical researchers most concentrate on.5
+d (x)]T,
 
-Curriculum learning6 (CL), as a major machine learning regime, is a learning strategy where an “easy-to-
-hard” curriculum is designed to train the model. CL is particularly intriguing in medical ﬁelds, since medical
-knowledge can serve as an important contributing factor to the deﬁnition of “easy” and “hard” in terms of CL.3, 4
-Such a curriculum can be designed with respect to both the input space and the output (task) space. CL in
-the input space sort the sorts the training samples from the “easier” ones to “harder” ones.3, 4 And CL in the
-output (task) space7 treats the original task as a “harder” task, and learns “easier” sub-tasks prior to learning
-the original “harder” task. In classiﬁcation tasks with multiple (≥ 3 classes) classes, CL in task space creates
-“easier” classiﬁcation sub-tasks out of the original “harder” task, usually by grouping classes with similarities,7
-and thus reducing the number of total classes and the diﬃculty of the task.
+x ∈ Zd,
 
-Further author information: (Send correspondence to Shandong Wu)
-Shandong Wu: E-mail: wus3@upmc.edu, Telephone: 1 412 641 2567
-Jun Luo: E-mail: jul117@pitt.edu
+(Sψ)(x) = [ψ+
 
-(a) Malignant
+1 (x + e1), ψ−
 
-(b) False recall
+1 (x − e1), . . . , ψ+
 
-(c) Negative
+d (x + ed), ψ−
 
-Figure 1: Example Full-Field Digital Mammography images from the three categories of our dataset.
+d (x − ed)]T,
 
-In this work, we propose an end-to-end curriculum learning in task space strategy on classifying three cate-
-gories of the Full-Field Digital Mammography (FFDM), namely Malignant, Negative, and False recall (shown in
-Figure 1). Our method treats the original three-class classiﬁcation task as a “harder” task in terms of CL, and
-create an “easier” sub-task of classifying the false recall cases against the combined group of the negative and
-the malignant cases. We introduce a loss scheduler to dynamically weight the contribution of the two tasks to
-the loss that the machine learning model learns from throughout the training process. We conduct experiments
-using an FFDM dataset of 1,709 images using 5-fold cross validation. The results show that our curriculum
-learning strategy can boost the model’s performance compared to the baseline training strategies.
+where e1, . . . , ed are the standard basis on Zd. The position-dependent QW is
+deﬁned by the operator U = SC where C is the operator of multiplication by a
+k,l=1 ∈ U(2d) for every x ∈ Zd. Throughout of this paper,
+matrix C(x) = (ck,l(x))2d
+we assume that the following statements hold.
 
-2.1 Study Cohort and Dataset
+Date: August 25, 2021.
+2010 Mathematics Subject Classiﬁcation. Primary 81U20, Secondary 47A40.
+Key words and phrases. quantum walk, scattering matrix, Green function.
+H. Morioka is supported by the JSPS Grant-in-aid for young scientists No. 20K14327. E.
+Segawa is supported by the JSPS Grant-in-Aid for Scientiﬁc Research (C) No. 19K03616 and
+Research Origin for Dressed Photon.
 
-2. METHOD
+1
 
-In this IRB-approved study, we used a cohort of 1,709 FFDM images (349 Malignant cases, 653 Negative cases
-and 707 False recall cases). The FFDM images were retrospectively collected at our institution and reviewed by
-expert radiologists. Sample images from the three classes are shown in Figure 1. We conducted our experiments
-with 5-fold cross validation. Within each iteration of cross validation, one fold of the data was used as a hold-out
-test set. 80% and 20% of the remaining four folds were used as training and validation set respectively. The
-data partitioning scheme is described with more details in Table 1. Note that the numbers in Table 1 are within
-±1 range, since the ﬁve folds do not evenly split the data samples.
+2
 
-Table 1: The number of images in each class for each partition of the 5-fold cross validation. Note that the
-numbers are within ±1 range, since the ﬁve folds do not evenly split the data samples.
-Malignant Negative False recall Total
+T. KOMATSU, N. KONNO, H. MORIOKA, AND E. SEGAWA
 
-Training set
-Validation set
-Test set
-Total
+• There exists a positive integer n0 such that C(x) is the 2d × 2d identity
+matrix I2d for x ∈ Zd \ D where D = {x ∈ Zd ; |x1| ≤ n0, . . . , |xd| ≤ n0}.
+• For every x ∈ D,
 
-226
-53
-45
-349
+det(c2k−1,2l−1(x))d
 
-425
-98
-130
-653
+k,l=1,
 
-460
-106
-141
-707
+det(c2k,2l(x))d
 
-1,111
-280
-341
-1,709
+k,l=1,
 
-2.2 Curriculum in Task Space
+do not vanish.
 
-Curriculum learning seeks a certain “easy-to-hard” order of the learning procedure. The order can be in terms of
-the input samples or the learning tasks. Here in this study, while we focus on the original three-class classiﬁcation
-of the FFDM images, we treat it as a “harder” task and create an “easier” sub-task of binary classiﬁcation. In
-this sub-task, the goal is to classify False recall against the combined group of Malignant and Negative cases.
+These assumptions will be used in order to prove a unique continuation property for
+generalized eigenfunctions of U in Lemma 3.7 and Corollary 3.8. The unique con-
+tinuation property guarantees a radiation condition for non-homogeneous equations
+and the absence of eigenvalues of U . See Corollaries 3.11 and 3.12.
 
-Consider an image-label pair (xi, yi), where xi represents the image and yi ∈ {0, 1, 2} (with 0, 1, and 2
-representing False recall, Negative, and Malignant respectively) is the ground truth label of the image. Let
-f (xi)(c) be the probability that the predicted label is c with f (·) being the machine learning model and c ∈
+In the following, almost all of our arguments are restricted to the case d = 2 in
+order to avoid the complication of notations. Our results can be generalized easily
+for higher dimensional cases. For the case d = 2, we use more explicit notations.
+Components of C4-valued sequences ψ are written as
 
-{0, 1, 2}. We compute the cross entropy loss for the original “harder” task of the three-class classiﬁcation as in
-Equation (1), where yi,c is the cth element in the one-hot representation of the label yi.
+ψ(x) = [ψ←(x), ψ→(x), ψ↓(x), ψ↑(x)]T,
 
-Lhard(xi, yi) = −(cid:88)
+x ∈ Z2.
 
-(cid:16)
+The chirality of ψ is represented by p ∈ {←,→,↓,↑}. Typical examples of C(x) for
+every x ∈ D such that the second assumption holds are
+√
+√
+1/
+6
+√
+6
+1/
+−2/
+6
+0
 
-yi,c · log(f (xi)(c))
+1
+1
+1
+1 −1
+1 −1
+1 −1 −1
+1
+1 −1 −1
+1
 
-c
+12
+1/2
+12
+1/2
+12
+1/2
+12 −1/2
+
+√
+√
+2
+−1/
+2
+0
+0
+
+ 1
+
+√
+√
+√
+√
+
+1/
+1/
+1/
+3/
+
+ ,
+
+ .
+
+1
+2
+
+On the other hand, the 2D Grover coin and the 2D Fourier coin
+
+ −1
+
+1
+1
+1
+1 −1
+1
+1
+1 −1
+1
+1
+1 −1
+1
+1
+do not satisfy the second assumption.
+
+1
+2
+
+ ,
+
+1
+1
+1
+i −1 −i
+1
+1 −1
+1 −1
+1 −i −1
+i
+
+ 1/
+ ,
+(cid:88)
+
+1
+2
+
+ 1
+(cid:88)
+
+Obviously, operators U0 and U are unitary on the Hilbert space (cid:96)2 := (cid:96)2(Z2; C4)
+
+equipped with the standard inner product
+
+(f, g)(cid:96)2 =
+
+fp(x)gp(x).
+
+p∈{←,→,↓,↑}
+
+x∈Z2
+
+The discrete time evolutions of these QWs are given by
+
+Ψ(t,·) = U tψ, Ψ(0)(t,·) = U t
+
+0ψ,
+
+t ∈ Z,
+
+for an initial state ψ. If ψ ∈ (cid:96)2, these time evolutions preserve the (cid:96)2-norm of ψ i.e.
+(cid:107)Ψ(t,·)(cid:107)(cid:96)2 = (cid:107)Ψ(0)(t,·)(cid:107)(cid:96)2 = (cid:107)ψ(cid:107)(cid:96)2 for any t ∈ Z.
+
+In view of the quantum scattering theory, the scattering matrix (S-matrix) is an
+important object. There are several equivalent deﬁnitions of the S-matrix. In the
+time-dependent scattering theory, we can prove that the wave operators
+
+W± = s-lim
+
+t→±∞ U−tU t
+
+0
+
+in (cid:96)2
+
+exist and asymptotically complete under our assumption by the similar way of
+Suzuki [21]. Namely, we have the following fact on the long time behavior of QWs.
+See also Figure 1.
+
+GENERALIZED EIGENFUNCTIONS FOR MULTI-DIM. QWS
+
+3
+
+Figure 1. For an initial state φ ∈ Hac(U ), there exist ψ± ∈ (cid:96)2
+such that U tφ ∼ U t
+0ψ± as t → ±∞. The wave operators represent
+these asymptotic behaviors. Roughly speaking, the scattering in
+0ψ−
+view of the dynamics of U tφ is a transition from a free QW U t
+0ψ+. The scattering operator Σ relates ψ−
+to another free QW U t
+and ψ+.
+
+Proposition 1.1. The ranges of the wave operators coincide with Hac(U ), the
+absolutely continuous subspace for U . In particular, for any φ ∈ Hac(U ), there
+exist ψ± ∈ (cid:96)2 such that (cid:107)U tφ − U t
+0ψ±(cid:107)(cid:96)2 → 0 as t → ±∞. The wave operators are
+unitary on (cid:96)2 and we have W ∗
+
+± = W −1± .
+
+The scattering operator Σ = W ∗
+
+Note that this proposition holds under the short-range condition. Namely, the
+ﬁrst assumption for C(x) can be replaced by (cid:107)C(x)− I4(cid:107) ≤ c(1 +|x|)−1− for some
+constants c,  > 0 for Proposition 1.1.
++W− : ψ− (cid:55)→ ψ+ is another important object. In
+view of Proposition 1.1, Σ connects the behavior of the quantum walker as t → −∞
+quantum walker ψ− to another free quantum walker ψ+. The S-matrix (cid:98)Σ(θ) for
+to t → ∞ in terms of the 2D free QW i.e. Σ represents a transition from the 2D free
+θ ∈ [0, 2π) is given by the spectral decomposition of(cid:98)Σ which is a spectral transform
+
+of Σ which will be introduced in the formula (4.18) as
+
+(cid:98)Σ =
+
+(cid:90) 2π
+
+0
+
+⊕(cid:98)Σ(θ)dθ.
+
+For details of the time-dependent scattering theory for QWs, see Suzuki [21] or
+Morioka [15].
+In these previous works, the authors consider 1DQWs. However,
+their arguments rely on abstract operator theory and spectral theory for unitary
+operators. Then it can be applied for our case easily.
+
+The wave operators and the scattering operator are considered in the Hilbert
+space (cid:96)2. From the physical point of view, it is reasonable to consider plane waves
+and corresponding scattered waves in certain classes larger than (cid:96)2. Moreover,
+the S-matrix naturally appears in a spatial asymptotic behavior at inﬁnity of a
+generalized eigenfunction to the equation
+
+(U − eiθ)u = 0
+
+on Z2,
+
+θ ∈ [0, 2π).
+
+In view of the separation of variables Ψ(t, x) = eitθu(x) where u satisﬁes the above
+equation, we have a time evolution Ψ(t,·) = U tu for any t ∈ Z. Note that gen-
+eralized eigenfunctions do not belong to (cid:96)2 when eiθ is included in the continuous
+spectrum of U . Generalized eigenfunctions associated with a continuous spectrum
+consist of an incident plane wave and the corresponding scattered wave. The S-
+matrix appears in the scattered wave as its amplitude and phase shift. See Figure
+2. Thus the spectral theory for U is an important topic in the research area of the
+scattering theory for QWs.
+
+4
+
+T. KOMATSU, N. KONNO, H. MORIOKA, AND E. SEGAWA
+
+The main purpose of this paper is to construct and to characterize generalized
+eigenfunctions in an anisotropic Banach space on Z2. The spectral theory for the
+unitary operator U allows us to see the behavior of the outgoing scattered wave. In
+order to study the distorted Fourier transformation, we often use the Green function
+which is the kernel of the resolvent operator R0(κ) = (U0 − eiκ)−1, κ ∈ C \ R. If
+κ ∈ R, the operator R0(κ) does not make sense in (cid:96)2. However, we will show that
+the limit R0(θ ± i0) for θ ∈ R exists in the sense of Agmon-H¨ormander’s B-B∗
+spaces ([1]).
+1.2. Agmon-H¨ormander’s spaces. Agmon-H¨ormander’s B-B∗ spaces are often
+used in the time-independent scattering theory for Schr¨odinger equations. Consider
+the equation
+
+(−∆ + V − λ)u = 0
+
+on Rd,
+
+λ > 0,
+
+where V ∈ C∞
+characterized by the Banach space B∗ equipped with the norm
+
+0 (Rd) is a real-valued function. The solution to this equation can be
+
+(cid:90)
+
+(cid:107)u(cid:107)2B∗ = sup
+
+ρ>1
+
+1
+ρ
+
+|x|<ρ
+
+|u(x)|2dx < ∞.
+
+The solution u has the asymptotics
+
+u(x) = |x|−(d−1)/2(cid:16)
+
+√
+
+C(λ)ei
+
+λ|x|φ+(ω) + C(λ)e−i
 
 (cid:17)
 
-(1)
+√
 
-(2)
+λ|x|φ−(ω)
 
-For the created “easier” task, to group the Negative and Malignant classes together against the False recall
-class, we assign xi a new label zi = 1yi(cid:54)=0 where 1 is the indicator function, which means that zi will only be
-0 if yi = 0, or else zi = 1. In terms of the prediction, we treat the probability of zi = 0 still as f (xi)(0) and
-the probability of zi = 1 as f (xi)(1) + f (xi)(2), or 1 − f (xi)(0). Consequently, we can compute the binary cross
-entropy loss for the created “easier” task of the binary classiﬁcation, as shown in Equation (2).
++ o(|x|−(d−1)/2)
 
-Leasy(xi, zi) = −(cid:16)
+as |x| → ∞ where ω = x/|x|. It is well-known that the S-matrix for Schr¨odinger
+operators relates φ+ and φ−. For this topic, see Yafaev [25].
 
-zi · log(f (xi)(0)) + (1 − zi) · log(1 − f (xi)(0))
+For our 2DQW, it is inadequate to adopt the usual separation of variables and
+to derive the asymptotic expansion with respect to the radius due to anisotropy of
+U and U0. Then we introduce a pair of anisotropic B-B∗ spaces. We will derive
+the asymptotic behaviors of generalized eigenfunctions by evaluating functions for
+each direction depending on its chirality.
 
+Figure 2. The notion of the scattering in view of generalized
+eigenfunctions associated with the continuous spectrum. For
+Schr¨odinger equations (−∆ + V (x))u = λu or acoustic wave equa-
+tions −c(x)2∆u = λu on Rd, the scattered wave is a spherical
+wave up to lower order terms (Left ﬁgure). However, for QWs on
+Zd, spherical waves do not appear, and the scattered wave passes
+along corridors (Right ﬁgure). Entries of the S-matrix appear in
+the scattered wave as its amplitude and phase shift.
+
+GENERALIZED EIGENFUNCTIONS FOR MULTI-DIM. QWS
+
+5
+
+1.3. Related works. The scattering theory for one dimensional QWs has been
+studied in some previous works. Feldman-Hillery [5, 6] are pioneering studies
+of QWs in view of the scattering theory. As has been mentioned above, Suzuki
+[21] proved the existence and the asymptotic completeness of the wave operators.
+Richard et al.
+[18, 19] considered more general cases. Note that the authors
+adopted commutator method for unitary operators (see [2], [7], [20]). Morioka
+[15], Morioka-Segawa [16], Maeda et al.
+[12] considered
+the time-independent scattering theory and the absence of eigenvalues embedded
+in the continuous spectrum. Tiedra de Aldecoa [23] studied an abstract theory
+of time-independent scattering for unitary operators and its applications to QWs.
+Maeda et al. [13] solved an inverse scattering problem for a nonlinear QW.
+
+[14] and Komatsu et al.
+
+Our method adopted in this paper is an analogue of the time-independent scat-
+tering theory for self-adjoint Hamiltonians. Over the past few years, the time-
+independent scattering theory for discrete Schr¨odinger operators has been studied.
+The following works are deeply related with our arguments: Isozaki-Korotyaev [9],
+Isozaki-Morioka [10, 11], Ando et al. [3, 4]. Nakamura [17] constructed the S-matrix
+as a pseudo-diﬀerential operator for discrete Schr¨odinger operators (as one of ex-
+amples of applications) by using the microlocal analysis. Tadano [22] studied the
+scattering theory for discrete Schr¨odinger operators with long-range perturbations.
+
+1.4. Results and plan of this paper. In Section 2, we introduce some functional
+spaces. The anisotropic B-B∗ spaces are deﬁned here. Some properties of these
+functional spaces will be proven.
+
+In Section 3, we study some properties of the Green function associated with
+the 2D free QW. By using the Green function of the 1D free QW, we can derive
+an explicit formula of the Green function of the 2D free QW. Then we can see
+the asymptotic behavior of the solution in B∗ to the equation (U0 − eiθ)u = f for
+f ∈ B. In view of this asymptotics, we can deﬁne the radiation condition which
+guarantees the uniqueness of the solution to the equation (U0 − eiθ)u = f . Here we
+apply a multi-dimensional generalization of the unique continuation property for
+QWs (Corollary 3.8). As a consequence of the argument in Section 3, we have the
+absence of eigenvalues of U (Corollary 3.12).
+In Section 4, we consider the generalized eigenfunction for U . We introduce a
+combinatorial construction of generalized eigenfunctions in B∗. This construction
+is a multi-dimensional version of the result in [12]. This approach is based on the
+long time limit of the dynamics of QWs. After that, we discuss the spectral theory
+for U in order to characterize rigorously the set of generalized eigenfunctions in
+B∗. The existence of the limits R(θ ± i0) in B-B∗ spaces for R(κ) = (U − eiκ)−1 is
+proved here. The spectral representation of U is introduced as a distorted Fourier
+transformation associated with U . Due to the closed range theorem, we prove
+a characterization of generalized eigenfunctions in B∗ (Theorem 4.15). Finally,
+
+we show that the S-matrix (cid:98)Σ(θ) naturally appears in the asymptotic behavior of
+
+generalized eigenfunctions. We observe that the scattered wave does not spread
+radially but passes along some corridors (Theorem 4.20).
+
+1.5. Notation. The notation used throughout of this paper is as follows. T2 :=
+R2/(2πZ2) denotes the ﬂat torus. For u, v ∈ Cn, (cid:104)u, v(cid:105) denotes the inner product of
+
+Cn, and we put |u| =(cid:112)(cid:104)u, u(cid:105). For a matrix A, A∗ denotes the Hermitian conjugate
+
+AT. diag[a1, . . . , an] denotes the n × n diagonal matrix.
+
+6
+
+T. KOMATSU, N. KONNO, H. MORIOKA, AND E. SEGAWA
+
+For a C4-valued sequence f = {f (x)}x∈Z2, the mapping U is the Fourier trans-
+
+formation
+
+The Fourier coeﬃcients of a distribution(cid:98)g on T2 is given by
+
+x∈Z2
+
+e−i(cid:104)x,ξ(cid:105)f (x),
+
+ξ ∈ T2.
+
+ei(cid:104)x,ξ(cid:105)(cid:98)g(ξ)dξ,
+
+x ∈ Z2.
+
+(cid:98)f (ξ) := (Uf )(ξ) =
+g(x) := (U∗(cid:98)g)(x) =
+
+1
+2π
+
+1
+2π
+
+(cid:88)
+(cid:90)
+
+T2
+
+For Banach spaces X and Y , B(X; Y ) denotes the set of bounded linear operators
+from X to Y . For an operator L ∈ B((cid:96)2; (cid:96)2), L∗ is the adjoint operator of L with
+respect to the inner product of (cid:96)2. As usual, for an operator L ∈ B(X; Y ) for
+Banach spaces X and Y , L∗ is its adjoint operator in B(Y ∗; X∗). However, for
+U = SC and U0 = S, we often adopt the abuse of notations U∗ = C∗S−1 and
+U∗
+0 = S−1 on some Banach spaces.
+
+2. Functional spaces
+
+2.1. Anisotropic Agmon-H¨ormander spaces. The Banach spaces B and B∗
+which are deﬁned here are used for the proof of boundedness of R0(κ) = (U0−eiκ)−1
+and R(κ) = (U − eiκ)−1 with κ ∈ C \ R. Let r−1 = 0, rj = 2j for j ≥ 0, and
+Ij = {y ∈ Z ; rj−1 ≤ |y| < rj}. For a C4-valued sequence f = {f (x)}x∈Z2 , we put
+
+aj(f )2 =
+
+x1∈Ij
+The Banach space B is deﬁned by
+
+p∈{←,→}
+
+|fp(x)|2 +
+
+(cid:88)
+
+(cid:88)
+
+(cid:88)
+f = {f (x)}x∈Z2 ; (cid:107)f(cid:107)B =
+
+x2∈Z
+
+∞(cid:88)
+
+j=0
+
+B =
+
+(cid:88)
+
+(cid:88)
+
+(cid:88)
+
+p∈{↓,↑}
+
+x2∈Ij
+
+x1∈Z
+
+|fp(x)|2.
+
+ .
+
+j aj(f ) < ∞
+r1/2
+
+Lemma 2.1. The dual space B∗ is equipped with the norm
+
+(cid:107)u(cid:107)B∗ = sup
+j≥0
+
+−1/2
+r
+j
+
+aj(u).
+
+Proof. We take f (k) ∈ B such that suppf (k)← , suppf (k)→ ⊂ {x ∈ Z2 ; rk−1 ≤
+|x1| < rk} and suppf (k)↓ , suppf (k)↑ ⊂ {x ∈ Z2 ; rk−1 ≤ |x2| < rk}. For T ∈ B∗, we
+consider the restriction T (k) on the subspace Hk := Vk ⊕ Wk where
+
+Vk = {f ∈ (cid:96)2(Ik × Z; C4) ; f (x) = [f←(x), f→(x), 0, 0]T},
+Wk = {f ∈ (cid:96)2(Z × Ik; C4) ; f (x) = [0, 0, f↓(x), f↑(x)]T}.
+
+Note that Hk for every k is a Hilbert space. We have
+
+|T (k)(f (k))| ≤ (cid:107)T(cid:107)(cid:107)f (k)(cid:107)B = (cid:107)T(cid:107)r1/2
+
+k ak(f (k)) = (cid:107)T(cid:107)(cid:107)f (k)(cid:107)Hk r1/2
+
+k
+
+.
+
+Applying the Riesz representation theorem on Hk, we see that there exists u(k) ∈ Hk
+such that
+
+T (k)(f (k))
+
+(cid:88)
+
+(cid:88)
+
+(cid:88)
+
+p∈{←,→}
+
+x1∈Ik
+
+x2∈Z
+
+(2.1)
+
+=
+
+(cid:88)
+
+(cid:88)
+
+(cid:88)
+
+p∈{↓,↑}
+
+x2∈Ik
+
+x1∈Z
+
+p (x)u(k)
+f (k)
+
+p (x) +
+
+p (x)u(k)
+f (k)
+
+p (x),
+
+GENERALIZED EIGENFUNCTIONS FOR MULTI-DIM. QWS
+
+7
+
+and
+
+(cid:107)u(k)(cid:107)Hk = ak(u(k)) =
+
+|T (k)(f (k))| ≤ (cid:107)T(cid:107)r1/2
+
+k
+
+.
+
+sup
+
+(cid:107)f (k)(cid:107)Hk =1
+
+Taking a sequence u such that u = u(k) on every subspace Hk, we have
+
+k=0 f (k) for f (k) ∈ Hk. In fact, we see
+
+x ∈ Z2,
+
+f↓(x)
+f↑(x)
+
+0
+0
+
+ ,
+
+ ∈ Hk.
+
+−1/2
+r
+j
+
+aj(u) ≤ (cid:107)T(cid:107),
+
+sup
+j≥0
+
+which implies (cid:107)u(cid:107)B∗ ≤ (cid:107)T(cid:107).
+
+f (x) =
+
+∞(cid:88)
+
+χVk (x)
+
+For any f ∈ B, we can write f =(cid:80)∞
+ f←(x)
+ f←
+
+f (k) := χVk
+
+f→(x)
+
+0
+0
+
+k=0
+
+f→
+0
+0
+
+We have
+
+T (f ) =
+
+
+ + χWk (x)
+ 0
+ + χWk
+∞(cid:88)
+
+T (k)(f (k)).
+
+0
+f↓
+f↑
+
+k=0
+
+It follows from (2.1) that
+
+∞(cid:88)
+
+|T (f )| ≤
+
+−1/2
+r1/2
+k ak(f )r
+k
+
+ak(u) ≤
+
+k=0
+
+This inequality implies
+
+where χVk and χWk are characteristic functions of Ik × Z and Z × Ik, respectively.
+In view of the deﬁnition of (cid:107) · (cid:107)B, we have
+
+(cid:18)
+
+−1/2
+r
+j
+
+sup
+j≥0
+
+(cid:19) ∞(cid:88)
+
+aj(u)
+
+k=0
+
+r1/2
+k ak(f ).
+
+(cid:107)T(cid:107) ≤ sup
+j≥0
+
+−1/2
+r
+j
+
+aj(u) = (cid:107)u(cid:107)B∗ .
+
+Therefore, we obtain (cid:107)T(cid:107) = (cid:107)u(cid:107)B∗ . Since T ∈ B∗ is arbitrary, we have proven the
+(cid:3)
+lemma.
+
+The following equivalent norm of B∗ is easier to handle :
+
+ (cid:88)
+
+MB∗ (u)2
+
+= sup
+ρ>1
+
+1
+ρ
+
+(2.2)
+
+(cid:88)
+
+(cid:88)
+
+|up(x)|2 +
+
+(cid:88)
+
+(cid:88)
+
+ .
+
+|up(x)|2
+
+(cid:88)
+
+x1∈Z
+
+p∈{←,→}
+
+p∈{↓,↑}
+Lemma 2.2. There exist constants c2 ≥ c1 > 0 such that
+c1(cid:107)u(cid:107)2B∗ ≤ MB∗ (u)2 ≤ c2(cid:107)u(cid:107)2B∗ .
+
+|x1|<ρ
+
+x2∈Z
+
+Then (cid:107) · (cid:107)B∗ and MB∗ (·) are equivalent as the norms on B∗.
+
+|x2|<ρ
+
+Proof. For any  > 0, there exists a nonnegative integer k such that
+
+(cid:107)u(cid:107)2B∗ ≤ r−1
+
+k ak(u)2 + .
+
+8
+
+T. KOMATSU, N. KONNO, H. MORIOKA, AND E. SEGAWA
+
+(cid:88)
+
+ρ/2≤|x1|<ρ
+
+(cid:88)
+
+x2∈Z
+
+|up(x)|2 +
+
+(cid:88)
+
+(cid:88)
+
+(cid:88)
+
+p∈{↓,↑}
+
+ρ/2≤|x2|<ρ
+
+x1∈Z
+
+ + 
+
+|up(x)|2
+
+Letting ρ = rk, we have
+
+ (cid:88)
+
+(cid:107)u(cid:107)2B∗
+≤ 1
+ρ
+
+p∈{←,→}
+≤ MB∗ (u)2 + .
+
+ (cid:88)
+
+MB∗ (u)2
+
+≤ 1
+ρ0
+
+On the other hand, for any  > 0, there exists ρ0 > 1 such that
+
+(cid:88)
+
+(cid:88)
+
+|up(x)|2 +
+
+(cid:88)
+
+(cid:88)
+
+(cid:88)
+
+ + .
+
+|up(x)|2
+
+p∈{←,→}
+
+x1∈Z
+Taking a positive integer k such that rk−1 ≤ ρ0 ≤ rk, we have
+
+|x1|<ρ0
+
+|x2|<ρ0
+
+p∈{↓,↑}
+
+x2∈Z
+
+(cid:18)
+
+(cid:19)2
+
+MB∗ (u)2 ≤ r−1
+k−1
+
+aj(u)2 +  ≤
+
+−1/2
+r
+j
+
+aj(u)
+
+r−1
+k−1
+
+sup
+j≥0
+
+k(cid:88)
+
+j=0
+
+Thus we obtain
+
+for a constant c > 0.
+
+MB∗ (u)2 ≤ c(cid:107)u(cid:107)2B∗ + ,
+
+k(cid:88)
+
+j=0
+
+rj + .
+
+(cid:3)
+
+In the following, we often use the norm (cid:107)u(cid:107)B∗ = MB∗ (u) i.e.
+B∗ = {u = {u(x)}x∈Z2 ; MB∗ (u) < ∞} .
+Let the Hilbert space (cid:96)2,s for s ∈ R be deﬁned by the norm
+(cid:107)f(cid:107)2
+
+(1 + |x1|2)s|fp(x)|2 +
+
+(cid:88)
+
+(cid:88)
+
+(cid:88)
+
+(cid:88)
+
+(cid:96)2,s =
+
+p∈{←,→}
+
+x∈Z2
+
+p∈{↓,↑}
+
+x∈Z2
+
+(1 + |x2|2)s|fp(x)|2.
+
+When s = 0, (cid:96)2,0 = (cid:96)2 is the usual (cid:96)2-space equipped with the standard inner
+product.
+
+In the following, (u, f ) denotes the pairing
+
+(cid:88)
+
+x∈Z2
+
+(u, f ) =
+
+(cid:104)u(x), f (x)(cid:105),
+
+for u ∈ B∗ and f ∈ B or u ∈ (cid:96)2,−s and f ∈ (cid:96)2,s for s ≥ 0.
+
+Finally, we deﬁne the subspace B∗
+
+0 as the totality of sequences u ∈ B∗ such that
+
+ (cid:88)
+
+lim
+ρ→0
+
+1
+ρ
+
+(cid:88)
+
+(cid:88)
+
+|up(x)|2 +
+
+(cid:88)
+
+(cid:88)
+
+(cid:88)
+
+x1∈Z
+
+ = 0.
+
+|up(x)|2
+
+When u − v ∈ B∗
+
+x2∈Z
+
+|x1|<ρ
+
+p∈{←,→}
+|x2|<ρ
+0, we write u (cid:39) v. Then the subspace B∗
+
+p∈{↓,↑}
+
+0 is written as
+
+B∗
+0 = {u ∈ B∗ ; u (cid:39) 0}.
+
+GENERALIZED EIGENFUNCTIONS FOR MULTI-DIM. QWS
+
+9
+
+2.2. Some properties. The following inclusion relation holds.
+
+Lemma 2.3. We have
+
+(cid:96)2,s ⊂ B ⊂ (cid:96)2,1/2 ⊂ (cid:96)2 ⊂ (cid:96)2,−1/2 ⊂ B∗ ⊂ (cid:96)2,−s,
+
+for any s > 1/2.
+
+Proof. We put
+
+bj,s(f )2 =
+
+(cid:88)
+(cid:88)
+
+(cid:88)
+(cid:88)
+
+x1∈Ij
+
+(cid:88)
+(cid:88)
+
+x2∈Z
+
+p∈{←,→}
+
++
+
+p∈{↓,↑}
+
+x2∈Ij
+
+x1∈Z
+
+(1 + |x1|2)s|fp(x)|2
+
+(1 + |x2|2)s|fp(x)|2,
+
+Since we have bj,0(f ) = aj(f ), we also have (cid:107)f(cid:107)B =(cid:80)∞
+
+for j ≥ 0, s ∈ R, and a sequence f = {f (x)}x∈Z2 . Note that (cid:107)f(cid:107)2
+j=0 r1/2
+
+j
+
+can take a positive constant c > 0 such that c−1r2
+implies
+
+j ≤ 1 +|y|2 ≤ cr2
+
+(cid:96)2,s =(cid:80)∞
+
+j=0 bj,s(f )2.
+bj,0(f ). If y ∈ Ij, we
+j . This inequality
+
+ ∞(cid:88)
+
+∞(cid:88)
+
+c−1r2s
+
+j aj(f )2 ≤ bj,s(f )2 ≤ cr2s
+
+j aj(f )2,
+
+(2.3)
+for every j and s ≥ 0.
+
+For s = 1/2, it follows from (2.3) that
+
+(cid:107)f(cid:107)(cid:96)2,1/2 =
+
+bj,1/2(f )2
+
+j=0
+
+j=0
+
+1/2
+
+∞(cid:88)
+
+bj,1/2(f ) ≤ c
+
+∞(cid:88)
+
+j=0
+
+j aj(f ) ≤ c(cid:107)f(cid:107)B,
+r1/2
+
+≤
+
+for a constant c > 0. We obtain B ⊂ (cid:96)2,1/2.
+
+For s > 1/2, we use (2.3) again in order to show
+
+(cid:107)f(cid:107)B =
+
+−s+1/2
+r
+j
+
+j aj(f ) ≤
+rs
+
+r−2s+1
+
+j
+
+ ∞(cid:88)
+
+1/2 ∞(cid:88)
+
+1/2
+
+r2s
+j aj(f )2
+
+j=0
+
+≤ c(cid:107)f(cid:107)(cid:96)2,s,
+
+j=0
+
+j=0
+
+for a constant c > 0. Thus we have (cid:96)2,s ⊂ B.
+have (cid:96)2,−1/2 ⊂ B∗ ⊂ (cid:96)2,−s.
+
+Now we obtain (cid:96)2,s ⊂ B ⊂ (cid:96)2,1/2 for s > 1/2. Passing to the dual spaces, we also
+(cid:3)
+Remark. In view of Lemma 2.3, the B-B∗ spaces constitute the optimal pair of
+Banach spaces to prove the limiting absorption principle for R0(κ) = (U0 − eiκ)−1
+and R(κ) = (U − eiκ)−1. Namely, B-B∗ estimates are sharper than (cid:96)2,s-(cid:96)2,−s
+estimates for s > 1/2. For details, we discuss in Sections 3 and 4.
+
+Let us show the following property.
+
+Lemma 2.4. Suppose f ∈ B. For any x1, x2 ∈ Z, we have f←(·, x2), f→(·, x2),
+f↓(x1,·), f↑(x1,·) ∈ (cid:96)1(Z).
+
+10
+
+T. KOMATSU, N. KONNO, H. MORIOKA, AND E. SEGAWA
+
+Proof. The summability of |f←(y1, x2)| with respect to the variable y1 follows
+
+from the estimate(cid:88)
+
+y1∈Z
+
+|f←(y1, x2)| ≤
+
+r1/2
+j
+
+|f←(y1, x2)|2
+
+∞(cid:88)
+∞(cid:88)
+
+j=0
+
+(cid:88)
+(cid:88)
+
+y1∈Ij
+
+(cid:88)
+
+1/2
+1/2
+
+≤
+
+r1/2
+j
+
+|f←(y1, y2)|2
+
+y2∈Z
+The other cases can be proved in the same way.
+
+y1∈Ij
+
+j=0
+
+≤ (cid:107)f(cid:107)B.
+
+(cid:3)
+
+3. Radiation condition
+
+3.1. Continuous spectrum. The classiﬁcation of the spectrum of a unitary oper-
+ator is a consequence of the spectral theory for self-adjoint operators (see e.g. [24]).
+In the following, σ(A) is the totality of the spectrum of A. There are two kinds of
+classiﬁcation of σ(A). One is based on the spectral measure of A. Namely, there
+exists a spectral decomposition EA(θ) for θ ∈ R such that A can be represented by
+
+(cid:90) 2π
+
+0
+
+A =
+
+eiθdEA(θ),
+
+where EA(θ) = 0 for θ < 0 and EA(θ) = 1 for θ ≥ 2π. Since EA(θ) is a measure on
+R, it provides a orthogonal decomposition of H as
+
+H = Hp(A) ⊕ Hac(A) ⊕ Hsc(A),
+
+where Hp(A) is the closure of the subspace spanned by eigenfunctions in H of
+A, Hac(A) and Hsc(A) are orthogonal projections onto the absolutely continuous
+subspace and the singular continuous subspace with respect to the measure EA(θ),
+respectively. Then the spectrum σ(A) is classiﬁed as
+
+σp(A) = {eigenvalues of A},
+
+σac(A) = σ(A|Hac ),
+
+σsc(A) = σ(A|Hsc ).
+
+We call them the point spectrum, the absolutely continuous spectrum, and the
+singular continuous spectrum, respectively.
+
+Another classiﬁcation of σ(A) is based on the topological point of view. The
+discrete spectrum σd(A) is the set of isolated eigenvalues of A with ﬁnite multi-
+plicities. The essential spectrum σess(A) is deﬁned by σess(A) = σ(A) \ σd(A) i.e.
+σess(A) is the set of accumulation points in σ(A). Note that eigenvalues of inﬁnite
+multiplicity are included in σess(A).
+For the spectral theory for 2DQWs, we take H = (cid:96)2 and A = U0 or U . First of
+all, let us derive the structure of σ(U0) explicitly. In order to do this, we consider
+
+(cid:98)U0 = UU0U∗ which is the operator of multiplication by the unitary matrix
+
+(cid:98)U0(ξ) = diag[eiξ1 , e−iξ1, eiξ2, e−iξ2],
+
+ξ ∈ T2.
+
+Obviously, we have
+
+p(ξ; κ) := det((cid:98)U0(ξ) − eiκ) =
+
+2(cid:89)
+
+for κ ∈ C. Then we obtain the spectrum σ(U0).
+
+j=1
+
+(eiξj − eiκ)(e−iξj − eiκ),
+
+GENERALIZED EIGENFUNCTIONS FOR MULTI-DIM. QWS
+
+11
+
+Lemma 3.1. We have σ(U0) = σess(U0) = σac(U0) = {eiθ ; θ ∈ [0, 2π)}.
+
+Proof. Due to the formula of p(ξ, κ), σp(U0) = ∅ is trivial. Let R0(κ) = (U0 −
+In order to compute the spectral measure EU0((a, b)) :=
+
+eiκ)−1 for κ ∈ C \ R.
+EU0(b − 0) − EU0(a), we apply the formula
+
+(EU0((a, b))f, f )(cid:96)2 = lim
+↓0
+
+(3.1)
+for a < b and κ,± = θ − i log(1 ∓ ). For the proof of (3.1), see [15, Lemma 4.5].
+Since we have
+
+a
+
+(R0(κ+,)f − R0(κ,−)f, f )dθ,
+
+f ∈ (cid:96)2,
+
+eiθ
+2π
+
+(cid:90) b
+
+(cid:98)R0(κ,±)
+
+= diag[(eiξ1 − eiκ,±)−1, (e−iξ1 − eiκ,± )−1, (eiξ2 − eiκ,± )−1, (e−iξ2 − eiκ,± )−1],
+
+we can obtain
+
+(EU0 ((a, b))f, f )(cid:96)2 =
+
+(cid:90) b
+
+(cid:18)
+
+Note that this formula follows from
+−
+
+1
+
+ei(ω−θ) − 1 + 
+
+lim
+↓0
+
+a
+
+(cid:90)
+
++
+
+(cid:90)
+
+a<ξ1<b
+
+a<ξ2<b
+
+(cid:90)
+|(cid:98)f←(ξ)|2dξ +
+(cid:90)
+|(cid:98)f↓(ξ)|2dξ +
+(cid:19)
+
+1
+
+ei(ω−θ) − 1 − 
+
+dθ =
+
+a<−ξ1<b
+
+a<−ξ2<b
+
+|(cid:98)f→(ξ)|2dξ
+|(cid:98)f↑(ξ)|2dξ.
+(cid:40)2π, ω ∈ (a, b),
+
+0, otherwise,
+
+which can be proved by the complex contour integration in the similar way of [15,
+Appendix A] or [12, Appendix A]. Then the spectral measure EU0(θ) is absolutely
+(cid:3)
+continuous.
+
+As a consequence of Weyl’s singular sequence method, we also determine σess(U )
+
+since U − U0 is compact in (cid:96)2.
+Lemma 3.2. We have σess(U ) = σess(U0) = {eiθ ; θ ∈ [0, 2π)}. As a consequence,
+we have σd(U ) = ∅.
+
+Proof. A rigorous proof was given in [16, Lemma 2.1] which is an analogue
+of well-known Weyl’s singular sequence method on preservation of the essential
+(cid:3)
+spectrum for self-adjoint operators (See e.g. [24, Section 0.3]).
+
+3.2. Green function and resolvent operator. The resolvent operators
+
+R0(κ) = (U0 − eiκ)−1, R(κ) = (U − eiκ)−1,
+
+do not make sense as operators in B((cid:96)2; (cid:96)2) when eiκ ∈ σ(U0) or σ(U ). The limiting
+absorption principle ensure the existence of the limits R0(θ ± i0) = lim↓0 R0(θ −
+i log(1 ∓ )) and R(θ ± i0) = lim↓0 R(θ − i log(1 ∓ )) in B(B;B∗) for θ ∈ [0, 2π).
+Here we consider R0(θ ± i0) by using an explicit formula of the Green function.
+
+Now we seek a solution to the equation
+
+(3.2)
+for κ ∈ C \ R such that u is given by
+
+(U0 − eiκ)u = f,
+
+f ∈ B,
+
+u(x) =
+
+G0(x − y; κ)f (y),
+
+(cid:88)
+
+y∈Z2
+
+12
+
+T. KOMATSU, N. KONNO, H. MORIOKA, AND E. SEGAWA
+
+where the kernel G0(x; κ) is a diagonal matrix
+
+G0(x; κ) = diag[r←(x; κ), r→(x; κ), r↓(x; κ), r↑(x; κ)].
+
+Passing through the Fourier transformation, we can see easily the following lemma.
+Lemma 3.3. Let δ = {δx0}x∈Z2 where δxy is the Kronecker delta for x, y ∈ Z2.
+The kernel G0(x; κ) is the fundamental solution to the equation (3.2) in the sense
+
+for κ ∈ C \ R. In particular, we have (R0(κ)f )(x) =(cid:80)
+
+(U0 − eiκ)G0(·; κ) = diag[δ, δ, δ, δ],
+
+f ∈ B.
+
+Let us compute G0(x; κ) explicitly as follows. We have
+
+r←(x; κ) =
+
+Since we have(cid:82)
+
+1
+
+(2π)2
+
+T2
+
+ei(cid:104)x,ξ(cid:105)
+eiξ1 − eiκ dξ =
+
+1
+
+(2π)2
+
+T
+
+eix1ξ1
+eiξ1 − eiκ dξ1
+
+T eix2ξ2dξ2 = 2πδx20, we obtain
+
+(3.3)
+
+r←(x; κ) =
+
+δx20
+2π
+
+eix1ξ1
+eiξ1 − eiκ dξ1.
+
+T
+
+(cid:90)
+
+y∈Z2 G0(x − y; κ)f (y) for
+
+(cid:90)
+
+(cid:90)
+
+T
+
+eix2ξ2 dξ2.
+
+(cid:90)
+(cid:90)
+(cid:90)
+(cid:90)
+
+T
+
+T
+
+T
+
+By the similar argument, we also have
+
+(3.4)
+
+(3.5)
+
+(3.6)
+
+r→(x; κ) =
+
+r↓(x; κ) =
+
+r↑(x; κ) =
+
+δx20
+2π
+δx10
+2π
+δx20
+2π
+
+eix1ξ1
+
+e−iξ1 − eiκ dξ1,
+
+eix2ξ2
+eiξ2 − eiκ dξ2,
+eix2ξ2
+
+e−iξ2 − eiκ dξ2.
+
+Then we can apply [12, Lemma 2.5] in order to prove the following formulas.
+Lemma 3.4. Let F (s) be the characteristic function of the set {s ∈ R ; s ≥ 0}.
+We put κ± = θ − i log(1 ∓ ) for  > 0 and θ ∈ [0, 2π). We have
+
+(3.7)
+
+(3.8)
+
+(3.9)
+
+(3.10)
+
+and
+
+(3.11)
+
+(3.12)
+
+(3.13)
+
+(3.14)
+
+r←(x; κ+) = δx20F (x1 − 1)eiκ+(x1−1),
+r→(x; κ+) = δx20F (−x1 − 1)e−iκ+(x1+1),
+r↓(x; κ+) = δx10F (x2 − 1)eiκ+(x2−1),
+r↑(x; κ+) = δx10F (−x2 − 1)e−iκ+(x2+1),
+
+r←(x; κ−) = −δx20F (−x1)eiκ−(x1−1),
+r→(x; κ−) = −δx20F (x1)e−iκ−(x1+1),
+r↓(x; κ−) = −δx10F (−x2)eiκ−(x2−1),
+r↑(x; κ−) = −δx10F (x2)e−iκ−(x2+1).
+
+GENERALIZED EIGENFUNCTIONS FOR MULTI-DIM. QWS
+
+13
+
+Even if we take limits of (3.7)-(3.14) as  ↓ 0 in the weak ∗ sense, the formulas
+(3.7)-(3.14) hold. Letting e← = [1, 0, 0, 0]T, e→ = [0, 1, 0, 0]T, e↓ = [0, 0, 1, 0]T,
+e↑ = [0, 0, 0, 1]T, R0(θ + i0)f for f ∈ B can be represented by
+
+(3.15)
+
+(R0(θ + i0)f )(x)
+
+= eiθ(x1−1) (cid:88)
++ eiθ(x2−1) (cid:88)
+
+y1≤x1−1
+
+e−iθy1 f←(y1, x2)e← + e−iθ(x1+1) (cid:88)
+e−iθy2f↓(x1, y2)e↓ + e−iθ(x2+1) (cid:88)
+
+y1≥x1+1
+
+y2≤x2−1
+
+y2≥x2+1
+
+eiθy1f→(y1, x2)e→
+
+eiθy2f↑(x1, y2)e↑,
+
+and R0(θ − i0)f can be represented by
+
+(3.16)
+
+(R0(θ − i0)f )(x)
+
+= −eiθ(x1−1) (cid:88)
+− eiθ(x2−1) (cid:88)
+
+y1≥x1
+
+e−iθy1 f←(y1, x2)e← − e−iθ(x1+1) (cid:88)
+e−iθy2 f↓(x1, y2)e↓ − e−iθ(x2+1) (cid:88)
+
+y1≤x1
+
+y2≥x2
+
+eiθy1f→(y1, x2)e→
+
+eiθy2f↑(x1, y2)e↑.
+
+y2≤x2
+
+Note that the summations on the right-hand side of (3.15)-(3.16) converge due to
+Lemma 2.4. Then we obtain the limiting absorption principle for R0(κ).
+
+Lemma 3.5. Let J be an arbitrary compact interval in [0, 2π).
+
+(1) For θ ∈ [0, 2π), we have R0(θ ± i0) ∈ B(B;B∗) in the weak ∗ topology. In
+particular, there exists a constant c > 0 such that (cid:107)R0(θ± i0)f(cid:107)B∗ ≤ c(cid:107)f(cid:107)B
+where θ varies on J.
+
+(2) The mapping J (cid:51) θ (cid:55)→ (R0(θ ± i0)f, g) for f, g ∈ B is continuous.
+
+We can see the asymptotic behavior of R0(θ ± i0)f at inﬁnity from formulas
+
+(3.15)-(3.16).
+Lemma 3.6. Let f ∈ B. We have
+
+R0(θ + i0)f (cid:39) F (x1)eiθ(x1−1) (cid:88)
++ F (−x1)e−iθ(x1+1) (cid:88)
++ F (x2)eiθ(x2−1) (cid:88)
++ F (−x2)e−iθ(x2+1) (cid:88)
+
+y1∈Z
+
+y2∈Z
+
+e−iθy1 f←(y1, x2)e←
+
+eiθy1f→(y1, x2)e→
+
+y1∈Z
+e−iθy2f↓(x1, y2)e↓
+
+eiθy2f↑(x1, y2)e↑,
+
+y2∈Z
+
+(3.17)
+
+14
+
+and
+
+(3.18)
+
+T. KOMATSU, N. KONNO, H. MORIOKA, AND E. SEGAWA
+
+R0(θ − i0)f (cid:39) − F (−x1)eiθ(x1−1) (cid:88)
+− F (x1)e−iθ(x1+1) (cid:88)
+− F (−x2)eiθ(x2−1) (cid:88)
+− F (x2)e−iθ(x2+1) (cid:88)
+
+y1∈Z
+
+y1∈Z
+
+y2∈Z
+
+y2∈Z
+
+e−iθy1f←(y1, x2)e←
+
+eiθy1f→(y1, x2)e→
+
+e−iθy2f↓(x1, y2)e↓
+
+eiθy2f↑(x1, y2)e↑.
+
+Proof. Take f ∈ B such that suppf is ﬁnite. Now we denote the right-hand side
+
+of (3.17) by I1,+(x) + I1,−(x) + I2,+(x) + I2,−(x). We have
+
+(R0(θ + i0)f )(x) − (I1,+(x) + I1,−(x) + I2,+(x) + I2,−(x))
+e−iθy1(F (x1 − y1 − 1) − F (x1))f←(y1, x2)e←
+
+y1∈Z
+
+= eiθ(x1−1) (cid:88)
++ e−iθ(x1+1) (cid:88)
++ eiθ(x2−1) (cid:88)
++ e−iθ(x2+1) (cid:88)
+
+y2∈Z
+
+y1∈Z
+
+y2∈Z
+
+eiθy1(F (−x1 + y1 − 1) − F (−x1))f→(y1, x2)e→
+
+e−iθy2 (F (x2 − y2 − 1) − F (x2))f↓(x1, y2)e↓
+
+eiθy2(F (−x2 + y2 − 1) − F (−x2))f↑(x1, y2)e↑.
+
+Thus (R0(θ + i0)f )(x)− (I1,+(x) + I1,−(x) + I2,+(x) + I2,−(x)) vanishes except for a
+ﬁnite number of x ∈ Z2. This implies the formula (3.17). For any f ∈ B and  > 0,
+there exists g ∈ B such that g has a ﬁnite support and satisﬁes (cid:107)f − g(cid:107)B < . Then
+the formula (3.17) holds for any f ∈ B due to Lemma 3.5. The proof of (3.18) is
+(cid:3)
+similar.
+
+3.3. Multi-dimensional unique continuation for QW. In this subsection, we
+consider the unique continuation property for generalized eigenfunctions of dDQWs
+as follows.
+
+Lemma 3.7. Suppose that a C2d-valued sequence ψ on Zd satisﬁes the equation
+(U −eiθ)ψ = 0. For any x ∈ Zd, the value ψ(x) is determined uniquely by ψ(x+ej),
+j = 1, . . . , d.
+
+Proof. The unique continuation property for 1DQW is well-known since (U −
+eiθ)ψ = 0 on Z can be reduced to a ﬁrst order recurrence formula. Let us prove
+the lemma for d ≥ 2. We put
+
+C(x) = ((cid:126)cj(x))2d
+
+j=1,
+
+x ∈ Zd,
+
+where (cid:126)cj(x) are row vectors of C(x). In the proof of this lemma, we use the similar
+notation for row vectors of some matrices. We also deﬁne matrices A(k)
+θ (x) =
+
+GENERALIZED EIGENFUNCTIONS FOR MULTI-DIM. QWS
+
+15
+
+((cid:126)a(k)
+
+j,θ (x))2d
+
+j=1, j = 1, . . . , d, and Mθ(x) = ( (cid:126)mj,θ(x))2d
+
+j=1 for x ∈ Zd by
+
+(cid:40)
+
+j = 2k − 1,
+j = 2k,
+
+otherwise,
+
+(cid:126)mj,θ(x) =
+
+eiθ(ej)T,
+(cid:126)cj(x),
+
+j is odd,
+
+j is even,
+
+(cid:126)a(k)
+j,θ (x) =
+
+eiθ(ej)T,
+0,
+
+ (cid:126)cj(x),
+d(cid:88)
+
+A(k)
+
+noting that ej, j = 1, . . . , 2d, are the standard basis of R2d. The equation (U −
+eiθ)ψ = 0 on Zd can be rewritten as
+
+θ (x + ej)ψ(x + ek) = Mθ(x)ψ(x),
+
+x ∈ Zd.
+
+k=1
+
+In view of the assumption for C(x), we have
+
+det Mθ(x) = ediθ det(c2l1,2l2 (x))d
+
+l1,l2=1 (cid:54)= 0.
+
+Thus we obtain
+
+ψ(x) = Mθ(x)−1
+
+A(k)
+
+θ (x + ej)ψ(x + ek),
+
+d(cid:88)
+
+k=1
+
+(cid:3)
+
+which implies the lemma.
+
+As a consequence of this lemma, we obtain the following assertion.
+
+Corollary 3.8. Let ON (x) = {y ∈ Zd \ {x} ; yj − xj ≥ 0, j = 1, . . . , d,(cid:80)d
+from ψ(cid:12)(cid:12)ON (x). In particular, if ψ = 0 in ON (x), we have ψ(x) = 0.
+
+j=1(yj −
+xj) = N} for x ∈ Zd and a positive integer N . If the solution ψ to the equation
+(U −eiθ)ψ = 0 is known in the subset ON (x), the value ψ(x) is determined uniquely
+
+3.4. Radiation condition. Lemma 3.6 implies the radiation condition which guar-
+antees the uniqueness of solutions to the equation (U − eiθ)u = f for f ∈ B. In
+view of the anisotropy of the asymptotic behavior of R0(θ ± i0)f , we deﬁne the
+radiation condition as follows.
+
+Let us introduce the operator
+
+(B±f )(x) = [F (±x1)f←(x), F (∓x1)f→(x), F (±x2)f↓(x), F (∓x2)f↑(x)]T,
+
+for x ∈ Z2.
+Deﬁnition 3.9. The solutions u(±) ∈ B∗ to the equation (U − eiθ)u(±) = f for
+f ∈ B are incoming (for +) or outgoing (for −) if u(±) satisfy
+(3.19)
+
+B±Su(±) − eiθu(±) ∈ B∗
+0.
+
+Lemma 3.10. Suppose that u(±) ∈ B∗ satisfy the equation (U − eiθ)u(±) = 0 and
+the condition (3.19). Then we have u(±) = 0.
+
+Proof. We prove for u(+) and the proof for u(−) is similar. Due to the equation
+(U − eiθ)u(+) = 0, u(+)← satisﬁes u(+)← (x + e1) = eiθu(+)← (x) for x ∈ Z2 \ D with
+x1 ≤ −n0−2 or |x2| ≥ n0 +1. In particular, we have |u(+)← (x+e1)| = |u(+)← (x)|. This
+equality and the radiation condition (3.19) imply lim inf x1→−∞ |u←(x1, x2)| = 0 for
+every x2. Then we have
+
+(3.20)
+
+u(+)← (x) = 0
+
+in D+← = {x ∈ Z2 ; x1 ≤ −n0 − 1 or |x2| ≥ n0 + 1}.
+
+16
+
+T. KOMATSU, N. KONNO, H. MORIOKA, AND E. SEGAWA
+
+By the similar way, we have from the equation (U − eiθ)u(+) = 0 and the radiation
+condition (3.19)
+
+u(+)→ (x) = 0 in D+→ = {x ∈ Z2 ; x1 ≥ n0 + 1 or |x2| ≥ n0 + 1},
+(x) = 0 in D+↓ = {x ∈ Z2 ; x2 ≤ −n0 − 1 or |x1| ≥ n0 + 1},
+u(+)↓
+in D+↑ = {x ∈ Z2 ; x2 ≥ n0 + 1 or |x1| ≥ n0 + 1}.
+u(+)↑
+(x) = 0
+
+(3.21)
+
+(3.22)
+
+(3.23)
+
+We put
+
+∂D = {x ∈ Z2 \ D ; ∃y ∈ D such that |x − y| = 1},
+E+← = {x ∈ Z2 ; x1 = n0 + 1, n0 + 2, |x2| ≤ n0},
+E+→ = {x ∈ Z2 ; x1 = −n0 − 2,−n0 − 1, |x2| ≤ n0},
+E+↓ = {x ∈ Z2 ; |x1| ≤ n0, x2 = n0 + 1, n0 + 2},
+E+↑ = {x ∈ Z2 ; |x1| ≤ n0, x2 = −n0 − 2,−n0 − 1}.
+(cid:88)
+(cid:88)
+By (3.20)-(3.23) and the deﬁnition of the operator U = SC, we have
+Due to the equation (U − eiθ)u(+) = 0, we also have (cid:80)
+(cid:80)
+x∈D∪∂D |u(+)(x)|2. Thus (3.24) can be rewritten as
+
+Since C(x) is unitary, we have |C(x)u(+)(x)|2 = |u(+)(x)|2 for every x ∈ D.
+x∈D∪∂D |(U u(+))(x)|2 =
+
+|C(x)u(+)(x)|2 +
+
+|(U u(+))(x)|2 =
+
+|u(+)
+
+p
+
+(x)|2
+
+(cid:88)
+
+p∈{←,→,↓,↑}
+
+x∈E+
+
+p
+
+(cid:88)
+
+x∈D
+
+(3.24)
+
+x∈D∪∂D
+
+(cid:88)
+
+(cid:88)
+
+p∈{←,→,↓,↑}
+
+x∈E+
+
+p \∂D
+
+|u(+)
+
+(x)|2 = 0
+
+p
+
+This implies u(+)← (n0+2, x2) = u(+)→ (−n0−2, x2) = 0 for |x2| ≤ n0, and u(+)↓
+(x1, n0+
+(x1,−n0 − 2) = 0 for |x1| ≤ n0. By using the equation (U − eiθ)u(+) = 0
+2) = u(+)↑
+in the region Z2 \ D, we obtain u(+) = 0 in Z2 \ D. Due to Corollary 3.8, u(+) = 0
+(cid:3)
+is extended in D.
+
+As a direct consequence of this lemma, we can show immediately the uniqueness
+of the incoming (for +) or outgoing (for −) solution to the equation (U0− eiθ)u = f
+for f ∈ B.
+Corollary 3.11. The solution u(±) ∈ B∗ to the equation (U0 − eiθ)u(±) = f for
+f ∈ B is incoming (for +) or outgoing (for −) if and only if u(±) = R0(θ ± i0)f .
+Proof. R0(θ ± i0)f obviously satisfy the radiation condition (3.19) in view of
+Lemma 3.6. For the proof of uniqueness, we assume that the solutions v(±) ∈ B∗
+to the equation (U0 − eiθ)v(±) = f are incoming (for +) or outgoing (for −). Thus
+w(±) = R0(θ± i0)f − v(±) satisfy the equation (U0− eiθ)w(±) = 0 and the condition
+(cid:3)
+(3.19). Lemma 3.10 implies w(±) = 0.
+
+We also have the absence of eigenvalues of U .
+
+Corollary 3.12. We have σp(U ) = ∅.
+
+Proof. Recall that σess(U ) = {eiθ ; θ ∈ [0, 2π)}. Then σp(U ) ⊂ σess(U ). If
+there exists an eigenvalue eiθ, the corresponding eigenfunction ψ ∈ (cid:96)2 satisﬁes the
+equation (U − eiθ)ψ = 0 and the condition (3.19). Lemma 3.10 implies ψ = 0. This
+(cid:3)
+is a contradiction.
+
+GENERALIZED EIGENFUNCTIONS FOR MULTI-DIM. QWS
+
+17
+
+4. Generalized eigenfunction
+
+4.1. Combinatorial construction of generalized eigenfunction. Before we
+derive the spectral theory for U , we mention a combinatorial construction of gen-
+eralized eigenfunctions. This construction is based on a long time behavior of a
+dynamics of the QW. Our argument in this subsection is an analogue of [12] which
+is a special case of [8, Theorem 3.1].
+Let χ : B∗ → (cid:96)2(D; C4) be deﬁned by (χu)(x) = u(x) for x ∈ D. We also
+introduce the operator χ∗ : (cid:96)2(D; C4) → B∗ by (χ∗ψ)(x) = ψ(x) for x ∈ D and
+(χ∗ψ)(x) = 0 for x ∈ Z2 \ D. We deﬁne the 4(2n0 + 1)2 × 4(2n0 + 1)2 submatrix
+
+UD = χU χ∗.
+
+Fixing a basis of (cid:96)2(D; C4) = C4(2n0+1)2
+of the matrix UD. In this paper, we omit it.
+Lemma 4.1. Eigenvalues of UD lie in the subset {λ ∈ C ; |λ| < 1}.
+
+, we can obtain an explicit representation
+
+Proof. For an eigenvector ψ ∈ (cid:96)2(D; C4) associated with an eigenvalue λ, we
+
+have
+
+|λ|2(cid:107)ψ(cid:107)2
+
+(cid:96)2(D;C4) = (cid:107)UDψ(cid:107)2
+
+(cid:96)2(D;C4) ≤ (cid:107)U χ∗ψ(cid:107)2
+
+(cid:96)2(Z2;C4) = (cid:107)ψ(cid:107)2
+
+(cid:96)2(D;C4).
+
+This implies |λ| ≤ 1. Now we suppose |λ| = 1. This implies (cid:107)UDψ(cid:107)2
+(cid:107)U χ∗ψ(cid:107)2
+Thus we obtain
+
+(cid:96)2(D;C4) =
+(cid:96)2(Z2;C4). In view of the deﬁnition of χ and χ∗, we have (1−χ∗χ)U χ∗ψ = 0.
+
+U χ∗ψ = χ∗χU χ∗ψ = λχ∗ψ,
+
+and χ∗ψ is an eigenfunction of U with a ﬁnite support. It follows χ∗ψ = 0 from
+(cid:3)
+Corollary 3.12. This is a contradiction.
+
+Lemma 4.1 implies the convergence of the series
+
+e−imθU m
+D ,
+
+θ ∈ [0, 2π),
+
+∞(cid:88)
+
+m=0
+
+(cid:40)
+
+in view of the Jordan canonical form of UD. Namely, there exists a 4(2n0 + 1)2 ×
+4(2n0 + 1)2 regular matrix G such that
+
+G−1UDG = J(λ1, k1) ⊕ ··· ⊕ J(λr, kr),
+
+for a positive integer r where J(λj, kj) is the Jordan block for an eigenvalue λj with
+algebraic multiplicity kj.
+
+Now let us derive a construction of a generalized eigenfunction of U with a
+single incident wave along an incoming path. Note that a generalized eigenfunction
+of U with multiple incident waves can be written by a linear combination of the
+generalized eigenfunctions associated with a single incident wave.
+Lemma 4.2. Take an integer b ∈ [−n0, n0]. Let Ψ0 ∈ B∗ be given by
+
+Ψ0(x) =
+
+eiθx1e←,
+0,
+
+x = (x1, b),
+otherwise,
+
+x1 ≥ n0 + 1,
+
+for θ ∈ [0, 2π). We deﬁne Ψt for every positive integer t by Ψt = U Ψt−1. Then
+there exists a limint
+
+Ψ∞(x) := lim
+
+t→∞ e−itθΨt(x),
+
+x ∈ Z2,
+
+18
+
+T. KOMATSU, N. KONNO, H. MORIOKA, AND E. SEGAWA
+
+and Ψ∞ ∈ B∗ satisﬁes U Ψ∞ = eiθΨ∞ on Z2.
+
+Proof. The initial state Ψ0 is an incoming ﬂow on (x1, b) for x1 ≥ n0 + 1. The
+outgoing ﬂow occurs due to the perturbation in the region D. Once the ﬂow comes
+out of D, it goes away. In view of this dynamics, we split Ψt into three parts
+
+Ψt = χ∗χΨt + (1 − χ∗χ)(Ψt − eitθΨ0) + eitθ(1 − χ∗χ)Ψ0.
+
+The ﬁrst term on the right-hand side is the state in D. The second and third term
+on the right-hand side are the outgoing ﬂow and the incoming ﬂow on Z2 \ D,
+respectively.
+
+Letting φt = χΨt, we have
+
+φ0 = 0, φt+1 = UDφt + eitθχU Ψ0,
+
+t ≥ 0,
+
+where we have used the equality χU (1 − χ∗χ)U tΨ0 = eitθχU Ψ0. The solution of
+this recurrence formula is
+
+t−1(cid:88)
+
+φt = eiθ(t−1)
+
+e−imθU m
+
+D χU Ψ0,
+
+t ≥ 0.
+
+m=0
+
+In view of Lemma 4.1, the limit
+
+φ∞ := lim
+
+t→∞ e−itθφt = e−iθ(1 − e−iθE)−1χU Ψ0
+
+exists and obtain the equation
+
+(4.1)
+
+UDφ∞ + χU Ψ0 = eiθφ∞.
+
+t−1(cid:88)
+
+m=1
+
+Let us derive the outgoing ﬂow. We deﬁne the subset
+
+B = {x ∈ D ; |x1| = n0 or |x2| = n0}.
+
+Let δB be the characteristic function of the subset B. The outgoing ﬂow for t ≥ 2
+is given by
+
+(1 − χ∗χ)(Ψt − eitθΨ0) = (1 − χ∗χ)
+
+U mft−m,
+
+where the source ft−m is deﬁned by ft−m = δBχ∗φt−m. For t ≥ 2, the value of the
+outgoing ﬂow Ψt,out := (1 − χ∗χ)(Ψt − eitθΨ0) at every point x ∈ Z2 \ D is
+|x1| > n0, |x2| ≤ n0,
+|x1| ≤ n0, |x2| > n0 + 1,
+
+Ψt,out(x1, x2) = (U µx1 ft−µx1
+
+Ψt,out(x1, x2) = (U µx2 ft−µx2
+
+)(x1, x2)
+
+for
+
+for
+
+)(x1, x2)
+or Ψt,out(x) = 0 for other x ∈ Z2 \ D where
+
+(cid:26) x1 − n0, x1 ≥ n0 + 1,
+
+µx1 =
+
+−x1 − n0, x1 ≤ −n0 − 1,
+
+µx2 =
+
+(cid:26) x2 − n0, x2 ≥ n0 + 1,
+
+−x2 − n0, x2 ≤ −n0 − 1.
+
+Then the limit Ψout := limt→∞ e−itθ(1 − χ∗χ)(Ψt − eitθΨ0) is given by
+
+t→∞ e−itθ(U µx ft−µx )(x) = e−iµxθ(U f∞)((cid:101)x),
+
+for f∞ = δBχ∗φ∞, µx = µx1 or µx2, and(cid:101)x = (±(n0 + 1), x2) or (x1,±(n0 + 1)).
+
+Ψout(x) = lim
+
+Finally, we show the equation U Ψ∞ = eiθΨ∞. Note that
+on Z2.
+
+Ψ∞ = χ∗φ∞ + Ψout + Ψ0
+
+Then we have
+
+(4.2)
+
+χ∗χU Ψ∞ = χ∗UDφ∞ + χ∗χU Ψ0 + χ∗χU Ψout = eiθχ∗φ∞,
+
+GENERALIZED EIGENFUNCTIONS FOR MULTI-DIM. QWS
+
+19
+
+in view of (4.1) and χU Ψout = 0. We also have
+
+(1 − χ∗χ)U Ψ∞ = (1 − χ∗χ)U (χ∗φ∞ + Ψ0) + U Ψout
+
+(4.3)
+
+= (1 − χ∗χ)δ∂DU f∞ + eiθΨ0 + eiθΨout − δ∂DU f∞
+= eiθ(Ψout + Ψ0),
+
+where δ∂D is the characteristic function of the subset ∂D (see the proof of Lemma
+3.10 for the deﬁnition of ∂D). Plugging (4.2) and (4.3), we obtain the equation
+(cid:3)
+U Ψ∞ = eiθΨ∞.
+
+Remark. For 1DQWs, a combinatorial formula of the S-matrix was derived by
+[12] which is based on counting paths of quantum walkers in an interval on which
+U (cid:54)= U0. For multi-dimensional cases, this approach is more complicated. However,
+as has been derived in Lemma 4.1, we can construct generalized eigenfunctions as
+a long time limit of a dynamics of QWs.
+
+4.2. Limiting absorption principle for position-dependent QW. We have
+proved the existence and a construction of generalized eigenfunctions in B∗. In the
+following, we discuss the spectral theory for the operator U in order to characterize
+rigorously the set of generalized eigenfunctions in B∗. By using the distorted Fourier
+transformation associated with U , we can see that the S-matrix appears in the
+outgoing scattered wave Ψout.
+Here we prove the existence of the limits R(θ ± i0) = lim↓0 R(θ − i log(1 ∓ ))
+in B(B;B∗). In the following argument, we put
+V = U − U0.
+(4.4)
+
+The well-known resolvent equations hold :
+
+R(κ) = R0(κ) − R0(κ)V R(κ) = R0(κ) − R(κ)V R0(κ),
+
+(4.5)
+for κ ∈ C \ R. In fact, these equalities follow from
+
+(U0 − eiκ)R(κ) = 1 − V R(κ),
+
+(U − eiκ)R0(κ) = 1 + V R0(κ).
+
+We often use the formula
+
+R(κ)∗ = −eiκU R(κ),
+(4.6)
+which follows from R(κ)∗ = ((eiκ − U )e−iκU∗)−1.
+Lemma 4.3. For θ ∈ [0, 2π), we have R(θ ± i0) = lim↓0 R(θ − i log(1 ∓ )) ∈
+B(B;B∗) in the weak ∗ topology.
+
+Proof. Let J be a compact interval in [0, 2π). Due to the resolvent equation
+
+(4.5) and Lemma 3.5, there exists a constant c > 0 such that
+(cid:107)R(κ)f(cid:107)B∗ ≤ c((cid:107)f(cid:107)B + (cid:107)V R(κ)f(cid:107)B),
+
+(4.7)
+for Re κ ∈ J and Im κ (cid:54)= 0.
+
+First of all, let us prove that there exists a constant c > 0 such that
+
+(4.8)
+
+(cid:107)R(κ)f(cid:107)B∗ ≤ c(cid:107)f(cid:107)B, Re κ ∈ J,
+
+Im κ (cid:54)= 0.
+
+Suppose that this inequality does not hold. Without loss of generality, we can
+take sequences {f j}∞
+j=1 ⊂ C \ R such that (cid:107)R(κj)f j(cid:107)B∗ = 1,
+(cid:107)f j(cid:107)B → 0 and κj → θ + i0 as j → ∞. We put uj = R(κj)f j. Since the range
+of the operator V is a ﬁnite dimensional subspace of B, there exists a subsequence
+
+j=1 ⊂ B and {κj}∞
+
+20
+
+T. KOMATSU, N. KONNO, H. MORIOKA, AND E. SEGAWA
+
+k=1 such that V ujk converges in B. Now let V ujk converge to a sequence
+
+{ujk}∞
+g ∈ B. It follows from the resolvent equation (4.5) and Lemma 3.5 that
+
+(cid:0)R0(κjk )f jk − R0(κjk )V ujk(cid:1) = −R0(θ + i0)g,
+
+u := lim
+
+k→∞ ujk = lim
+k→∞
+
+in the weak ∗ sense. Then u satisﬁes the equation (U − eiθ)u = 0 and u = −R0(θ +
+i0)g for g ∈ B. Applying Lemma 3.10 and Corollary 3.11, we have u = 0. This is a
+contradiction in view of (cid:107)ujk(cid:107)B∗ = 1 for all k.
+Next we show the existence of the limit R(θ + i0) in B(B;B∗) in the weak ∗
+sense. We consider a sequence {κj}∞
+j=1 where κj = θ − i log(1∓ j) with j ↓ 0. For
+f ∈ B, we put uj = R(κj)f . Due to the inequality (4.8), there exists a subsequence
+{ujk}∞
+k=1 such that V ujk converges a sequence g ∈ B as above. Then the limit
+u := limk→∞ ujk ∈ B∗ exists in the weak ∗ sense in view of
+
+(cid:0)R0(κjk )f − R0(κjk )V ujk(cid:1) = R0(θ + i0)f − R0(θ + i0)g.
+
+u = lim
+k→∞
+
+The estimate
+
+(cid:107)g − V u(cid:107)B ≤ (cid:107)g − V ujk(cid:107)B + (cid:107)V (cid:107)B(B∗;B)(cid:107)u − ujk(cid:107)B∗ ,
+
+implies g = V u. Let us prove that uj itself converges to u in B∗. Assume that there
+exists another subsequence {ujl}∞
+l=1 such that liml→∞ ujl = v (cid:54)= u in the weak ∗
+sense for v ∈ B∗. We have
+
+v = R0(θ + i0)f − R0(θ + i0)V v,
+
+as above. Then u− v satisﬁes (U − eiθ)(u− v) = 0 and u− v = −R0(θ + i0)V (u− v).
+Applying Lemma 3.10 and Corollary 3.11, we obtain u = v. This is a contradiction.
+For R(θ − i0), the proof is similar.
+(cid:3)
+Remark. The limiting absorption principle in the sense of B(B;B∗) was intro-
+duced by [1] (for self-adjoint partial diﬀerential operators with simple characteris-
+tics). The pair B-B∗ is optimal for which the limiting absorption principle holds.
+We also mention [23] in which a rigorous proof of the limiting absorption principle
+for unitary operators was given as a general theory on Hilbert spaces. Applying it
+for our case, we can see R(θ ± i0) ∈ B((cid:96)2,s, (cid:96)2,−s) for any s > 1/2 as a direct conse-
+quence. However, since we adopt the framework of B-B∗ argument, we decided to
+rewrite a complete proof of our concrete argument for the sake of completeness of
+the paper.
+
+By the similar way, we can also prove the following lemma.
+
+Lemma 4.4. Let J be a compact interval in [0, 2π). The mapping J (cid:51) θ (cid:55)→
+(R(θ ± i0)f, g) for f, g ∈ B is continuous.
+
+As a direct consequence of the resolvent equation (4.5) and Lemmas 3.5 and 4.3,
+we obtain the uniqueness of the incoming (for +) or outgoing (for −) solution to
+the equation (U − eiθ)u = f for f ∈ B.
+Corollary 4.5. The solution u(±) ∈ B∗ to the equation (U −eiθ)u(±) = f for f ∈ B
+is incoming (for +) or outgoing (for −) if and only if u(±) = R(θ ± i0)f .
+
+GENERALIZED EIGENFUNCTIONS FOR MULTI-DIM. QWS
+
+21
+
+4.3. Distorted Fourier transformation for QW. Here we introduce the spec-
+tral representations for U0 and U . The spectral representations are (distorted)
+Fourier transformations associated with U0 and U . Moreover, the generalized eigen-
+functions are constructed by the spectral representations.
+
+Let F (0)(θ) = (F (0)← (θ),F (0)→ (θ),F (0)↓ (θ),F (0)↑ (θ)) for θ ∈ [0, 2π) be deﬁned by
+
+(F (0)← (θ)f )(x2) =
+
+(F (0)→ (θ)f )(x2) =
+
+(F (0)↓ (θ)f )(x1) =
+
+(F (0)↑ (θ)f )(x1) =
+
+e−iθy1 f←(y1, x2)e←,
+
+eiθy1f→(y1, x2)e→,
+
+e−iθy2f↓(x1, y2)e↓,
+
+eiθy2f↑(x1, y2)e↑,
+
+y1∈Z
+
+(cid:88)
+(cid:88)
+(cid:88)
+(cid:88)
+
+y1∈Z
+
+y2∈Z
+
+1√
+2π
+1√
+2π
+1√
+2π
+1√
+2π
+
+y2∈Z
+
+(cid:77)
+
+for f ∈ B. Note that F (0)(θ) ∈ B(B; h(θ)) where the Hilbert space h(θ) is deﬁned
+by
+
+h(θ) =
+
+(cid:88)
+
+(cid:88)
+
+with the inner product
+
+for φ =(cid:80)
+
+(φ, ψ)h(θ) =
+
+p∈{←,→,↓,→} φpep and ψ =(cid:80)
+
+p∈{←,→}
+
+x2∈Z
+
+Lemma 4.6. Let f ∈ B. We have
+
+R0(θ + i0)f (cid:39)
+
+√
+
+(cid:96)2(Z; C)ep,
+
+p∈{←,→,↓,↑}
+
+(cid:88)
+
+(cid:88)
+
+p∈{↓,↑}
+
+x1∈Z
+
+φp(x1)ψp(x1),
+
+φp(x2)ψp(x2) +
+
+p∈{←,→,↓,↑} ψpep.
+
+(4.9)
+
+and
+
+(4.10)
+
++
+
++
+
+2πF (x1)eiθ(x1−1)(F (0)← (θ)f )(x2)
+√
++
+√
+√
+
+2πF (−x1)e−iθ(x1+1)(F (0)→ (θ)f )(x2)
+2πF (x2)eiθ(x2−1)(F (0)↓ (θ)f )(x1)
+2πF (−x2)e−iθ(x2+1)(F (0)↑ (θ)f )(x1),
+√
+√
+√
+√
+
+2πF (−x1)eiθ(x1−1)(F (0)← (θ)f )(x2)
+2πF (x1)e−iθ(x1+1)(F (0)→ (θ)f )(x2)
+2πF (−x2)eiθ(x2−1)(F (0)↓ (θ)f )(x1)
+2πF (x2)e−iθ(x2+1)(F (0)↑ (θ)f )(x1).
+
+R0(θ − i0)f (cid:39) −
+−
+−
+−
+
+In view of (3.15) and (3.16), we also have the following lemma.
+
+Lemma 4.7. We have
+
+(R0(θ + i0)f − R0(θ − i0)f, g) = 2πe−iθ(F (0)(θ)f,F (0)(θ)g)h(θ),
+
+for θ ∈ [0, 2π) and f, g ∈ B.
+
+22
+
+T. KOMATSU, N. KONNO, H. MORIOKA, AND E. SEGAWA
+
+Now we have arrived at the formula of generalized eigenfunctions of U0. Taking
+
+the adjoint operator F (0)(θ)∗ ∈ B(h(θ);B∗), we have
+
+(F (0)(θ)∗φ)(x) =
+
+1√
+2π
+
+ eiθx1φ←(x2)
+
+e−iθx1 φ→(x2)
+eiθx2 φ↓(x1)
+e−iθx2φ↑(x1)
+
+ , φ ∈ h(θ).
+
+Lemma 4.8. For θ ∈ [0, 2π) and φ ∈ h(θ), F (0)(θ)∗φ ∈ B∗ satisﬁes (U0 −
+eiθ)F (0)(θ)∗φ = 0.
+
+Let us turn to the distorted Fourier transformation associated with U . Due to
+the resolvent equation (4.5) and Lemma 3.6, we deﬁne the operator F (±)(θ) =
+(F (±)← (θ),F (±)→ (θ),F (±)↓
+
+(θ)) for θ ∈ [0, 2π) by
+
+(θ),F (±)↑
+
+F (±)
+
+p
+
+(θ) = F (0)
+
+p (θ)(1 − V R(θ ± i0)),
+
+p ∈ {←,→,↓,↑}.
+
+The operator F (±)(θ) appears in the asymptotic behavior of R(θ ± i0)f at inﬁn-
+ity. The following lemma is a direct consequence of Lemma 4.6 and the resolvent
+equation (4.5).
+Lemma 4.9. Let f ∈ B. We have
+
+R(θ + i0)f (cid:39)
+
+√
+
+(4.11)
+
+and
+
+(4.12)
+
++
+
++
+
+(θ)f )(x1)
+
+2πF (x1)eiθ(x1−1)(F (+)← (θ)f )(x2)
+√
++
+√
+√
+
+2πF (−x1)e−iθ(x1+1)(F (+)→ (θ)f )(x2)
+2πF (x2)eiθ(x2−1)(F (+)↓
+2πF (−x2)e−iθ(x2+1)(F (+)↑
+√
+√
+√
+√
+
+2πF (−x1)eiθ(x1−1)(F (−)← (θ)f )(x2)
+2πF (x1)e−iθ(x1+1)(F (−)→ (θ)f )(x2)
+2πF (−x2)eiθ(x2−1)(F (−)↓
+(θ)f )(x1)
+2πF (x2)e−iθ(x2+1)(F (−)↑
+
+(θ)f )(x1).
+
+(θ)f )(x1),
+
+R(θ − i0)f (cid:39) −
+−
+−
+−
+
+An analogue of Lemma 4.7 holds.
+
+Lemma 4.10. We have
+
+for θ ∈ [0, 2π) and f, g ∈ B.
+
+(R(θ + i0)f − R(θ − i0)f, g) = 2πe−iθ(F (±)(θ)f,F (±)(θ)g)h(θ),
+
+Proof. Note that the equalities
+
+R(θ − i log(1 − )) − R(θ − i log(1 + ))
+
+(4.13)
+
+= −2eiθR(θ − i log(1 − ))R(θ − i log(1 + ))
+= −2eiθR(θ − i log(1 + ))R(θ − i log(1 − )),
+
+for  > 0. It follows from the second equality and the resolvent equation (4.5) that
+
+R(θ + i0) − R(θ − i0)
+= (1 − R(θ − i0)V )(R0(θ + i0) − R0(θ − i0))(1 − V R(θ + i0)).
+
+GENERALIZED EIGENFUNCTIONS FOR MULTI-DIM. QWS
+
+23
+
+From Lemma 4.7, we have
+
+(R(θ + i0)f − R(θ − i0)f, g)
+= 2πe−iθ(F (0)(θ)(1 − V R(θ + i0))f,F (0)(θ)(1 − V ∗R(θ − i0)∗)g)h(θ).
+
+0 V and F (0)(θ)U∗
+
+In view of (4.6), we have R(θ − i0)∗ = −eiθU R(θ + i0). Plugging this equality,
+0 = e−iθF (0)(θ), we obtain F (0)(θ)(1−V ∗R(θ−i0)∗) =
+V ∗U = −U∗
+F (+)(θ). We have proven the lemma for F (+)(θ). For F (−)(θ), we can prove the
+(cid:3)
+lemma by the same way, by using the ﬁrst equality in (4.13).
+By some direct computations, we can show that F (±)(θ)∗ ∈ B(h(θ);B∗) is an
+
+eigenoperator of U as follows.
+Lemma 4.11. For any φ ∈ h(θ), F (±)(θ)∗φ ∈ B∗ satisﬁes the equation (U −
+eiθ)F (±)(θ)∗φ = 0. F (±)(θ)∗φ−F (0)(θ)∗φ is outgoing (for +) or incoming (for −).
+
+Proof. Note that
+
+(4.14)
+
+F (±)(θ)∗ = F (0)(θ)∗ + eiθU R(θ ∓ i0)V ∗F (0)(θ)∗
+
+= F (0)(θ)∗ + eiθ(cid:16)
+
+eiθR(θ ∓ i0)V ∗F (0)(θ)∗ + V ∗F (0)(θ)∗(cid:17)
+
+,
+
+in view of (4.6) and (U − eiθ)R(θ ± i0)g = g for any g ∈ B. Then we have
+UF (±)(θ)∗ = eiθF (±)(θ)∗ by using the equalities U V ∗ = −V U∗
+0F (0)(θ)∗ =
+e−iθF (0)(θ)∗.
+The formula (4.14) implies that F (±)(θ)∗φ − F (0)(θ)∗φ is outgoing (for +) or
+incoming (for −) in view of Lemma 4.9 and the fact that V ∗F (0)(θ)∗φ = 0 at
+(cid:3)
+inﬁnity.
+
+0 and U∗
+
+4.4. Characterization of generalized eigenfunction. The set of solutions to
+the equation (U − eiθ)u = 0 for u ∈ B∗ can be characterized by the range of
+F (+)(θ)∗. To begin with, let us consider the case (U0 − eiθ)u = 0.
+Lemma 4.12. We have KerF (0)(θ)∗ = {0}. The range of F (0)(θ)∗ is closed.
+
+Proof. The lemma follows from
+
+for any φ ∈ h(θ).
+
+(cid:107)F (0)(θ)∗φ(cid:107)2B∗ =
+
+(cid:107)φ(cid:107)2
+
+h(θ),
+
+1
+π
+
+(cid:3)
+
+Due to Lemma 4.12, we can apply the following closed range theorem (see [26,
+
+p. 205]).
+Theorem 4.13. Let X1 and X2 be Banach spaces and (·,·) denote the pairing
+2 , respectively. For T ∈ B(X1; X2),
+between X1 or X2 and its dual spaces X∗
+the following assertions are equivalent.
+
+1 or X∗
+
+(1) Ran T is closed.
+(2) Ran T ∗ is closed.
+(3) Ran T = (Ker T ∗)⊥ := {y ∈ X2 ; (y, y∗) = 0, ∀y∗ ∈ Ker T ∗}.
+1 ; (x, x∗) = 0, ∀x ∈ Ker T}.
+(4) Ran T ∗ = (Ker T )⊥ := {x∗ ∈ X∗
+
+24
+
+T. KOMATSU, N. KONNO, H. MORIOKA, AND E. SEGAWA
+
+Now we can prove the characterization of solutions to the equation (U0−eiθ)u = 0
+
+in B∗ as follows. We deﬁne the operator (cid:98)F (0)(θ) = ((cid:98)F (0)← (θ), (cid:98)F (0)→ (θ), (cid:98)F (0)↓ (θ), (cid:98)F (0)↑ (θ))
+
+which is the Fourier transform of F (0)(θ) by
+
+((cid:98)F (0)← (θ)f )(ξ2) = (cid:98)f←(θ, ξ2),
+((cid:98)F (0)↓ (θ)f )(ξ1) = (cid:98)f↓(ξ1, θ),
+
+((cid:98)F (0)→ (θ)f )(ξ2) = (cid:98)f←(−θ, ξ2),
+((cid:98)F (0)↑ (θ)f )(ξ1) = (cid:98)f↑(ξ1,−θ),
+
+for ξ = (ξ1, ξ2) ∈ T2. Here we have identiﬁed T2 with [−π, π)2.
+Lemma 4.14. We have F (0)(θ)B = h(θ) and {u ∈ B∗ ; (U0 − eiθ)u = 0} =
+F (0)(θ)∗h(θ).
+
+Proof. We apply Theorem 4.13, taking X1 = B, X2 = h(θ) and T = F (0)(θ).
+The relation F (0)(θ)B = h(θ) follows from the assertion (3) in view of Lemma 4.12.
+For the proof of the latter part, we have only to show (u, f ) = 0 when u ∈ B∗,
+
+f ∈ B, (U − eiθ)u = 0 and F (0)(θ)f = 0. Since(cid:98)u satisﬁes ((cid:98)U0(ξ) − eiθ)(cid:98)u(ξ) = 0, we
+have supp(cid:98)u← ⊂ {ξ ∈ T2 ; x1 = θ}, supp(cid:98)u→ ⊂ {ξ ∈ T2 ; x1 = −θ}, supp(cid:98)u↓ ⊂ {ξ ∈
+T2 ; x2 = θ} and supp(cid:98)u↑ ⊂ {ξ ∈ T2 ; x2 = −θ}. It follows
+
+(cid:90)
+
+(cid:16)(cid:98)u←(θ, ξ2)(cid:98)f←(θ, ξ2) +(cid:98)u→(−θ, ξ2)(cid:98)f→(−θ, ξ2)
+(cid:17)
+(cid:90)
+(cid:16)(cid:98)u↓(ξ1, θ)(cid:98)f↓(ξ1, θ) +(cid:98)u↑(ξ1,−θ)(cid:98)f↑(ξ1,−θ)
 (cid:17)
 
-L(xi, yi, zi) = λ · Leasy(xi, zi) + (1 − λ) · Lhard(xi, yi)
+T
 
-(3)
-We compute the ﬁnal loss as a weighted sum of L1(xi, yi) and L2(xi, zi) as shown in Equation (3). We
-introduce a loss scheduler to dynamically weight the contribution of the losses from the two tasks throughout the
-entire training process, which is done by designing a speciﬁc function for the λ in Equation (3) with respect to
-the current training epoch number. In this work, we investigate the loss schedulers listed in Table 2 and Figure
-2. In practice, λ can be any function. Note that in Figure 2 and Table 2 all loss schedulers have λ = 1 at the
-beginning of training, and λ = 0 after when the current epoch number, e, is larger than a preset hyperparameter
-L. This is to make the training focus on the “easier” task in the beginning of training, while transitioning to
-focusing on the “harder” task (original three-class classiﬁcation) as training progresses.
+dξ2
 
-Table 2: Functions of diﬀerent types of loss scheduler with
-current epoch number, e, less than the preset hyperparameter
-L, (λ = 0 when L ≤ e ≤ E)
+dξ1.
 
-Loss scheduler type Function (with 0 ≤ e < L)
-λ(e) = (cos(eπ/L) + 1) /2
-Cosine
-λ(e) = 1 − e/L
-Linear
-λ(e) = −(e/L)2 + 1
-Concave quadratic
-λ(e) = L−2 · (e − L)2
-Convex quadratic
-λ(e) = e/L,  = 10−3
-Exponential
-λ(e) = log(1 + L − e)/ log(1 + L)
-Logarithm
-λ(e) = 1
-Step
+(u, f ) =
 
-Figure 2: Seven diﬀerent types of loss scheduler.
-L is a preset hyperparameter and E is the total
-number of the training epochs
+In view of (cid:98)F (0)(θ)f = 0, we obtain (u, f ) = 0.
 
-Table 3: Comparison of the diﬀerent methods’ performance. “LS: X” stands for a certain type of loss scheduler.
-The bold numbers correspond to the highest value for each metric.
++
 
-Accuracy
+T
 
-Balanced
-accuracy
+Let us turn to the equation (U − eiθ)u = 0 in B∗.
 
-Average
+(cid:3)
 
-AUC
+Theorem 4.15. We have F (+)(θ)B = h(θ) and {u ∈ B∗ ; (U − eiθ)u = 0} =
+F (+)(θ)∗h(θ).
 
-Aboutalib et al.5 (baseline)
+Proof. By using the resolvent equation (4.5), we have
+(1 − R(θ + i0)∗V ∗)(1 + R0(θ + i0)∗V ∗)
+= (1 + R0(θ + i0)∗V ∗)(1 − R(θ + i0)∗V ∗) = 1.
 
-LS: exponential
-LS: convex quadratic
-LS: linear
-LS: cosine
-LS: concave quadratic
-LS: logarithm
-LS: step
+(4.15)
 
-0.489
+Then 1 − R(θ + i0)∗V ∗ is invertible. It follows that KerF (+)(θ)∗ = {0} and the
+range of F (+)(θ)∗ is closed. Applying the assertion (3) of Theorem 4.13, we obtain
+F (+)(θ)B = h(θ).
+For the remaining part, we have only to prove {u ∈ B∗ ; (U − eiθ)u = 0} ⊂
+F (+)(θ)∗h(θ). Suppose that u ∈ B∗ satisﬁes (U − eiθ)u = 0. We deﬁne u(0) ∈ B∗
+by
 
-0.491
-0.510
-0.480
-0.501
-0.508
-0.511
-0.515
+(4.16)
 
-0.458
+u(0) = (1 + R0(θ + i0)∗V ∗)u
 
-0.468
-0.474
-0.476
-0.464
-0.492
-0.494
-0.483
+= u − eiθ(1 + eiθR0(θ − i0))V ∗u.
 
-0.658
+In view of U∗u = e−iθu and U0V ∗ = −V U∗, we have (U0 − eiθ)u(0) = 0. Lemma
+4.14 implies u(0) = F (0)(θ)∗φ for some φ ∈ h(θ). Due to (4.16), we have (1+R0(θ +
+i0)∗V ∗)u = F (0)(θ)∗φ. By using (4.15), we obtain
 
-0.658
-0.672
-0.655
-0.653
-0.671
-0.668
-0.669
+u = (1 − R(θ + i0)∗V ∗)F (0)(θ)∗φ = F (+)(θ)∗φ.
 
-Binary
+Then u ∈ RanF (+)(θ)∗.
 
-task
+(cid:3)
 
-accuracy
+GENERALIZED EIGENFUNCTIONS FOR MULTI-DIM. QWS
 
-0.598
+25
 
-0.623
-0.607
-0.614
-0.611
-0.633
-0.617
-0.622
+4.5. Spectral decomposition of scattering operator. In view of Lemma 3.12,
+we have only to show the absence of σsc(U ) in order to prove the absolute continuity
+of σ(U ). It is well-known that Stone’s formula and the limiting absorption principle
+of the resolvent operator imply the absolute continuity of the essential spectrum
+of Schr¨odinger operators. An analogue of this argument holds for the dDQW as
+follows.
+Lemma 4.16. We have σsc(U ) = ∅.
 
-Binary
+Proof. Let θ ∈ (0, 2π) and I = (θ − , θ + ) for small  > 0. The lemma follows
 
-task
-AUC
+from Lemma 4.4 and the formula (3.1) for U :
 
-0.633
+(EU ((θ − , θ(cid:48)))f, f )(cid:96)2 =
 
-0.641
-0.648
-0.635
-0.645
-0.647
-0.644
-0.655
+(4.17)
+for θ(cid:48) ∈ I and f ∈ B. The proof is same as [15, Lemma 4.6].
 
-3. RESULTS
+(cid:3)
+Let the Hilbert space H be deﬁned by H = L2([0, 2π); h(θ); dθ) with the inner
 
-We evaluate our method on 1,709 FFDM images using 5-fold cross validation. The results shown in Table 3
-are means over the ﬁve partitions. We use the VGG162 as the backbone of the convolutional neural network
-(CNN) model. We present the results for diﬀerent loss schedulers and compare our methods with Aboutalib et
-al.’s method5 (baseline) which is a deep learning method on the same three-class classiﬁcation task as ours. Our
-model evaluation metrics include the accuracy and the AUC for the three-class classiﬁcation, and the balanced
-accuracy by averaging the accuracies of the three classes, which reduces the eﬀect induced by data imbalance. In
-addition, to further evaluate the methods’ overall ability to distinguish False recall, we also show the accuracy
-and AUC of the binary “easier” task mentioned in Section 2.2. All experiments are implemented in PyTorch
-framework and run on an Nvidia TESLA V100 GPU from Pittsburgh Supercomputing Center.
+θ−
 
-4. DISCUSSION
+(R(ω + i0)f − R(ω − i0)f, f )dω,
 
-In this work, we proposed a curriculum learning strategy in task space for FFDM image classiﬁcation of the
-three classes of Malignant, Negative, and False recall. We designed a loss scheduler to weight the contribution
-of the original “harder” three-class classiﬁcation task and the created “easier” binary classiﬁcation task.
+eiω
+2π
 
-According to the results, CL in task space with most forms of the loss scheduler outperform the baseline,
-which attributes to the fact that the loss schedulers focus more on the “easier” task during the ﬁrst stage of the
-training process (0 ≤ e < L), while Aboutalib et al.’s method5 (baseline) only uses the basic learning strategy. In
-addition, the three concave loss schedulers, namely the concave quadratic, logarithm and step function, perform
-better than the other ones. This is partially because these three concave loss scheduler put reasonably more
-weight than others on the “easier” task, which provides more help on understanding the “harder” task (see
-Figure 2).
+(cid:90) θ(cid:48)
 
-5. NEW OR BREAKTHROUGH WORK TO BE PRESENTED
+(cid:90) 2π
 
-As far as we know, this work is one of the newest studies that develop a learning strategy with regard to
-curriculum learning in task space on FFDM image classiﬁcation. Our method demonstrates that by scheduling
-the learning from an “easier” sub-task to the original “harder” task, the model’s performance to classify the
-three classes of the FFDM images will be further improved from the baseline learning strategies. We believe
-that such curriculum learning methods will expand the possibilities of artiﬁcial intelligence (AI) studies and its
-applications in future medical imaging research.
+0
 
-REFERENCES
+product
 
-[1] “U.S. Breast Cancer Statistics.” American Cancer Society, 4 February 2021, https://www.breastcancer.
+(f, g)H =
 
-org/symptoms/understand_bc/statistics (2021).
+The operators F (0) and F (±) are deﬁned by
 
-[2] Simonyan, K. and Zisserman, A., “Very deep convolutional networks for large-scale image recognition,” arXiv
+(f (θ), g(θ))h(θ)dθ.
 
-preprint arXiv:1409.1556 (2014).
+(F (0)f )(θ) = F (0)(θ)f,
 
-[3] Luo, J., Kitamura, G., Doganay, E., Arefan, D., and Wu, S., “Medical knowledge-guided deep curricu-
-lum learning for elbow fracture diagnosis from x-ray images,” in [Medical Imaging 2021: Computer-Aided
-Diagnosis], 11597, 1159712, International Society for Optics and Photonics (2021).
+(F (±)f )(θ) = F (±)(θ)f,
 
-[4] Jim´enez-S´anchez, A., Mateus, D., Kirchhoﬀ, S., Kirchhoﬀ, C., Biberthaler, P., Navab, N., Ballester, M. A. G.,
-and Piella, G., “Medical-based deep curriculum learning for improved fracture classiﬁcation,” in [International
-Conference on Medical Image Computing and Computer-Assisted Intervention ], 694–702, Springer (2019).
+for θ ∈ [0, 2π) and f ∈ B. The following lemma follows from the deﬁnition of
+F (0)(θ).
+Lemma 4.17. The following assertions holds.
 
-[5] Aboutalib, S. S., Mohamed, A. A., Berg, W. A., Zuley, M. L., Sumkin, J. H., and Wu, S., “Deep learn-
-ing to distinguish recalled but benign mammography images in breast cancer screening,” Clinical Cancer
-Research 24(23), 5902–5909 (2018).
+(1) The operator F (0) can be extended uniquely to a unitary operator from (cid:96)2
+0 f )(θ) = e−iθ(F (0)f )(θ)
+(2) We have (F (0)U0f )(θ) = eiθ(F (0)f )(θ) and (F (0)U∗
 
-[6] Bengio, Y., Louradour, J., Collobert, R., and Weston, J., “Curriculum learning,” in [Proceedings of the 26th
+to H.
+for θ ∈ [0, 2π) and f ∈ (cid:96)2.
 
-annual international conference on machine learning ], 41–48 (2009).
+The operator F (±) also diagonalizes U as follows.
 
-[7] Stretcu, O., Platanios, E. A., Mitchell, T., and P´oczos, B., “Coarse-to-Fine Curriculum Learning for Classi-
-ﬁcation,” in [International Conference on Learning Representations (ICLR) Workshop on Bridging AI and
-Cognitive Science (BAICS) ], (2020).
+Lemma 4.18. The following assertions holds.
+
+(1) The operator F (±) can be extended uniquely to a unitary operator from (cid:96)2
+(2) We have (F (±)U f )(θ) = eiθ(F (±)f )(θ) and (F (±)U∗f )(θ) = e−iθ(F (±)f )(θ)
+
+to H.
+for θ ∈ [0, 2π) and f ∈ (cid:96)2.
+
+(cid:90) θ2
+
+θ1
+
+Proof. Lemma 4.10 and the formula (4.17) imply
+
+(EU ((θ1, θ2))f, g)(cid:96)2 =
+
+(F (±)(θ)f,F (±)(θ)g)h(θ)dθ,
+
+for θ1 < θ2, θ1, θ2 ∈ [0, 2π). It follows that F (±) is a partial isometry from Hac(U )
+to H. In view of Corollary 3.12 and Lemma 4.16, we have Hp(U ) = Hsc(U ) = ∅.
+Then we obtain the assertion (1).
+The assertion (2) follows from the deﬁnition of F (±). The details of computation
+(cid:3)
+
+is same as [15, Theorem 4.7].
+
+The Fourier transform of the scattering operator Σ = W ∗
+
++W− is deﬁned by
+
+(cid:98)Σ = F (0)Σ(F (0))∗.
+
+(4.18)
+
+26
+
+(cid:98)Σ =
+
+⊕(cid:98)Σ(θ)dθ,
+
+T. KOMATSU, N. KONNO, H. MORIOKA, AND E. SEGAWA
+
+By the same way of [15, Theorem 5.3], we can see that (cid:98)Σ can be decomposed as
+(cid:90) 2π
+and (cid:98)Σ(θ) satisﬁes the following properties.
+Theorem 4.19. Let θ ∈ [0, 2π). The S-matrix (cid:98)Σ(θ) satisﬁes the following asser-
+(1) For f ∈ H, we have ((cid:98)Σf )(θ) =(cid:98)Σ(θ)f (θ).
+(2) (cid:98)Σ(θ) is unitary on h(θ).
+(3) We have (cid:98)Σ(θ) = 1 − 2πeiθA(θ) where
+
+tions.
+
+0
+
+A(θ) = (A←(θ), A→(θ), A↓(θ), A↑(θ)),
+
+is deﬁned by
+
+for p ∈ {←,→,↓,↑}.
+
+Ap(θ) = F (−)
+
+p
+
+(θ)V ∗F (0)(θ)∗,
+
+Remark. Usually the statement of the S-matrix holds for a.e. θ in the continuous
+spectrum. For the case where σac(U0) has band gaps, the endpoints of σac(U0) are
+the exceptional points. If U0 or U have some eigenvalues embedded in the contin-
+uous spectrum, these embedded eigenvalues are also exceptional points. However,
+the spectrum of the free QW U0 does not band gaps and its structure is uniform
+on the unit circle. Indeed, there is no threshold in θ for the limiting absorption
+principle (formulas (3.15) and (3.16), Lemmas 3.5 and 4.3, formulas (4.11) and
+(4.12)) and the deﬁnition of the Hilbert space h(θ). Mathematically, the homo-
+geneity of σac(U0) follows from ∂
+∂ξj
+assumption for C(x) and Corollary 3.12, there is no eigenvalue in the continuous
+
+(e±iξj − eiθ)(cid:12)(cid:12)±ξj =θ (cid:54)= 0 for j = 1, 2. Due to the
+spectrum. Thus the ﬁber operator (cid:98)Σ(θ) can be deﬁned for all θ modulo 2π without
+
+thresholds. If we remove the second assumption for C(x), the operator U may have
+some eigenvalues with eigenfunctions with ﬁnite supports. In this case, Theorem
+4.19 holds for θ except for a ﬁnite number of embedded eigenvalues.
+
+Due to the representation (4.14) of generalized eigenfunctions of U , we have for
+
+u(+) = F (+)(θ)∗φ and u(0) = F (0)(θ)∗φ, φ ∈ h(θ),
+
+(4.19)
+
+u(+) − u(0) (cid:39) −
+−
+−
+−
+
+2πeiθF (−x1)eiθx1 (A←(θ)φ)(x2)
+2πeiθF (x1)e−iθx1 (A→(θ)φ)(x2)
+2πeiθF (−x2)eiθx2 (A↓(θ)φ)(x1)
+2πeiθF (x2)e−iθx2 (A↑(θ)φ)(x1).
+
+√
+√
+√
+√
+
+In particular, the generalized eigenfunction F (+)(θ)∗φ has the asymptotics
+
+(F (+)(θ)∗φ)←(x) =
+
+(F (+)(θ)∗φ)→(x) =
+
+((cid:98)Σ←(θ)φ)(x2) + o(1),
+((cid:98)Σ→(θ)φ)(x2) + o(1),
+
+eiθx1√
+2π
+e−iθx1√
+
+2π
+
+x1 → −∞,
+
+x1 → ∞,
+
+GENERALIZED EIGENFUNCTIONS FOR MULTI-DIM. QWS
+
+27
+
+Figure 3. The scattered wave with an incident wave which con-
+sists of one plane wave of the chirality ←.
+
+for every ﬁxed x2 ∈ Z, and
+
+(F (+)(θ)∗φ)↓(x) =
+
+(F (+)(θ)∗φ)↑(x) =
+
+((cid:98)Σ↓(θ)φ)(x1) + o(1),
+((cid:98)Σ↑(θ)φ)(x1) + o(1),
+
+eiθx2√
+2π
+e−iθx2√
+
+2π
+
+x2 → −∞,
+
+x2 → ∞,
+
+for every ﬁxed x1 ∈ Z. Moreover, v(+) := u(+) − u(0) satisﬁes not only the asymp-
+totics (4.19) but equalities as follows :
+
+√
+v(+)← (x) = −
+2πeiθeiθx1(A←(θ)φ)(x2),
+√
+v(+)→ (x) = −
+2πeiθe−iθx1 (A→(θ)φ)(x2),
+√
+(x) = −
+v(+)↓
+2πeiθeiθx2(A↓(θ)φ)(x1),
+√
+(x) = −
+2πeiθe−iθx2 (A↑(θ)φ)(x1),
+v(+)↑
+
+x1 ≤ −n0 − 1,
+x1 ≥ n0 + 1,
+x2 ≤ −n0 − 1,
+x2 ≥ n0 + 1.
+
+In fact, v(+) satisﬁes (U0 − eiθ)v(+) = 0 in Z2 \ (D ∪ ∂D). Then we can see
+these equalities by the same argument of the proof of Lemma 3.10, considering the
+asymptotics (4.19).
+For 2DQW, the scattered wave does not spread radially as above. Since V =
+U − U0 is ﬁnite rank, the scattered wave for every chirality passes along corridors.
+See Figure 3.
+Theorem 4.20. Let φ ∈ h(θ).
+
+(1) (A←(θ)φ)(x2) and (A→(θ)φ)(x2) vanish for |x2| ≥ n0 + 1.
+(2) (A↓(θ)φ)(x1) and (A↑(θ)φ)(x1) vanish for |x1| ≥ n0 + 1.
+
+As a consequence, A(θ) is an operator of ﬁnite rank.
+
+v(+) = u(+) − u(0) = eiθ(cid:16)
+
+eiθR0(θ − i0)g + V ∗u(0)(cid:17)
+
+,
+
+Proof. Note that
+
+where g = V ∗u(0) − V R(θ − i0)V ∗u(0) for u(+) = F (+)(θ)∗φ and u(0) = F (0)(θ)∗φ,
+φ ∈ h(θ). In view of the assumption for C(x), we have (V ∗u(0))←(x) = ((C∗ −
+1)S−1u(0))←(x) = 0 for |x2| ≥ n0. Similarly, we have (V R(θ − i0)V ∗u(0))←(x) =
+(S(C − 1)R(θ − i0)V ∗u(0))←(x) = 0 for |x2| ≥ n0. Thus the formula (3.16) shows
+
+28
+
+T. KOMATSU, N. KONNO, H. MORIOKA, AND E. SEGAWA
+
+that v(+)(x) vanishes for |x2| ≥ 0. This implies that (A←(θ)φ)(x2) = 0 for |x2| ≥ 0.
+The proofs for Ap(θ)φ with p ∈ {→,↓,↑} are similar.
+(cid:3)
+
+References
+
+[1] S. Agmon and L. H¨ormander, Asymptotic properties of solutions of diﬀerential equations
+
+with simple characteristics, J. Anal. Math., 30 (1976), 1-30.
+
+[2] W. O. Amrein, A. Boutet de Monvel, and V. Georgescu, “C0-groups, commutator meth-
+ods and spectral theory of N -body Hamiltonians”, volume 135 of Progress in Mathematics,
+Birkh¨auser Verlag, Basel, 1996.
+
+[3] K. Ando, H. Isozaki and H. Morioka, Spectral properties of Schr¨odinger operators on perturbed
+
+lattices, Ann. Henri Poincar´e, 17 (2016), 2103-2171.
+
+[4] K. Ando, H. Isozaki and H. Morioka, Inverse scattering for Schr¨odinger operators on per-
+
+turbed lattices, Ann. Henri Poincar´e, 19 (2018), 3397-3455.
+
+[5] E. Feldman and M. Hillery, Quantum walks on graphs and quantum scattering theory, Coding
+Theory and Quantum Computing, edited by D. Evans, J. Holt, C. Jones, K. Klintworth, B.
+Parshall, O. Pﬁster, and H. Ward, Contemporary Mathematics, 381 (2005), 71-96.
+
+[6] E. Feldman and M. Hillery, Modifying quantum walks: A scattering theory approach, Journal
+
+of Physics A: Mathematical and Theoretical 40 (2007), 11343-11359.
+
+[7] C. Fern´andez, S. Richard and R. Tiedra de Aldecoa, Commutator methods for unitary oper-
+
+ators, J. Spectr. Theory, 3 (2013), 271-292.
+
+[8] Yu. Higuchi and E. Segawa, Dynamical system induced by quantum walks, J. Phys. A: Math.
+
+Theor. 52 (2009) 395202.
+
+[9] H. Isozaki and E. Korotyaev, Inverse problems, trace formulae for discrete Schr¨odinger op-
+
+erators, Ann. Henri Poincar´e, 13 (2012), 513-542.
+
+[10] H. Isozaki and H. Morioka, A Rellich type theorem for discrete Schr¨odinger operators, Inverse
+
+Problems and Imaging, 8 (2014), 475-489.
+
+[11] H. Isozaki and H. Morioka, Inverse scattering at a ﬁxed energy for discrete Schr¨odinger
+
+operators on the square lattice, Ann. l’Inst. Fourier, 65 (2015), 1153–1200.
+
+[12] T. Komatsu, N. Konno, H. Morioka and E. Segawa, Generalized eigenfunctions for quantum
+
+walks via pass counting approach, Rev. Math. Phys., 33 (2021), 2150019, pp. 1-24.
+
+[13] M. Maeda, H. Sasaki, E. Segawa, A. Suzuki and K. Suzuki, Scattering and inverse scattering
+for nonlinear quantum walks, Discrete and Continuous Dynamical Systems A, 38 (2018),
+3687-3703.
+
+[14] M. Maeda, H. Sasaki, E. Segawa, A. Suzuki and K. Suzuki, Dispersive estimates for quantum
+
+walks on 1D lattice, preprint. arXiv:1808.05714
+
+[15] H. Morioka, Generalized eigenfunctions and scattering matrices for position-dependent quan-
+
+tum walks, Rev. Math. Phys., 31 (2019), 1950019, pp. 1-37.
+
+[16] H. Morioka and E. Segawa, Detection of edge defects by embedded eigenvalues of quantum
+
+walks, Quantum Inf. Process., 18 (2019), 283, pp. 1-18.
+
+[17] S. Nakamura, Microlocal properties of scattering matrices, Commn. PDE, 41 (2016), 894-912.
+[18] S. Richard, A. Suzuki and R. Tiedra de Aldecoa, Quantum walks with an anisotropic coin I:
+
+spectral theory, Lett. Math. Phys., 108 (2018), 331-357.
+
+[19] S. Richard, A. Suzuki and R. Tiedra de Aldecoa, Quantum walks with an anisotropic coin II:
+
+scattering theory, Lett. Math. Phys., First Online (2018), DOI:10.1007/s11005-018-1100-1.
+
+[20] J. Sahbani, The conjugate operator method for locally regular Hamiltonians, J. Operator
+
+Theory, 38 (1997), 297-322.
+
+[21] A. Suzuki, Asymptotic velocity of a position-dependent quantum walk, Quantum Inf. Process,
+
+15 (2016), 103-119.
+
+[22] Y. Tadano, Long-range scattering for discrete Schr¨odinger operators, Ann. Henri Poincar´e,
+
+20 (2019), 1439-1469.
+
+[23] R. Tiedra de Aldecoa, Stationary scattering theory for unitary operators with an application
+
+to quantum walks, J. Funct. Anal., 279 (2020), 108704.
+
+[24] D. Yafaev, “Mathematical Scattering Theory: General Theory”, Translations of Mathemati-
+
+cal Monographs, Vol. 105 (American Mathematical Society, Providence, RI, 2009).
+
+[25] D. Yafaev, On solutions of the Schr¨odinger equations with radiation condition at inﬁnity,
+
+Adv. in Sob. Math., 7 (1991), 179-204.
+
+[26] K. Yoshida, “Functional Analysis”, Springer, Berlin, 1966.
+
+GENERALIZED EIGENFUNCTIONS FOR MULTI-DIM. QWS
+
+29
+
+(T. Komatsu) Department of Bioengineering, School of Engineering,The University
+
+of Tokyo, Bunkyo-ku, Tokyo, 113-8656, Japan
+Email address: komatsu@coi.t.u-tokyo.ac.jp
+
+(N. Konno) Department of Applied Mathematics, Yokohama National University,
+
+Hodogaya, Yokohama, Kanagawa, 240-8501, Japan
+
+Email address: konno-norio-bt@ynu.ac.jp
+
+(H. Morioka) Graduate School of Science and Engineering, Ehime University, Bunkyo-
+
+cho 3, Matsuyama, Ehime, 790-8577, Japan
+Email address: morioka@cs.ehime-u.ac.jp
+
+(E. Segawa) Graduate School of Environment and Information Sciences, Yokohama
+
+National University, Hodogaya, Yokohama, Kanagawa, 240-8501, Japan
+
+Email address: segawa-etsuo-tb@ynu.ac.jp
 
 
