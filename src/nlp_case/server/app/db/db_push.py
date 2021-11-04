@@ -39,8 +39,8 @@ class DBPusher:
         _db = self._get_collection(collection)
         
         tr = Tfidf_model(data_iterator)
-        if isinstance(data_iterator, pymongo.cursor.CursorType):
-            data_iterator.rewind()
+        #if isinstance(data_iterator, pymongo.cursor.CursorType):
+        data_iterator.rewind() #TODO: do the actual type check
         
         for paper in data_iterator:
             keywords = tr.predict_keywords(paper['abstract'])
