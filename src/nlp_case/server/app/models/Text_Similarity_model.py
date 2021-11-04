@@ -49,4 +49,8 @@ class Text_Similarity_model:
         res = self.data[self.data['distant'] == self.data['distant'].min()]
         _id = res['_id'].array[0]
         paper = self.db_access.get_paper_by_id(_id)
+<<<<<<< HEAD
         return paper
+=======
+        return paper
+>>>>>>> c61f1e55eb7c626906c45f17c4f9eb677661eb5b

@@ -17,9 +17,15 @@ class Tfidf_model:
             vocabulary = pickle.load(open(COUNTVEC_PATH, "rb"))
             if use_stopwords:
                 stopwords = nltk.corpus.stopwords.words("english")
+<<<<<<< HEAD
                 self.cv = CountVectorizer(max_df=0.5, stop_words=stopwords, ngram_range=(1,2), vocabulary=vocabulary)
             else:
                 self.cv=CountVectorizer(max_df=0.5, ngram_range=(1,2), vocabulary=vocabulary)
+=======
+                self.cv = CountVectorizer(max_df=0.5, stop_words=stopwords, ngram_range=(1,3), vocabulary=vocabulary)
+            else:
+                self.cv=CountVectorizer(max_df=0.5, ngram_range=(1,3), vocabulary=vocabulary)
+>>>>>>> c61f1e55eb7c626906c45f17c4f9eb677661eb5b
                 
             idf = pickle.load(open(TFIDF_PATH, "rb"))
             self.transformer.idf_ = idf
@@ -30,10 +36,17 @@ class Tfidf_model:
         print("Fitting new Tfidf_model...")
         if (use_stopwords):
             stopwords = nltk.corpus.stopwords.words("english")
+<<<<<<< HEAD
             self.cv = CountVectorizer(max_df=0.5, stop_words=stopwords, ngram_range=(1,2))
             self.transformer = TfidfTransformer(smooth_idf=True,use_idf=True)
         else:
             self.cv = CountVectorizer(max_df=0.5, ngram_range=(1,2))
+=======
+            self.cv = CountVectorizer(max_df=0.5, stop_words=stopwords, ngram_range=(1,3))
+            self.transformer = TfidfTransformer(smooth_idf=True,use_idf=True)
+        else:
+            self.cv = CountVectorizer(max_df=0.5, ngram_range=(1,3))
+>>>>>>> c61f1e55eb7c626906c45f17c4f9eb677661eb5b
             self.transformer = TfidfTransformer(smooth_idf=True,use_idf=True)
 
         #again loads the whole DB in RAM, needs a fix
