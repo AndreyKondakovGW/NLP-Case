@@ -41,6 +41,18 @@ class Parser(object):
     @staticmethod
     def getDescription(filename):
         with open(filename, mode='r') as f :
-            description = re.split(r'Abstract\. |Contents|ABSTRACT|1\. INTRODUCTION|Keywords:|',f.read())[1].strip()
-            print(re.split(r'Abstract\. |Contents|ABSTRACT|1\. INTRODUCTION|Keywords:|',f.read()))
+            description = re.split(r'ABSTRACT|1. INTRODUCTION|Keywords:|Contents|Abstract. ',f.read())[1].strip()
+        return description
+
+    def get_text_from_pdf(filename):
+        Parser.parsePDF(filename)
+        filename = os.path.dirname(os.path.abspath(__file__)) + '\..\..\\tmp\out.txt'
+        with open(filename, mode='r') as f :
+            text = f.read()
+        return text
+
+    @staticmethod
+    def get_description_from_pdf(filename):
+        Parser.parsePDF(filename)
+        description = Parser.getDescription(os.path.dirname(os.path.abspath(__file__)) + '\..\..\\tmp\out.txt')
         return description

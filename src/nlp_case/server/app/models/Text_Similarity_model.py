@@ -28,14 +28,15 @@ class Text_Similarity_model:
             print('Waiting for creating the embedding')
             MyText2VecModel.generate_embedding(self.model, datapath, db_access.get_papers_iterator())
             print('Embedding was created')
+
+        self.db_access = db_access
         self.data = pd.read_csv(datapath,index_col=False)
         self.db_access = db_access
         self.milvus = MilvusBridge()
 
     def find_similar_article(self, data):
         stopwords = custom_stopwords
-        Parser.parsePDF(data)
-        description = Parser.getDescription(os.path.dirname(os.path.abspath(__file__)) + '\..\\tmp\out.txt')
+        description = Parser.get_description_from_pdf(data)
         print('Article description:')
         print(description)
         description_clean = preprocess_text(description, stopwords=stopwords)

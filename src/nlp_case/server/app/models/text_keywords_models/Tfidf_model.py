@@ -20,7 +20,6 @@ class Tfidf_model:
             stopwords = custom_stopwords if use_stopwords else None
             self.cv = CountVectorizer(max_df=0.5, stop_words=stopwords, 
                                         ngram_range=(1,2), vocabulary=vocabulary)
-                
             idf = pickle.load(open(TFIDF_PATH, "rb"))
             self.transformer.idf_ = idf
         else:
@@ -33,6 +32,7 @@ class Tfidf_model:
         stopwords = custom_stopwords if use_stopwords else None
         self.cv = CountVectorizer(max_df=0.5, stop_words=stopwords, ngram_range=(1,2))
         self.transformer = TfidfTransformer(smooth_idf=True,use_idf=True)
+        
         #again loads the whole DB in RAM, needs a fix
         clean_corpus = []
         for paper in data_iterator:

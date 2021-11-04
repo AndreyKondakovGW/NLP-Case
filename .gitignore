@@ -131,3 +131,4 @@ dmypy.json
 #big model files
 src/nlp_case/data/word2vec.wordvectors.vectors.npy
 src/nlp_case/data/word2vec.wordvectors
+src/nlp_case/data/countvec.pkl
