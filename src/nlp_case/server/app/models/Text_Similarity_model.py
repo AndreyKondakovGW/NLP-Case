@@ -4,6 +4,8 @@ from nlp_case.server.app.models.parsers.PDFparser import Parser
 from nlp_case.server.app.models.preprocessor.Text2Vec import MyText2VecModel
 from nlp_case.server.app.models.preprocessor.StandardPreprocessor import preprocess_text
 from nlp_case.server.app.models.preprocessor.Text2Vec import get_sif_feature_vector
+from nlp_case.server.app.db.milvus_bridge import MilvusBridge
+from nlp_case.server.app.models.preprocessor.custom_stopwords import custom_stopwords
 import nltk
 from sklearn.metrics.pairwise import cosine_similarity
 import os
@@ -28,10 +30,10 @@ class Text_Similarity_model:
             print('Embedding was created')
         self.data = pd.read_csv(datapath,index_col=False)
         self.db_access = db_access
-
+        self.milvus = MilvusBridge()
 
     def find_similar_article(self, data):
-        stopwords = nltk.corpus.stopwords.words("english")
+        stopwords = custom_stopwords
         Parser.parsePDF(data)
         description = Parser.getDescription(os.path.dirname(os.path.abspath(__file__)) + '\..\\tmp\out.txt')
         print('Article description:')
