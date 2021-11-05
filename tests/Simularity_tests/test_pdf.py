@@ -2,7 +2,7 @@ import requests
 import json
 
 
-server_url = 'http://127.0.0.1:5000'
+server_url = 'https://nlp-case-elia-morrison.cloud.okteto.net'
 headers = {
 'Accept': "multipart/form-data",
 'Content-Type': "application/pdf",
@@ -32,6 +32,6 @@ files2 = {
 request = requests.post(server_url+ '/find_similar_article', json={"data": "article"}, files=files2)
 article = json.loads(request.text)
 print("Most simular article(s) in base for article above:")
-print(f"Titel {article['titel']}")
+print(f"Title {article['title']}")
 print(f"Pdf {article['pdflink']}")
 print(f"Link {article['sitelink']}") 

@@ -4,7 +4,7 @@ from pymilvus import connections, FieldSchema, CollectionSchema, DataType, Colle
 
 class MilvusBridge:
     def __init__(self):
-        self.connection = connections.connect(host='localhost', port='19530')
+        self.connection = connections.connect(host='10.152.3.172', port='19530')
         self.collection = None
         
     def push_embeddings(self, file):

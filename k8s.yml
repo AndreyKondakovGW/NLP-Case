@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nlp-case
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nlp-case
+  template:
+    metadata:
+      labels:
+        app: nlp-case
+    spec:
+      containers:
+      - image: registry.cloud.okteto.net/elia-morrison/nlp-case:python
+        name: nlp-case
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nlp-case
+  annotations:
+    dev.okteto.com/auto-ingress: "true"
+spec:
+  type: ClusterIP  
+  ports:
+  - name: "nlp-case"
+    port: 5000
+  selector:
+    app: nlp-case

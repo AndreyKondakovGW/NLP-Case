@@ -7,8 +7,8 @@ import numpy as np
 from torch.utils.data import DataLoader
 import json
 
-MODEL_PATH = os.path.dirname(os.path.abspath(__file__)) + "\..\..\..\data\sentence_level_em_pos.model"
-MODEL_DESCRIPTON_PATH =  os.path.dirname(os.path.abspath(__file__)) + "\..\..\..\data\model_data.json"
+MODEL_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../../../data/sentence_level_em_pos.model"
+MODEL_DESCRIPTON_PATH =  os.path.dirname(os.path.abspath(__file__)) + "/../../../data/model_data.json"
 
 def copy_data_to_device(data, device):
     if torch.is_tensor(data):

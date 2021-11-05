@@ -11,26 +11,27 @@ from sklearn.metrics.pairwise import cosine_similarity
 import os
 
 
-DATA_PATH = os.path.dirname(os.path.abspath(__file__)) + "\..\..\..\data\embedding_data.csv"
-MODEL_PATH = os.path.dirname(os.path.abspath(__file__)) + "\..\..\..\data\word2vec.wordvectors"
+DATA_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../../../data/embedding_data.csv"
+MODEL_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../../../data/word2vec.wordvectors"
 
 def get_cosine_similarity(feature_vec_1, feature_vec_2):    
     return cosine_similarity(feature_vec_1.reshape(1, -1), feature_vec_2.reshape(1, -1))[0][0]
 
 class Text_Similarity_model:
     def __init__(self, db_access, datapath = DATA_PATH, modelpath = MODEL_PATH):
+        uninitialized = False
         if not os.path.exists(modelpath): 
+            uninitialized = True
             print('Waiting for creating the model')
             self.model = MyText2VecModel.save_embedding_model(modelpath, db_access.get_papers_iterator())
             print('Model was created')
         self.model = KeyedVectors.load(modelpath)
-        if not os.path.exists(datapath):
+        if uninitialized:
             print('Waiting for creating the embedding')
             MyText2VecModel.generate_embedding(self.model, datapath, db_access.get_papers_iterator())
             print('Embedding was created')
 
         self.db_access = db_access
-        self.data = pd.read_csv(datapath,index_col=False)
         self.db_access = db_access
         self.milvus = MilvusBridge()
 

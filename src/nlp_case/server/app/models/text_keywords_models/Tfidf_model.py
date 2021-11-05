@@ -7,7 +7,7 @@ import os
 import pickle
 import heapq
 
-DATA_PATH = os.path.dirname(os.path.abspath(__file__)) + "\..\..\..\..\data\clean_data.csv"
+DATA_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../../../../data/clean_data.csv"
 TFIDF_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../../../../data/tfidf.pkl" #LOL
 COUNTVEC_PATH = os.path.dirname(os.path.abspath(__file__)) + "/../../../../data/countvec.pkl"
 

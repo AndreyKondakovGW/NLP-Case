@@ -1,11 +1,14 @@
 from flask import Flask, request, jsonify
+import nltk
 from nlp_case.server.app.models.text_keywords_models.TextRank_model import  TextRank_model
 from nlp_case.server.app.models.text_keywords_models.Tfidf_model import Tfidf_model
+from nlp_case.server.app.db.milvus_bridge import MilvusBridge
 from nlp_case.server.app.models.parsers.PDFparser import Parser
 from nlp_case.server.app.db.db_access import DBAccess
 from nlp_case.server.app.models.Text_Similarity_model import Text_Similarity_model
 from nlp_case.server.app.models.NER_Disease_recognizer import NERDiseaseRecognizer
 from nlp_case.server.app.models.NER_Disease_net import SentenceDiseaseRecognizer, StackedConv1d
+from waitress import serve
 import re
 import os
 
@@ -14,7 +17,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return 'Hello World!'
+    return 'NLP keyword/NER/text similarity project. Contact authors to get the API.'
 
 @app.route('/predict_keywords', methods=["POST"])
 def predict():
@@ -43,7 +46,7 @@ def find_by_keywords():
     keywords = request.get_json().get("keywords")
     papers = access.search_keywords(keywords, num_results=3)
     return jsonify({'result': 
-    [{'titel': p[0], 'pdf_link': p[3], 'site_link': p[2]} for p in papers]})
+    [{'title': p[0], 'pdf_link': p[3], 'site_link': p[2]} for p in papers]})
 
 @app.route('/parse_pdf', methods=["POST"])
 def parse_pdf():
@@ -56,7 +59,7 @@ def find_most_similar():
     json_data = request.files["file"]
     res = sim_model.find_similar_article(json_data)
     print(res)
-    return jsonify({'titel': res['title'],'sitelink': res['sitelink'], 'pdflink': res['pdflink']})
+    return jsonify({'title': res['title'],'sitelink': res['sitelink'], 'pdflink': res['pdflink']})
 
 @app.route('/find_disease_names', methods=["POST"])
 def find_dis_names():
@@ -73,10 +76,15 @@ def find_dis_names_infile():
 
 
 if __name__ == '__main__':
+    bridge = MilvusBridge()
     print(os.path.abspath(__file__))
+    nltk.download('stopwords')
+    nltk.download('punkt')
+    nltk.download('wordnet')
+    NER_model = NERDiseaseRecognizer()
     access = DBAccess("7P7RRzvV516fhdQX")
     sim_model = Text_Similarity_model(access)
     tf_model = Tfidf_model(access.get_papers_iterator())
-    NER_model = NERDiseaseRecognizer()
-    app.run()
+    serve(app, host="0.0.0.0", port="5000")
+    
 
