@@ -1,0 +1,388 @@
+1
+2
+0
+2
+
+ 
+t
+c
+O
+1
+2
+
+ 
+
+ 
+ 
+]
+
+V
+C
+.
+s
+c
+[
+ 
+ 
+
+1
+v
+0
+2
+3
+1
+1
+
+.
+
+0
+1
+1
+2
+:
+v
+i
+X
+r
+a
+
+Deep Curriculum Learning in Task Space for Multi-Class
+
+Based Mammography Diagnosis
+
+Jun Luoa, Dooman Arefanb, Margarita Zuleyb,c, Jules Sumkinb,c, and Shandong Wua,b,d,e
+
+aIntelligent Systems Program, School of Computing and Information, University of Pittsburgh,
+
+Pittsburgh, PA, USA
+
+bDepartment of Radiology, University of Pittsburgh, Pittsburgh, PA, USA
+
+cMagee-Womens Hospital, University of Pittsburgh Medical Center, Pittsburgh, PA, USA
+dDepartment of Biomedical Informatics, University of Pittsburgh, Pittsburgh, PA, USA
+
+eDepartment of Bioengineering, University of Pittsburgh, Pittsburgh, PA, USA
+
+ABSTRACT
+
+Mammography is used as a standard screening procedure for the potential patients of breast cancer. Over the
+past decade, it has been shown that deep learning techniques have succeeded in reaching near-human performance
+in a number of tasks, and its application in mammography is one of the topics that medical researchers most
+concentrate on. In this work, we propose an end-to-end Curriculum Learning (CL) strategy in task space for
+classifying the three categories of Full-Field Digital Mammography (FFDM), namely Malignant, Negative, and
+False recall. Speciﬁcally, our method treats this three-class classiﬁcation as a “harder” task in terms of CL, and
+create an “easier” sub-task of classifying False recall against the combined group of Negative and Malignant. We
+introduce a loss scheduler to dynamically weight the contribution of the losses from the two tasks throughout
+the entire training process. We conduct experiments on an FFDM datasets of 1,709 images using 5-fold cross
+validation. The results show that our curriculum learning strategy can boost the performance for classifying the
+three categories of FFDM compared to the baseline strategies for model training.
+
+Keywords: Curriculum learning, Full-Field Digital Mammography, Deep learning
+
+1. INTRODUCTION
+
+Breast cancer is the second leading cause of cancer death in women. As of 2021, breast cancer takes up 12%
+of new annual cancer cases globally.1 Full-Field Digital Mammography (FFDM), also known as the digital
+mammography, is a mammography screening techniques that enables the manipulation of images in such a way
+that it is more convenient for the radiologists to evaluate the areas of concerns with computer-aided detection
+(CAD) systems. Meanwhile, over the past decade, it has been shown that deep learning techniques have succeeded
+in reaching near-human performance in a number of tasks,2–4 and its application in mammography is one of the
+topics that medical researchers most concentrate on.5
+
+Curriculum learning6 (CL), as a major machine learning regime, is a learning strategy where an “easy-to-
+hard” curriculum is designed to train the model. CL is particularly intriguing in medical ﬁelds, since medical
+knowledge can serve as an important contributing factor to the deﬁnition of “easy” and “hard” in terms of CL.3, 4
+Such a curriculum can be designed with respect to both the input space and the output (task) space. CL in
+the input space sort the sorts the training samples from the “easier” ones to “harder” ones.3, 4 And CL in the
+output (task) space7 treats the original task as a “harder” task, and learns “easier” sub-tasks prior to learning
+the original “harder” task. In classiﬁcation tasks with multiple (≥ 3 classes) classes, CL in task space creates
+“easier” classiﬁcation sub-tasks out of the original “harder” task, usually by grouping classes with similarities,7
+and thus reducing the number of total classes and the diﬃculty of the task.
+
+Further author information: (Send correspondence to Shandong Wu)
+Shandong Wu: E-mail: wus3@upmc.edu, Telephone: 1 412 641 2567
+Jun Luo: E-mail: jul117@pitt.edu
+
+(a) Malignant
+
+(b) False recall
+
+(c) Negative
+
+Figure 1: Example Full-Field Digital Mammography images from the three categories of our dataset.
+
+In this work, we propose an end-to-end curriculum learning in task space strategy on classifying three cate-
+gories of the Full-Field Digital Mammography (FFDM), namely Malignant, Negative, and False recall (shown in
+Figure 1). Our method treats the original three-class classiﬁcation task as a “harder” task in terms of CL, and
+create an “easier” sub-task of classifying the false recall cases against the combined group of the negative and
+the malignant cases. We introduce a loss scheduler to dynamically weight the contribution of the two tasks to
+the loss that the machine learning model learns from throughout the training process. We conduct experiments
+using an FFDM dataset of 1,709 images using 5-fold cross validation. The results show that our curriculum
+learning strategy can boost the model’s performance compared to the baseline training strategies.
+
+2.1 Study Cohort and Dataset
+
+2. METHOD
+
+In this IRB-approved study, we used a cohort of 1,709 FFDM images (349 Malignant cases, 653 Negative cases
+and 707 False recall cases). The FFDM images were retrospectively collected at our institution and reviewed by
+expert radiologists. Sample images from the three classes are shown in Figure 1. We conducted our experiments
+with 5-fold cross validation. Within each iteration of cross validation, one fold of the data was used as a hold-out
+test set. 80% and 20% of the remaining four folds were used as training and validation set respectively. The
+data partitioning scheme is described with more details in Table 1. Note that the numbers in Table 1 are within
+±1 range, since the ﬁve folds do not evenly split the data samples.
+
+Table 1: The number of images in each class for each partition of the 5-fold cross validation. Note that the
+numbers are within ±1 range, since the ﬁve folds do not evenly split the data samples.
+Malignant Negative False recall Total
+
+Training set
+Validation set
+Test set
+Total
+
+226
+53
+45
+349
+
+425
+98
+130
+653
+
+460
+106
+141
+707
+
+1,111
+280
+341
+1,709
+
+2.2 Curriculum in Task Space
+
+Curriculum learning seeks a certain “easy-to-hard” order of the learning procedure. The order can be in terms of
+the input samples or the learning tasks. Here in this study, while we focus on the original three-class classiﬁcation
+of the FFDM images, we treat it as a “harder” task and create an “easier” sub-task of binary classiﬁcation. In
+this sub-task, the goal is to classify False recall against the combined group of Malignant and Negative cases.
+
+Consider an image-label pair (xi, yi), where xi represents the image and yi ∈ {0, 1, 2} (with 0, 1, and 2
+representing False recall, Negative, and Malignant respectively) is the ground truth label of the image. Let
+f (xi)(c) be the probability that the predicted label is c with f (·) being the machine learning model and c ∈
+
+{0, 1, 2}. We compute the cross entropy loss for the original “harder” task of the three-class classiﬁcation as in
+Equation (1), where yi,c is the cth element in the one-hot representation of the label yi.
+
+Lhard(xi, yi) = −(cid:88)
+
+(cid:16)
+
+yi,c · log(f (xi)(c))
+
+c
+
+(cid:17)
+
+(1)
+
+(2)
+
+For the created “easier” task, to group the Negative and Malignant classes together against the False recall
+class, we assign xi a new label zi = 1yi(cid:54)=0 where 1 is the indicator function, which means that zi will only be
+0 if yi = 0, or else zi = 1. In terms of the prediction, we treat the probability of zi = 0 still as f (xi)(0) and
+the probability of zi = 1 as f (xi)(1) + f (xi)(2), or 1 − f (xi)(0). Consequently, we can compute the binary cross
+entropy loss for the created “easier” task of the binary classiﬁcation, as shown in Equation (2).
+
+Leasy(xi, zi) = −(cid:16)
+
+zi · log(f (xi)(0)) + (1 − zi) · log(1 − f (xi)(0))
+
+(cid:17)
+
+L(xi, yi, zi) = λ · Leasy(xi, zi) + (1 − λ) · Lhard(xi, yi)
+
+(3)
+We compute the ﬁnal loss as a weighted sum of L1(xi, yi) and L2(xi, zi) as shown in Equation (3). We
+introduce a loss scheduler to dynamically weight the contribution of the losses from the two tasks throughout the
+entire training process, which is done by designing a speciﬁc function for the λ in Equation (3) with respect to
+the current training epoch number. In this work, we investigate the loss schedulers listed in Table 2 and Figure
+2. In practice, λ can be any function. Note that in Figure 2 and Table 2 all loss schedulers have λ = 1 at the
+beginning of training, and λ = 0 after when the current epoch number, e, is larger than a preset hyperparameter
+L. This is to make the training focus on the “easier” task in the beginning of training, while transitioning to
+focusing on the “harder” task (original three-class classiﬁcation) as training progresses.
+
+Table 2: Functions of diﬀerent types of loss scheduler with
+current epoch number, e, less than the preset hyperparameter
+L, (λ = 0 when L ≤ e ≤ E)
+
+Loss scheduler type Function (with 0 ≤ e < L)
+λ(e) = (cos(eπ/L) + 1) /2
+Cosine
+λ(e) = 1 − e/L
+Linear
+λ(e) = −(e/L)2 + 1
+Concave quadratic
+λ(e) = L−2 · (e − L)2
+Convex quadratic
+λ(e) = e/L,  = 10−3
+Exponential
+λ(e) = log(1 + L − e)/ log(1 + L)
+Logarithm
+λ(e) = 1
+Step
+
+Figure 2: Seven diﬀerent types of loss scheduler.
+L is a preset hyperparameter and E is the total
+number of the training epochs
+
+Table 3: Comparison of the diﬀerent methods’ performance. “LS: X” stands for a certain type of loss scheduler.
+The bold numbers correspond to the highest value for each metric.
+
+Accuracy
+
+Balanced
+accuracy
+
+Average
+
+AUC
+
+Aboutalib et al.5 (baseline)
+
+LS: exponential
+LS: convex quadratic
+LS: linear
+LS: cosine
+LS: concave quadratic
+LS: logarithm
+LS: step
+
+0.489
+
+0.491
+0.510
+0.480
+0.501
+0.508
+0.511
+0.515
+
+0.458
+
+0.468
+0.474
+0.476
+0.464
+0.492
+0.494
+0.483
+
+0.658
+
+0.658
+0.672
+0.655
+0.653
+0.671
+0.668
+0.669
+
+Binary
+
+task
+
+accuracy
+
+0.598
+
+0.623
+0.607
+0.614
+0.611
+0.633
+0.617
+0.622
+
+Binary
+
+task
+AUC
+
+0.633
+
+0.641
+0.648
+0.635
+0.645
+0.647
+0.644
+0.655
+
+3. RESULTS
+
+We evaluate our method on 1,709 FFDM images using 5-fold cross validation. The results shown in Table 3
+are means over the ﬁve partitions. We use the VGG162 as the backbone of the convolutional neural network
+(CNN) model. We present the results for diﬀerent loss schedulers and compare our methods with Aboutalib et
+al.’s method5 (baseline) which is a deep learning method on the same three-class classiﬁcation task as ours. Our
+model evaluation metrics include the accuracy and the AUC for the three-class classiﬁcation, and the balanced
+accuracy by averaging the accuracies of the three classes, which reduces the eﬀect induced by data imbalance. In
+addition, to further evaluate the methods’ overall ability to distinguish False recall, we also show the accuracy
+and AUC of the binary “easier” task mentioned in Section 2.2. All experiments are implemented in PyTorch
+framework and run on an Nvidia TESLA V100 GPU from Pittsburgh Supercomputing Center.
+
+4. DISCUSSION
+
+In this work, we proposed a curriculum learning strategy in task space for FFDM image classiﬁcation of the
+three classes of Malignant, Negative, and False recall. We designed a loss scheduler to weight the contribution
+of the original “harder” three-class classiﬁcation task and the created “easier” binary classiﬁcation task.
+
+According to the results, CL in task space with most forms of the loss scheduler outperform the baseline,
+which attributes to the fact that the loss schedulers focus more on the “easier” task during the ﬁrst stage of the
+training process (0 ≤ e < L), while Aboutalib et al.’s method5 (baseline) only uses the basic learning strategy. In
+addition, the three concave loss schedulers, namely the concave quadratic, logarithm and step function, perform
+better than the other ones. This is partially because these three concave loss scheduler put reasonably more
+weight than others on the “easier” task, which provides more help on understanding the “harder” task (see
+Figure 2).
+
+5. NEW OR BREAKTHROUGH WORK TO BE PRESENTED
+
+As far as we know, this work is one of the newest studies that develop a learning strategy with regard to
+curriculum learning in task space on FFDM image classiﬁcation. Our method demonstrates that by scheduling
+the learning from an “easier” sub-task to the original “harder” task, the model’s performance to classify the
+three classes of the FFDM images will be further improved from the baseline learning strategies. We believe
+that such curriculum learning methods will expand the possibilities of artiﬁcial intelligence (AI) studies and its
+applications in future medical imaging research.
+
+REFERENCES
+
+[1] “U.S. Breast Cancer Statistics.” American Cancer Society, 4 February 2021, https://www.breastcancer.
+
+org/symptoms/understand_bc/statistics (2021).
+
+[2] Simonyan, K. and Zisserman, A., “Very deep convolutional networks for large-scale image recognition,” arXiv
+
+preprint arXiv:1409.1556 (2014).
+
+[3] Luo, J., Kitamura, G., Doganay, E., Arefan, D., and Wu, S., “Medical knowledge-guided deep curricu-
+lum learning for elbow fracture diagnosis from x-ray images,” in [Medical Imaging 2021: Computer-Aided
+Diagnosis], 11597, 1159712, International Society for Optics and Photonics (2021).
+
+[4] Jim´enez-S´anchez, A., Mateus, D., Kirchhoﬀ, S., Kirchhoﬀ, C., Biberthaler, P., Navab, N., Ballester, M. A. G.,
+and Piella, G., “Medical-based deep curriculum learning for improved fracture classiﬁcation,” in [International
+Conference on Medical Image Computing and Computer-Assisted Intervention ], 694–702, Springer (2019).
+
+[5] Aboutalib, S. S., Mohamed, A. A., Berg, W. A., Zuley, M. L., Sumkin, J. H., and Wu, S., “Deep learn-
+ing to distinguish recalled but benign mammography images in breast cancer screening,” Clinical Cancer
+Research 24(23), 5902–5909 (2018).
+
+[6] Bengio, Y., Louradour, J., Collobert, R., and Weston, J., “Curriculum learning,” in [Proceedings of the 26th
+
+annual international conference on machine learning ], 41–48 (2009).
+
+[7] Stretcu, O., Platanios, E. A., Mitchell, T., and P´oczos, B., “Coarse-to-Fine Curriculum Learning for Classi-
+ﬁcation,” in [International Conference on Learning Representations (ICLR) Workshop on Bridging AI and
+Cognitive Science (BAICS) ], (2020).
+
+
