@@ -42,13 +42,7 @@ class Text_Similarity_model:
         description_clean = preprocess_text(description, stopwords=stopwords)
         description_vector = get_sif_feature_vector(description_clean, self.model)
 
-        distants = []
-        for index, row in self.data.iterrows():
-            vector = row.drop(['Unnamed: 0','_id'])
-            distants.append(get_cosine_similarity(description_vector, vector.to_numpy()))
-        self.data['distant'] = pd.Series(data = distants)
         print('Most Similar article: ')
-        res = self.data[self.data['distant'] == self.data['distant'].min()]
-        _id = res['_id'].array[0]
+        _id = self.milvus.find_similar(description_vector, num_results=10)[0]
         paper = self.db_access.get_paper_by_id(_id)
         return paper

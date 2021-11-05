@@ -42,14 +42,6 @@ def get_keywords():
 def find_by_keywords():
     keywords = request.get_json().get("keywords")
     papers = access.search_keywords(keywords, num_results=3)
-<<<<<<< HEAD
-=======
-    for p in papers:
-        print(p[1])
-        print()
-        print('-' * 10)
-        print()
->>>>>>> c61f1e55eb7c626906c45f17c4f9eb677661eb5b
     return jsonify({'result': 
     [{'titel': p[0], 'pdf_link': p[3], 'site_link': p[2]} for p in papers]})
 
