@@ -1,7 +1,7 @@
 import requests
 import json
 
-server_url = 'http://127.0.0.1:5000'
+server_url = 'https://nlp-case-elia-morrison.cloud.okteto.net/'
 headers = {'Content-Type': 'application/json', 'Accept':'application/json'}
 
 #Test function of searching articles by keywords
@@ -23,10 +23,10 @@ print(keywords)
 
 #3 Searching articels by keywords
 data = {"keywords": ["math", "vision"]}
-request= requests.post("http://127.0.0.1:5000/search_articles_with_keywords", json=data, headers=headers)
+request= requests.post("https://nlp-case-elia-morrison.cloud.okteto.net//search_articles_with_keywords", json=data, headers=headers)
 jsonData = json.loads(request.text)
 for i,atr in enumerate(jsonData['result']):
     print(f"Article {i}:")
-    print(f"Titel {atr['titel']}")
+    print(f"Title {atr['title']}")
     print(f"Pdf {atr['pdf_link']}")
     print(f"Link {atr['site_link']}") 

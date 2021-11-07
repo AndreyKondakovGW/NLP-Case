@@ -4,7 +4,7 @@ from pymilvus import connections, FieldSchema, CollectionSchema, DataType, Colle
 
 class MilvusBridge:
     def __init__(self):
-        self.connection = connections.connect(host='localhost', port='19530')
+        self.connection = connections.connect(host='10.152.3.172', port='19530')
         self.collection = None
         
     def push_embeddings(self, file):
@@ -36,18 +36,20 @@ class MilvusBridge:
         schema = CollectionSchema(fields=default_fields)
         self.collection = Collection(name='similarity_features', schema=schema)
         
-        collection.insert(data)
+        self.collection.insert(data)
         
         #inner product (IP) is equivalent to cosine sim on normalized data
         index = {"index_type": "IVF_FLAT", "params": {"nlist": 128}, "metric_type": "IP"}
-        collection.create_index(field_name="features", index_params=index)
-        collection.load()
+        self.collection.create_index(field_name="features", index_params=index)
+        self.connection.flush(['similarity_features'])
+        self.collection.load()
         
     def find_similar(self, features, num_results = 10):
         if self.collection is None:
             if not 'similarity_features' in self.connection.list_collections():
-                raise Error("milvus database is not populated, but you're trying to access it!")
+                raise ValueError("milvus database is not populated, but you're trying to access it!")
             self.collection = Collection(name='similarity_features')
+            self.collection.load()
     
         search_params = {"metric_type": "IP", "params": {"nprobe": 10}}
         
