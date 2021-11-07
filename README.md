@@ -87,5 +87,5 @@ diseases = jsonData['diseases']
 ```
 # Ссылки
 1) Сылка на Хост сервера https://nlp-case-elia-morrison.cloud.okteto.net
-2) Ссылка на отчёт о проделанной работе [doc](NLP-Case/Report_NLP_Case.docx)
+2) Ссылка на отчёт о проделанной работе [doc](Report_NLP_Case.docx)
 
