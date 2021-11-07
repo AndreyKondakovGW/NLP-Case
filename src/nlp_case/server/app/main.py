@@ -12,14 +12,9 @@ import os
 
 app = Flask(__name__)
 
-@app.route('/')
-def hello_world():
-    return 'Hello World!'
-
 @app.route('/predict_keywords', methods=["POST"])
 def predict():
-    title = request.form.get("title")
-    article = request.form.get("body")
+    article = request.form.get("text")
     keywords = tf_model.predict_keywords(article)
     return jsonify({'result': keywords})
 
